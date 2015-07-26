@@ -1,0 +1,217 @@
+<applications xmlns="http://www.wabacus.com"
+			   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			   xsi:schemaLocation="http://www.wabacus.com ../xsd/wabacus.applications.xsd">
+	<page id="shitingbuzhi">
+       <hpanel id="shitingbuzhi_vpanel" parenttitle="${shitingbuzhi}" align="center">
+		<report id="shitingbuzhi_report" title="url{suoshuxianhao}号${shitingbuzhi}" align="left" right="20px" type="editablelist" >
+			 <interceptor>
+								<imports>
+							  	 	<import>com.wabacus.util.*</import>
+							  	 	<import>com.wabacus.system.*</import>
+							  	</imports>
+							  	 	 <preaction>
+							  	 	     <![CDATA[
+									String xh = rrequest.getStringAttribute("suoshuxianhao");							
+									rrequest.getRequest().setAttribute("key" ,xh);									
+										  ]]>
+							  </preaction>
+	  	      				  </interceptor> 
+			 <display>
+				<col column="{sequence:1}" label="序号"></col>
+				<col column="id" label="id" displaytype="hidden"></col>			
+				<col column="suoshuxianhao" label="所属${xianhao}" displaytype="hidden"/>		
+				<col column="cangduan" label="${cangduan}">
+					<inputbox type="selectbox">						  
+						<option value="I" label="I"></option>
+						<option value="II" label="II"></option>
+						<option value="III" label="III"></option>
+						<option value="IV" label="IV"></option>
+						<option value="V" label="V"></option>
+						<option value="VI" label="VI"></option>
+						<option value="VII" label="VII"></option>
+					</inputbox>
+				</col>
+				<col column="shebeiming" label="${shebei}名" clickorderby="true">
+					<inputbox type="selectbox" servervalidate="isNotEmpty(${invalid.isnotempty})">
+						<option dataset="@{select shebeimingcheng from sbgl_shebei_xiangxixinxi}" label="shebeimingcheng" value="shebeimingcheng"></option>
+					</inputbox>
+				</col>
+				<col column="bianhao" label="编号" ></col>		
+				<col column="weizhi" label="位置" ></col>	
+				<col column="bianhua" label="变化">
+				<inputbox type="selectbox">						  
+							<option value="新增" label="新增"></option>
+						    <option value="修改" label="修改"></option>
+						    <option value="删除" label="删除"></option>
+						    <option value="标配" label="标配"></option>
+					    </inputbox>
+			    </col>
+				<col column="beizhu" label="备注" datatype="clob" >
+					<inputbox type="textareabox" styleproperty="rows='5'"></inputbox>
+				</col>	
+			
+			 </display>
+			<sql>
+				 <select>
+					<value>
+						<![CDATA[SELECT * FROM zbgl_zbjbxx_xianhao_stbz  where {#condition#} order by id   ]]>
+				    </value>				   
+				
+			        <condition name="suoshuxianhao" hidden="true">
+						<value>
+							<![CDATA[(suoshuxianhao =  #data# )]]>
+						</value>
+					</condition> 		 				 
+				    <condition name="shebeiming" label="设备名" labelposition="left">
+					     <value>
+					       <![CDATA[(shebeiming like '%#data#%' )]]>
+					     </value>
+					</condition>
+				</select>
+	            <insert pageurl="report{shitingbuzhidetail.shitingbuzhidetail_report}" urlparams="suoshuxianhao=request{key}" popupparams="{title:'新增${xinghao}',width:980,height:400}"></insert>
+				<update pageurl="report{shitingbuzhidetail.shitingbuzhidetail_report}" urlparams="suoshuid=@{id}" popupparams="{title:'编辑${xinghao}信息',width:980,height:400}" ></update>
+				<delete>
+					  	 delete from zbgl_zbjbxx_xianhao_stbz where id=@{id__old};
+				</delete>
+			</sql>
+			<format>
+			  		<value>
+			  			<![CDATA[
+			        	shebeiming="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">"
+			        		+"<a href=\"#\" onclick=\"wx_winpage('ShowReport.wx?PAGEID=shitingbuzhi_shebei&shebeimingcheng="+shebeiming+"',{width:810,height:320})\" target=\"sampleframe\">"
+			      			+shebeiming+"</a></span>";    
+			     		]]>   
+			  		</value>
+			</format>						  
+		</report>
+		<report id="buzhitu_report"    pagesize="2" type="form"  width="300px" title="基本信息图片：">
+							<display dataheader="" >
+		                    	<col column="id" label="id" displaytype="hidden"/>
+		                    	<col column="tupiansuoshu" label="" displaytype="hidden"/>
+		                    	<col column="tupianzhonglei" label="" displaytype="hidden"/>
+							  	<col column="photo" label="" valuestyleproperty="align='center' width='10px' height='10px'">							  	
+							    	<!-- <inputbox type="file"   displaytype="image" deletetype="2" savepath="${image.path}" rooturl="/uploadfile/"></inputbox> -->
+						    	</col>  
+						    </display>
+						   <sql>
+							    <select>
+									<value>
+											<![CDATA[SELECT * FROM zbgl_zbwxjghz_pic  where tupianzhonglei='舷号布置图' and {#condition#} ]]>
+									</value>
+									<condition name="suoshuxianhao"  hidden="true">
+										<value>
+												<![CDATA[(tupiansuoshu = #data#)]]>
+										</value>
+									</condition>
+								</select>
+						      	<delete>
+						      		delete from zbgl_zbwxjghz_pic where id=@{id__old}; 			    
+						  		</delete>     
+						    </sql >
+		  					<format>
+					      		<imports>
+							    	<import>com.wabacus.util.*</import>
+					      		</imports>
+					      		<value>
+					  				<![CDATA[
+					  				if(photo!=null&&!photo.trim().equals(""))
+									{
+									  photo="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">"+"<a href=\"#\" onclick=\"wx_winpage('jsp/showPic.jsp?src="+photo+"',{initsize:'max'})\" >"+"<img src=\""+photo+"\"  width='100' height='100'>"+"</a></span>";
+									}else
+									{
+										photo="无照片";
+									}
+					  				
+					  				]]>
+					  			</value>
+					   		</format>  
+					   		<buttons buttonspacing="5" align="right">
+						  			<button name="upload" position="title" label="上传图片">
+									 <imports>
+							   			   <import>com.wabacus.system.*</import><!-- 用到了这个包下面的CacheDataBean类 -->
+						    		 </imports>
+										  <dynevent>
+											<![CDATA[
+												String str = rrequest.getStringAttribute("suoshuxianhao","");
+												System.out.println("***********************"+str);
+												StringBuffer sbuffer=new StringBuffer();
+												sbuffer.append("wx_winpage('upLoadImage.jsp?table=zbgl_zbwxjghz_pic&amp;tupianzhonglei=舷号布置图&amp;tupiansuoshu=");
+												sbuffer.append(str);
+												sbuffer.append("&amp;page=xianhaojibenxinxi&amp;report=jibenxinxitupian_report');");
+												return sbuffer.toString();//返回拼凑好的事件
+											]]>
+										</dynevent>
+									</button>
+					  		</buttons>
+					  	</report>			   			 	 
+		</hpanel>
+	</page>
+	<page id="shitingbuzhidetail">
+	<report id="shitingbuzhidetail_report" title="url{suoshuxianhao}号${shitingbuzhi}" align="center" type="editabledetail" >
+			 <display>
+				<col column="id" label="id" displaytype="hidden"></col>		
+				<col column="suoshuxianhao" label="所属${xianhao}" displaytype="hidden"/>		
+				<col column="cangduan" label="${cangduan}" br="true" valuestyleproperty="colspan='3'">
+					<inputbox type="selectbox">						  
+						<option value="I" label="I"></option>
+						<option value="II" label="II"></option>
+						<option value="III" label="III"></option>
+						<option value="IV" label="IV"></option>
+						<option value="V" label="V"></option>
+						<option value="VI" label="VI"></option>
+						<option value="VII" label="VII"></option>
+					</inputbox>
+				</col>
+				<col column="shebeiming" label="${shebei}名" clickorderby="true" >
+					<inputbox type="selectbox" servervalidate="isNotEmpty(${invalid.isnotempty})">
+						<option dataset="@{select shebeimingcheng from sbgl_shebei_xiangxixinxi}" label="shebeimingcheng" value="shebeimingcheng"></option>
+					</inputbox>
+				</col>
+				<col column="bianhao" label="编号" ></col>	
+				<col column="weizhi" label="位置" >
+					<inputbox type="selectbox">						  
+						<option value="左舷" label="左舷"></option>
+						<option value="右舷" label="右舷"></option>
+					</inputbox>
+				</col>	
+				<col column="bianhua" label="变化"  br="true">
+					<inputbox type="selectbox">						  
+						<option value="新增" label="新增"></option>
+						<option value="修改" label="修改"></option>
+						<option value="删除" label="删除"></option>
+						<option value="标配" label="标配"></option>
+					</inputbox>
+			    </col>
+				<col column="beizhu" label="备注" datatype="clob" valuestyleproperty="colspan='5'">
+					<inputbox type="textareabox" styleproperty="rows='5'"></inputbox>
+				</col>	
+			
+			 </display>
+			<sql>
+				 <select>
+					<value>
+						<![CDATA[SELECT * FROM zbgl_zbjbxx_xianhao_stbz  where {#condition#} order by id   ]]>
+				    </value>
+				    <condition name="suoshuid" hidden="true">
+						<value>
+							<![CDATA[(id =  #data# )]]>
+						</value>
+					</condition>				   
+				</select>
+	            <insert>
+					<params> 
+					   <param name="suoshuxianhao" value="url{suoshuxianhao}"/>
+					</params>
+				  		 insert into zbgl_zbjbxx_xianhao_stbz(id=uuid{},suoshuxianhao=#{suoshuxianhao},@{cangduan},@{shebeiming},@{bianhao},@{weizhi},@{bianhua},@{beizhu});
+				</insert>
+				<update>
+					     update zbgl_zbjbxx_xianhao_stbz(@{cangduan},@{shebeiming},@{bianhao},@{weizhi},@{bianhua},@{beizhu}) where id=@{id__old};
+				</update>
+				<delete>
+					  	 delete from zbgl_zbjbxx_xianhao_stbz where id=@{id__old};
+				</delete>
+			</sql>				  
+		</report>
+	</page>
+	</applications>
+			   

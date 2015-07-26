@@ -1,0 +1,34 @@
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+ 
+	<tr><td align='left'  colspan='2'><wx:data col="gongneng" showlabel="true" showdata="false"/><wx:data col="gongneng" showlabel="false" showdata="true"/></td></tr>
+	<tr><td colspan='2'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+	<tr><td align='left' width='18%'><wx:data col="gcymfw" showlabel="true" showdata="false"/></td><td><wx:data col="gcymfw" showlabel="false" showdata="true"/></td></tr>
+	<tr><td colspan='2'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+	<tr><td align='left' width='18%'><wx:data col="tsgzzsmbsl" showlabel="true" showdata="false"/></td><td><wx:data col="tsgzzsmbsl" showlabel="false" showdata="true"/></td></tr>
+	<tr><td colspan='2'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+	<tr><td align='left' width='18%'><wx:data col="tsgzzdsnmcxhsl" showlabel="true" showdata="false"/></td><td><wx:data col="tsgzzdsnmcxhsl" showlabel="false" showdata="true"/></td></tr>
+	<tr><td align='left'><b>对典型目标作用距离</b></td></tr>
+    <tr><td align='left' colspan='2'><wx:data col="mubiaotezheng" showlabel="true" showdata="false"/><wx:data col="mubiaotezheng" showlabel="false" showdata="true"/></td></tr>
+    <tr><td colspan='2'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+    <tr><td align='left' width='18%'><wx:data col="zsfxjl" showlabel="true" showdata="false"/></td><td><wx:data col="zsfxjl" showlabel="false" showdata="true"/></td></tr>
+    <tr><td colspan='2'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+    <tr><td align='left' width='18%'><wx:data col="zsfwgzjl" showlabel="true" showdata="false"/></td><td><wx:data col="zsfwgzjl" showlabel="false" showdata="true"/></td></tr>
+    <tr><td colspan='2'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+    <tr><td align='left' width='18%'><wx:data col="zsbdcjjl" showlabel="true" showdata="false"/></td><td><wx:data col="zsbdcjjl" showlabel="false" showdata="true"/></td></tr>
+    <tr><td colspan='2'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+    <tr><td align='left' width='18%'><wx:data col="hscjjl1" showlabel="true" showdata="false"/></td><td><wx:data col="hscjjl1" showlabel="false" showdata="true"/><wx:data col="hscjjl2" showlabel="false" showdata="true"/></td></tr>
+	<tr><td align='left'><b>对典型鱼雷目标的发现距离</b></td></tr>
+	<tr><td align='left' colspan='2'><wx:data col="ylmbtz1" showlabel="true" showdata="false"/><wx:data col="ylmbtz1" showlabel="false" showdata="true"/></td></tr>
+	<tr><td colspan='2'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+	<tr><td align='left' width='18%'><wx:data col="fxzxjl" showlabel="true" showdata="false"/></td><td><wx:data col="fxzxjl" showlabel="false" showdata="true"/></td></tr>
+	<tr><td align='left'><b>鱼雷报警距离</b></td></tr>
+	<tr><td align='left' colspan='2'><wx:data col="ylmbtz2" showlabel="true" showdata="false"/><wx:data col="ylmbtz2" showlabel="false" showdata="true"/></td></tr>
+	<tr><td colspan='2'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+	<tr><td align='left' width='18%'><wx:data col="bjzxjl" showlabel="true" showdata="false"/></td><td><wx:data col="bjzxjl" showlabel="false" showdata="true"/></td></tr>
+	<tr><td align='left'><b>对典型声呐主动声呐脉冲侦查距离</b></td></tr>
+	<tr><td align='left' width='18%'><wx:data col="shengnaleixing" showlabel="true" showdata="false"/></td><td><wx:data col="shengnaleixing" showlabel="false" showdata="true"/></td></tr>
+	<tr><td colspan='2'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+	<tr><td align='left' width='18%'><wx:data col="zhenchajuli" showlabel="true" showdata="false"/></td><td><wx:data col="zhenchajuli" showlabel="false" showdata="true"/></td></tr>
+	<tr><td align='right' colspan='2'><wx:button type="save" /></td></tr>
+</table>

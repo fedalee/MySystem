@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<applications xmlns="http://www.wabacus.com"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.wabacus.com ../../../xsd/wabacus.applications.xsd">
+	<page id="nianjihua"
+		js="/webresources/script/validate.js,/WebRoot/js/testcallback.js,/webresources/script/reportconfigreportzhuangbeiguanlikeyanguanlikeyanguanli_ketimingcheng_keti_niandujihuaxml.js">
+
+
+		<report id="report2" title="session{kaishiniandu}年节点：" type="editablelist"
+			align="center" template="${articlelist.report.template}">
+
+
+			<interceptor>
+				<imports>
+					<import>com.wabacus.util.*</import>
+					<import>com.wabacus.system.*</import>
+				</imports>
+				<preaction>
+		  	 	      <![CDATA[
+							String niandujihua_id = rrequest.getStringAttribute("niandujihua_id");							
+							rrequest.getRequest().setAttribute("niandujihua_id" ,niandujihua_id);	
+							System.out.println("################################"+niandujihua_id);
+							String kaishiniandu = rrequest.getStringAttribute("kaishiniandu");			
+							if(kaishiniandu != null){
+													
+								rrequest.getRequest().getSession().setAttribute("kaishiniandu" ,kaishiniandu);	
+							}
+							
+							System.out.println("################################"+kaishiniandu);					
+					  ]]>
+		  	 	  </preaction>
+			</interceptor>
+
+
+			<display>
+
+				<col column="id" label="id" displaytype="hidden" />
+				<col column="jiedian" label="节点" />
+				<!-- 将“节点所属年度” 改为“年度” -->
+				
+				<!-- 去掉起始时间和结束时间 -->
+				<!-- ”起始时间 “ 改为 ”完成时间“ -->
+				 <col column="zhuyaoyanjiuneirong" label="主要研究内容" />
+				<col column="wanchengshijian" label="完成时间" datatype="date{yyyy-MM-dd}">
+					<inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)"></inputbox>
+				</col>
+				
+				<!-- 加主要研究内容（一条一条列）、指标、附件、备注、成果（一条一条列）， -->
+				
+				<col column="zhibiao" label="指标" />
+				<col column="beizhu" label="备注" datatype="clob" />
+				<col column="chengguo" label="成果" datatype="clob" />
+				<col column="{non-fromdb}" property="FJ" label="附件" />
+				<!-- 考核时间、指标、成果全部不要 -->
+				<!--
+					<group label="考核时间"> <col column="kaohejihua" label="计划"
+					clickorderby="true" datatype="date{yyyy-MM-dd}"> <inputbox
+					type="datepicker"
+					jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)"></inputbox></col>
+					<col column="kaoheshiji" label="实际" clickorderby="true"
+					datatype="date{yyyy-MM-dd}" > <inputbox type="datepicker"
+					jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)"></inputbox> </col>
+					<col column="kaohewanchengqingkuang" label="完成情况" > </col> <col
+					column="kaoheyuanyin" label="原因" > <inputbox type="textareabox"
+					></inputbox> </col> </group>
+				-->
+				<col column="{non-fromdb}" property="cc" label="评审意见"></col>
+				<col column="{non-fromdb}" property="cz" label="评审专家"></col>
+
+
+				<col column="niandujihua_id" label="niandujihua_id" displaytype="hidden">
+					<inputbox type="textbox" defaultvalue="url{niandujihua_id}"></inputbox>
+				</col>
+			</display>
+
+			<sql>
+			<select>
+					<value>
+						<![CDATA[SELECT * FROM zbgl_kygl_niandujihuaxx where  {#condition#} order by jiedian]]>
+					</value>
+					<condition name="niandujihua_id" label="节点"
+						hidden="true">
+						<value>
+								<![CDATA[(niandujihua_id like  '%#data#%' )]]>
+						</value>
+						
+					</condition>
+				</select>
+				<!--
+					<insert> insert into
+					zbgl_kygl_niandujihuaxx(id=uuid{},@{jiedian},@{jiediansuoshuniandu},@{zhuyaoyanjiuneirong},@{zhibiao},@{beizhu},@{chengguo},@{wanchengshijian},niandujihua_id=url{niandujihua_id});
+					</insert> <update> update
+					zbgl_kygl_niandujihuaxx(@{jiedian},@{jiediansuoshuniandu},@{zhuyaoyanjiuneirong},@{zhibiao},@{beizhu},@{chengguo},@{wanchengshijian}
+					) where id=@{id__old}; </update>
+				-->
+				<insert pageurl="report{nianjihua_detail.nianjihua_report_detail}"
+					urlparams=" niandujihua_id=request{niandujihua_id}"
+					popupparams="{title:'添加',width:750,height:400}">
+				</insert>
+				<update pageurl="report{nianjihua_detail.nianjihua_report_detail}"
+					urlparams=" id=@{id}" popupparams="{title:'编辑',width:750,height:400}">
+				</update>
+				<delete>
+					delete from zbgl_kygl_niandujihuaxx where id = @{id__old};
+					
+				</delete>
+			</sql>
+
+			<format>
+
+				<value>
+			  <!-- 
+			  <![CDATA[
+			        zc="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">"
+			        +"<a href=\"ShowReport.wx?PAGEID=chengguojihuafujian\" target=\"_blank\">"
+			        +"附件"+"</a></span>";
+			     ]]>   
+			  <![CDATA[
+			        zz="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">"
+			        +"<a href=\"ShowReport.wx?PAGEID=chengguoshijifujian\" target=\"_blank\">"
+			        +"附件"+"</a></span>";
+			     ]]>   
+			    <![CDATA[
+			        cc="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">"
+			        +"<a href=\"ShowReport.wx?PAGEID=pingshenyijianfujian\" target=\"_blank\">"
+			        +"附件"+"</a></span>";
+			     ]]>   
+			  <![CDATA[
+			        cz="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">"
+			        +"<a href=\"ShowReport.wx?PAGEI=pingshenzhuanjiafujian\" target=\"_blank\">"
+			        +"附件"+"</a></span>";
+			     ]]>  
+			     --> 
+			  </value>
+			</format>
+		</report>
+	</page>
+
+
+
+	<!-- 从报表 -->
+	<page id="nianjihua_detail">
+		<report id="nianjihua_report_detail" title="编辑" width="700px"
+			align="center" type="editabledetail">
+			<display>
+				<col column="id" label="id" displaytype="hidden" />
+				<col column="jiedian" label="节点" />
+				<col column="wanchengshijian" label="完成时间" clickorderby="true"
+							datatype="date{yyyy-MM-dd}" br="true">
+					<inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)"></inputbox>
+				</col>
+				
+				<col column="zhibiao" label="指标" valuestyleproperty="colspan='3'"  br="true">
+					<inputbox type="textareabox" styleproperty="rows='4'"></inputbox>
+				</col>
+				<col column="zhuyaoyanjiuneirong" label="主要研究内容" valuestyleproperty="colspan='3'" br="true">
+					<inputbox type="textareabox" styleproperty="rows='4'"></inputbox>
+				</col>
+				<col column="chengguo" label="成果" valuestyleproperty="colspan='3'" datatype="clob" br="true">
+					<inputbox type="textareabox" styleproperty="rows='4'"></inputbox>
+				</col>
+				
+				<col column="beizhu" label="备注" valuestyleproperty="colspan='3'" datatype="clob" >
+					<inputbox type="textareabox" styleproperty="rows='4'"></inputbox>
+				</col>
+				<col column="niandujihua_id" displaytype="hidden"></col>
+
+			</display>
+
+			<sql>
+			<select>
+					<value>
+						<![CDATA[SELECT * FROM zbgl_kygl_niandujihuaxx where  {#condition#}]]>
+					</value>
+					<condition name="id" label="节点"
+						hidden="true">
+						<value>
+								<![CDATA[(id = #data# )]]>
+						</value>
+						
+					</condition>
+				</select>
+				<insert>
+					<params>
+						<param name="param1" value="url{niandujihua_id}"/>
+					</params>
+				 insert into
+					zbgl_kygl_niandujihuaxx(id=uuid{},@{jiedian},@{wanchengshijian},@{zhuyaoyanjiuneirong},@{zhibiao},@{beizhu},@{chengguo},niandujihua_id=#{param1});
+				</insert>
+				<update> update
+					zbgl_kygl_niandujihuaxx(@{wanchengshijian},@{jiedian},@{zhuyaoyanjiuneirong},@{zhibiao},@{beizhu},@{chengguo}) where id=@{id__old}; 
+				</update>
+
+			</sql>
+		</report>
+	</page>
+</applications>
+		

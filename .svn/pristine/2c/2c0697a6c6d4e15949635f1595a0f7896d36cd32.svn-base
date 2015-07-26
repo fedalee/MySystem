@@ -1,0 +1,439 @@
+<applications xmlns="http://www.wabacus.com"
+			   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			   xsi:schemaLocation="http://www.wabacus.com ../xsd/wabacus.applications.xsd">
+	<page id="shitingxitong">
+		<vpanel id="shitingxitong_vpanel" parenttitle="${shitingxitong}"  >
+				<report id="yijixitong_report" title="url{suoshuxianhao}号${shitingxitong}"  align="center" type="editablelist" >
+					<interceptor>
+						  <imports>
+				  	 		   <import>com.wabacus.util.*</import>
+				  	 		   <import>com.wabacus.system.*</import>
+				  	 	  </imports>
+				  	 	  <preaction>
+				  	 	      <![CDATA[
+									String xh = rrequest.getStringAttribute("suoshuxianhao");
+									rrequest.getRequest().setAttribute("key" ,xh);	
+							
+							  ]]>
+				  	 	  </preaction>
+			  	    </interceptor> 
+					<display colselect='true'>
+						<col column="{sequence:1}" label="序号"></col>
+						<col column="id" label="id" displaytype="hidden"></col>
+						<col column="suoshuxianhao" label="所属${xianhao}" displaytype="optional"/>
+						<col column="yijixitongmingcheng" label="一级${xitong}名称" ></col>
+						<col column="zhuyaogongneng" label="主要功能"></col>
+						<col column="zhuyaozucheng" label="主要组成"></col> 
+						<col column="jishuzerendanwei" label="${jishuzerendanwei}" />				          
+						<col column="beizhu" label="备注" datatype="clob" >
+								<inputbox type="textareabox" styleproperty="rows='5'"></inputbox>
+						</col>  
+					</display>
+					<sql>
+						<select>
+							<value>
+								<![CDATA[SELECT * FROM zbgl_zbjbxx_xianhao_yijixitong  where  {#condition#} order by id]]>
+							</value>
+							<condition name="suoshuxianhao" hidden="true">
+								<value>
+									<![CDATA[(suoshuxianhao =  #data# )]]>
+								</value>
+							</condition>  
+							<condition name="yijixitongmingcheng" label="一级${xitong}名称" labelposition="left">
+							    <value>
+							       <![CDATA[(yijixitongmingcheng like '%#data#%' )]]>
+							    </value>
+							</condition>
+						</select>
+						<insert pageurl="report{yijixitongdetail.yijixitongdetail_report}" urlparams="suoshuxianhao=request{key}" popupparams="{title:'新增总体布置',width:980,height:400}"></insert>
+			    		<update pageurl="report{yijixitongdetail.yijixitongdetail_report}" urlparams="suoshuyijixitongmingcheng=@{yijixitongmingcheng}" popupparams="{title:'编辑总体布置',width:980,height:400}" ></update>
+						<delete>
+							  	 delete from zbgl_zbjbxx_xianhao_yijixitong where id=@{id__old};
+						</delete>
+					</sql>
+				
+				</report>
+				   <tabpanel id="tab1" margin="10px" titlestyle="2" titlewidth="150px"  align="center" titlealign="center">
+           <hpanel id="zhuyaogongneng_vp3" parenttitle="主要功能">
+		   <report id="zhuayaogongneng_report"  type="form" right="20px"    depends="yijixitong_report" dependsparams="suoshuyijixitong=@{yijixitongmingcheng}"
+		   template="relative{htmltemplate/zhuangbeiguanli/zhuangbeijibenxinxi/buzhiheanzhuang_template.html}">
+					    <display>
+						      <col column="id" label="id" displaytype="hidden"></col> 
+						      <col column="yijixitongmingcheng" displaytype="hidden"></col> 
+						     <col column="buzhiheanzhuang" label="主要功能" datatype="clob" valuestyleproperty="colspan='5'">
+						         <inputbox type="textareabox" styleproperty="rows='15'"></inputbox>
+					         </col>
+					    </display>
+					    <sql>
+					       <select>
+						      <value>
+							<![CDATA[SELECT * FROM zbgl_zbjbxx_xianhao_yijixitong where  {#condition#}]]>
+						</value>
+						 <condition name="suoshuyijixitong" hidden="true">
+							       <value>
+								<![CDATA[(yijixitongmingcheng =  #data# )]]>
+							</value>
+						      </condition>
+						</select>
+					   <update>
+					     	update zbgl_zbjbxx_xianhao_yijixitong(@{buzhiheanzhuang}) where id=@{id__old};
+			  	       </update>
+						
+					    </sql>  
+				   </report>
+				    <report id="zhuyaogongneng_report"   align="center" pagesize="2"  width="300px" type="editablelist2"  title="图片：" >
+						<display dataheader="" >
+	                    	<col column="id" label="id" displaytype="hidden"/>
+						  	<col column="photo" label="" >
+						    	<inputbox type="file"   displaytype="image" deletetype="2" savepath="${image.path}" rooturl="/uploadfile/"></inputbox> <!-- />-->
+					    	</col>  
+					    </display>
+					  	<sql >				     
+							<value>
+								<![CDATA[SELECT * FROM zbgl_zbwxjghz_pic ]]>
+							</value>
+						    <insert>
+					  			insert into zbgl_zbwxjghz_pic(id=uuis{},@{photo});
+						    </insert>    						
+					  		<update>
+					     		update zbgl_zbwxjghz_pic(@{photo}) where id=@{id__old};			    
+					  		</update>
+					      	<delete>
+					      		delete from zbgl_zbwxjghz_pic where id=@{id__old}; 			    
+					  		</delete>     
+					    </sql >
+	  					<format>
+				      		<imports>
+						    	<import>com.wabacus.util.*</import>
+				      		</imports>
+				      		<value>
+				  				<![CDATA[
+				  					if(rrequest.getShowtype() == Consts.DISPLAY_ON_RICHEXCEL
+				  					||rrequest.getShowtype() == Consts.DISPLAY_ON_WORD)
+				  					{//如果当前是下载到excel/word中，则拼凑成图像。显示在页面中不用，因为它的输入框类型为FileBox，是在显示时填充的输入框，此输入框会自动显示图像
+				  					if(photo!=null&&!photo.trim().equals(""))
+					   				{
+					    				photo="<img src=\""+photo+"\">";
+					   				}
+				  					}
+				  				]]>
+				  			</value>
+				   		</format>  
+				  	</report>			
+		  </hpanel>
+		  <vpanel id="vp1" parenttitle="${zhuyaozhanshujishuxingnenghexitongzucheng}">
+		     <report id="zhuyaozhanjixingneng_report" title="概述" type="form"    
+		     depends="yijixitong_report" dependsparams="suoshuyijixitong=@{yijixitongmingcheng}"
+		     template="relative{htmltemplate/zhuangbeiguanli/zhuangbeijibenxinxi/zhuyaozhanshuxingnengzhibiao_template.html}">
+					    <display>
+						      <col column="id" label="id" displaytype="hidden"></col> 
+						      <col column="yijixitongmingcheng" displaytype="hidden"></col> 
+						     <col column="zhanshujishuxingneng" label="${zhuyaozhanshujishuxingneng}概述" datatype="clob" valuestyleproperty="colspan='5'">
+						         <inputbox type="textareabox" styleproperty="rows='15'"></inputbox>
+					         </col>
+					    </display>
+					    <sql>
+					       <select>
+						      <value>
+							<![CDATA[SELECT * FROM zbgl_zbjbxx_xianhao_yijixitong where  {#condition#}]]>
+						</value>
+						 <condition name="suoshuyijixitong" hidden="true">
+							       <value>
+								<![CDATA[(yijixitongmingcheng =  #data# )]]>
+							</value>
+						      </condition>
+						</select>
+					   <update>
+					     	update zbgl_zbjbxx_xianhao_yijixitong(@{zhanshujishuxingneng}) where id=@{id__old};
+			  	       </update>
+						
+					    </sql>
+				   </report>		   
+		 <report id="erjixitong_report" title="url{suoshuyijixitong}二级${xitong}" type="editablelist"    
+		         depends="yijixitong_report" dependsparams="suoshuyijixitong=@{yijixitongmingcheng}">
+		     <interceptor>
+				  <imports>
+		  	 		   <import>com.wabacus.util.*</import>
+		  	 		   <import>com.wabacus.system.*</import>
+		  	 	  </imports>
+		  	 	  <preaction>
+		  	 	      <![CDATA[
+							String yjxt = rrequest.getStringAttribute("suoshuyijixitong");
+							rrequest.getRequest().setAttribute("key" ,yjxt);	
+					
+					  ]]>
+		  	 	  </preaction>
+	  	     </interceptor> 
+			<display >
+				        <col column="{sequence:1}" label="序号"></col>
+						     <col column="id"  label="id" displaytype="hidden"></col>
+						     <col column="suoshuyijixitong" label="所属一级${xitong}" displaytype="hidden"/>						    
+						     <col column="erjixitongmingcheng" label="二级${xitong}名称" ></col>
+						     <col column="zhuyaogongneng" label="主要功能"></col>
+						     <col column="zhuyaoxingneng" label="主要性能"></col>
+						     <col column="zhuyaozucheng" label="主要组成"></col>						 
+						     <col column="jishuzerendanwei" label="${jishuzerendanwei}" />
+						     <col column="beizhu" label="备注" datatype="clob" >
+						     	<inputbox type="textareabox" styleproperty="rows='5'"></inputbox>
+				             </col>		    
+			</display>
+			<sql>
+				<select>
+					<value>
+						<![CDATA[SELECT * FROM zbgl_zbjbxx_xianhao_erjixitong  where  {#condition#} order by id]]>
+					</value>
+					<condition name="suoshuyijixitong" hidden="true">
+						<value>
+							<![CDATA[(suoshuyijixitong like  '%#data#%' )]]>
+						</value>
+					</condition>
+				</select>
+				<insert pageurl="report{erjixitongdetail.erjixitongdetail_report}" urlparams="suoshuyijixitong=request{key}" popupparams="{title:'新增总体布置',width:980,height:400}"></insert>
+			   	<update pageurl="report{erjixitongdetail.erjixitongdetail_report}" urlparams="suoshuerjixitongmingcheng=@{erjixitongmingcheng}" popupparams="{title:'编辑总体布置',width:980,height:400}" ></update>
+				<delete>
+					 delete from zbgl_zbjbxx_xianhao_erjixitong where id=@{id__old};
+				</delete>		
+			</sql>
+		</report> 
+		  </vpanel>  
+		  <framepanel id="vp2" parenttitle="${buzhiheanzhuang}" >
+		     <report id="buzhiheanzhuangtupian_report"   align="center" pagesize="2"   type="editablelist2"  title="图片："  >
+						<display dataheader="" >
+	                    	<col column="id" label="id" displaytype="hidden"/>
+						  	<col column="photo" label="" >
+						    	<inputbox type="file"   displaytype="image" deletetype="2" savepath="${image.path}" rooturl="/uploadfile/"></inputbox> <!-- />-->
+					    	</col>  
+					    </display>
+					  	<sql >				     
+							<value>
+								<![CDATA[SELECT * FROM zbgl_zbwxjghz_pic ]]>
+							</value>
+						    <insert>
+					  			insert into zbgl_zbwxjghz_pic(id=uuid{},@{photo});
+						    </insert>    						
+					  		<update>
+					     		update zbgl_zbwxjghz_pic(@{photo}) where id=@{id__old};			    
+					  		</update>
+					      	<delete>
+					      		delete from zbgl_zbwxjghz_pic where id=@{id__old}; 			    
+					  		</delete>     
+					    </sql >
+	  					<format>
+				      		<imports>
+						    	<import>com.wabacus.util.*</import>
+				      		</imports>
+				      		<value>
+				  				<![CDATA[
+				  					if(rrequest.getShowtype() == Consts.DISPLAY_ON_RICHEXCEL
+				  					||rrequest.getShowtype() == Consts.DISPLAY_ON_WORD)
+				  					{//如果当前是下载到excel/word中，则拼凑成图像。显示在页面中不用，因为它的输入框类型为FileBox，是在显示时填充的输入框，此输入框会自动显示图像
+				  					if(photo!=null&&!photo.trim().equals(""))
+					   				{
+					    				photo="<img src=\""+photo+"\">";
+					   				}
+				  					}
+				  				]]>
+				  			</value>
+				   		</format>  
+				  	</report>			
+		
+		  </framepanel>
+		   <hpanel id="vp3" parenttitle="${jiekouguanxi}">
+		   <report id="jiekouguanxi_report"  type="form" right="20px"
+		      depends="yijixitong_report" dependsparams="suoshuyijixitong=@{yijixitongmingcheng}"
+		   template="relative{htmltemplate/zhuangbeiguanli/zhuangbeijibenxinxi/jiekouguanxi_template.html}">
+					    <display>
+						      <col column="id" label="id" displaytype="hidden"></col> 
+						      <col column="yijixitongmingcheng" displaytype="hidden"></col> 
+						      <col column="jiekouguanxi" label="${jiekouguanxi}" datatype="clob" valuestyleproperty="colspan='5'">
+						         <inputbox type="textareabox" styleproperty="rows='15'"></inputbox>
+					          </col>
+					    </display>
+					    <sql>
+					       <select>
+						      <value>
+							      <![CDATA[SELECT * FROM zbgl_zbjbxx_xianhao_yijixitong where  {#condition#}]]>
+						      </value>
+						      <condition name="suoshuyijixitong" hidden="true">
+							       <value>
+								      <![CDATA[(yijixitongmingcheng =  #data# )]]>
+							       </value>
+						      </condition>
+						  </select>
+					      <update>
+					     	update zbgl_zbjbxx_xianhao_yijixitong(@{jiekouguanxi}) where id=@{id__old};
+			  	          </update>
+						
+					    </sql>  
+				   </report>
+				    <report id="jiekouguanxitupian_report"   align="center" pagesize="2"  width="300px" type="editablelist2"  title="图片：" >
+						<display dataheader="" >
+	                    	<col column="id" label="id" displaytype="hidden"/>
+						  	<col column="photo" label="" >
+						    	<inputbox type="file"   displaytype="image" deletetype="2" savepath="${image.path}" rooturl="/uploadfile/"></inputbox> <!-- />-->
+					    	</col>  
+					    </display>
+					  	<sql >				     
+							<value>
+								<![CDATA[SELECT * FROM zbgl_zbwxjghz_pic ]]>
+							</value>
+						    <insert>
+					  			insert into zbgl_zbwxjghz_pic(id=uuid{},@{photo});
+						    </insert>    						
+					  		<update>
+					     		update zbgl_zbwxjghz_pic(@{photo}) where id=@{id__old};			    
+					  		</update>
+					      	<delete>
+					      		delete from zbgl_zbwxjghz_pic where id=@{id__old}; 			    
+					  		</delete>     
+					    </sql >
+	  					<format>
+				      		<imports>
+						    	<import>com.wabacus.util.*</import>
+				      		</imports>
+				      		<value>
+				  				<![CDATA[
+				  					if(rrequest.getShowtype() == Consts.DISPLAY_ON_RICHEXCEL
+				  					||rrequest.getShowtype() == Consts.DISPLAY_ON_WORD)
+				  					{//如果当前是下载到excel/word中，则拼凑成图像。显示在页面中不用，因为它的输入框类型为FileBox，是在显示时填充的输入框，此输入框会自动显示图像
+				  					if(photo!=null&&!photo.trim().equals(""))
+					   				{
+					    				photo="<img src=\""+photo+"\">";
+					   				}
+				  					}
+				  				]]>
+				  			</value>
+				   		</format>  
+				  	</report>			
+		  </hpanel>
+		
+		     <report id="qitagaishu_report" title="其它概述" type="form" parenttitle="其它"
+		        depends="yijixitong_report" dependsparams="suoshuyijixitong=@{yijixitongmingcheng}"
+		     template="relative{htmltemplate/zhuangbeiguanli/zhuangbeijibenxinxi/qita_template.html}">
+					    <display>
+						      <col column="id" label="id" displaytype="hidden"></col> 
+						      <col column="yijixitongmingcheng" displaytype="hidden"></col> 
+						     <col column="qita" label="其它" datatype="clob" valuestyleproperty="colspan='5'">
+						         <inputbox type="textareabox" styleproperty="rows='15'"></inputbox>
+					         </col>
+					    </display>
+					    <sql>
+					       <select>
+						      <value>
+							<![CDATA[SELECT * FROM zbgl_zbjbxx_xianhao_yijixitong where  {#condition#}]]>
+						</value>
+						 <condition name="suoshuyijixitong" hidden="true">
+							       <value>
+								<![CDATA[(yijixitongmingcheng =  #data# )]]>
+							</value>
+						      </condition>
+						</select>
+					   <update>
+					     	update zbgl_zbjbxx_xianhao_yijixitong(@{qita}) where id=@{id__old};
+			  	       </update>
+						
+					    </sql>
+				   </report>
+		 
+	</tabpanel> 
+	</vpanel>
+	</page>
+	<page id="yijixitongdetail">
+	<report id="yijixitongdetail_report" title="url{suoshuxianhao}号${shitingxitong}"  align="center" type="editabledetail" >
+					<display colselect='true'>
+						<col column="id" label="id" displaytype="hidden"></col>
+						<col column="suoshuxianhao" label="所属${xianhao}" displaytype="hidden"/>
+						<col column="yijixitongmingcheng" label="一级${xitong}名称" ></col>
+						<col column="zhuyaogongneng" label="主要功能" br="true"></col>
+						<col column="zhuyaozucheng" label="主要组成" ></col> 
+						<col column="jishuzerendanwei" label="${jishuzerendanwei}" br="true">	
+							<inputbox  servervalidate="isNotEmpty(#label#列须从查询结果中选取)" servervalidatetype="both">				
+	                           <typeprompt count="15">
+	                                 <promptcol label="danweimingcheng" title="挂靠单位" matchmode="anywhere"></promptcol>
+	                                    <datasource>        
+	                                       <option dataset="@{select DANWEIMINGCHENG from XTSZ_JBXXWH_DANWEI where {#matchcondition#}}"></option>
+	                                    </datasource>
+	                             </typeprompt>				    
+						    </inputbox>
+					    </col>			          
+						<col column="beizhu" label="备注" datatype="clob" valuestyleproperty="colspan='3'">
+								<inputbox type="textareabox" styleproperty="rows='5'"></inputbox>
+						</col>  
+					</display>
+					<sql>
+						<select>
+							<value>
+								<![CDATA[SELECT * FROM zbgl_zbjbxx_xianhao_yijixitong  where  {#condition#} order by id]]>
+							</value>
+							<condition name="suoshuyijixitongmingcheng" hidden="true">
+							<value>
+									<![CDATA[(yijixitongmingcheng =  #data# )]]>
+							</value>
+					</condition>
+						</select>
+						<insert>
+							<params> 
+								<param name="suoshuxianhao" value="url{suoshuxianhao}"/>
+							</params>
+						  		 insert into zbgl_zbjbxx_xianhao_yijixitong(id=uuid{},suoshuxianhao=#{suoshuxianhao},@{yijixitongmingcheng},@{zhuyaogongneng},@{zhuyaozucheng},@{jishuzerendanwei},@{beizhu});
+						</insert>
+						<update>
+							     update zbgl_zbjbxx_xianhao_yijixitong(@{yijixitongmingcheng},@{zhuyaogongneng},@{zhuyaozucheng},@{jishuzerendanwei},@{beizhu}) where id=@{id__old};
+						</update>
+						<delete>
+							  	 delete from zbgl_zbjbxx_xianhao_yijixitong where id=@{id__old};
+						</delete>
+					</sql>
+				
+				</report>
+	</page>
+	<page id="erjixitongdetail">
+	 <report id="erjixitongdetail_report" title="二级${xitong}" type="editabledetail" >
+			<display >
+						     <col column="id"  label="id" displaytype="hidden"></col>
+						     <col column="suoshuyijixitong" label="所属一级${xitong}" displaytype="hidden"/>						    
+						     <col column="erjixitongmingcheng" label="二级${xitong}名称" ></col>
+						     <col column="zhuyaogongneng" label="主要功能" ></col>
+						     <col column="zhuyaoxingneng" label="主要性能" br="true"></col>
+						     <col column="zhuyaozucheng" label="主要组成"></col>						 
+						     <col column="jishuzerendanwei" label="${jishuzerendanwei}" valuestyleproperty="colspan='3'" br="true">
+							     <inputbox  servervalidate="isNotEmpty(#label#列须从查询结果中选取)" servervalidatetype="both">				
+	                           		<typeprompt count="15">
+	                                 <promptcol label="danweimingcheng" title="挂靠单位" matchmode="anywhere"></promptcol>
+	                                    <datasource>        
+	                                       <option dataset="@{select DANWEIMINGCHENG from XTSZ_JBXXWH_DANWEI where {#matchcondition#}}"></option>
+	                                    </datasource>
+	                             	</typeprompt>				    
+						    	</inputbox>
+					    	 </col>
+						     <col column="beizhu" label="备注" datatype="clob" valuestyleproperty="colspan='5'">
+						     	<inputbox type="textareabox" styleproperty="rows='5'"></inputbox>
+				             </col>		    
+			</display>
+			<sql>
+				<select>
+					<value>
+						<![CDATA[SELECT * FROM zbgl_zbjbxx_xianhao_erjixitong  where  {#condition#} order by id]]>
+					</value>
+					<condition name="suoshuerjixitongmingcheng" hidden="true">
+						<value>
+								<![CDATA[(erjixitongmingcheng =  #data# )]]>
+						</value>
+					</condition>
+				</select>
+				<insert>
+					<params> 
+						<param name="suoshuyijixitong" value="url{suoshuyijixitong}"/>
+					</params>
+				  	insert into zbgl_zbjbxx_xianhao_erjixitong(id=uuid{},suoshuyijixitong=#{suoshuyijixitong},@{erjixitongmingcheng},@{zhuyaogongneng},@{zhuyaoxingneng},@{zhuyaozucheng},@{jishuzerendanwei},@{beizhu});
+				</insert>
+				<update>
+					   update zbgl_zbjbxx_xianhao_erjixitong(@{erjixitongmingcheng},@{zhuyaogongneng},@{zhuyaoxingneng},@{zhuyaozucheng},@{jishuzerendanwei},@{beizhu}) where id=@{id__old};
+				</update>
+				<delete>
+					 delete from zbgl_zbjbxx_xianhao_erjixitong where id=@{id__old};
+				</delete>		
+			</sql>
+		</report> 
+		</page>
+</applications>		   

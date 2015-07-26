@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<applications xmlns="http://www.wabacus.com"
+			      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			   	  xsi:schemaLocation="http://www.wabacus.com ../xsd/wabacus.applications.xsd">
+		<page id="hongguanlunzheng">
+ 			<report id="hongguanlunzheng_report" title="宏观论证" align="center" type="editablelist" template="${articlelist.report.template}">
+				<display>
+					<col column="{sequence}" label="序号"></col>
+				    <col column="id" label="id" displaytype="hidden"></col>
+				    <col column="leixing" label="类型" ></col>
+					<col column="beizhu" label="备注"></col>
+				</display>
+			    <sql>
+			    	<select>
+						<value>
+							<![CDATA[SELECT * FROM XTSZ_JBXXWH_HGLZKTFL order by id]]>
+						</value>
+					</select>
+					<!-- <insert pageurl="report{hongguanlunzheng_detail.hongguanlunzheng_report_detail}" popupparams="{title:'添加',width:750,height:400}"></insert>
+					<update pageurl="report{hongguanlunzheng_detail.hongguanlunzheng_report_detail}" urlparams="id=@{id}" popupparams="{title:'编辑',width:750,height:400}"></update>
+					<delete>
+				   		delete from hyjs_hglz where id=@{id__old};
+					</delete> -->
+				</sql>
+			</report>
+        	<!-- 课题列表从报表 -->
+        	<report id="ketiliebiao_report" title="url{suoshuleixing}的课题列表" rowselect="single" depends="hongguanlunzheng_report" dependsparams="suoshuleixing=@{leixing}" align="center" type="editablelist" template="${articlelist.report.template}">
+				<interceptor>
+					<preaction>
+					<![CDATA[
+						String suoshuleixing = rrequest.getStringAttribute("suoshuleixing","");
+						rrequest.getRequest().setAttribute("suoshuleixing",suoshuleixing);
+					]]>
+					</preaction>
+			    </interceptor>
+				<display>
+					<col column="{sequence}" label="序号"></col>
+					<col column="id" label="id" displaytype="hidden"/>
+					<col column="ketimingcheng" label="课题名称" clickorderby="true"></col>
+					<col column="suoshuleixing" label="所属类型" clickorderby="true"  displaytype="hidden" valuestyleproperty="style='mso-number-format:\@'">				      					     
+					</col>
+					<col column="tijiaoriqi" label="提交日期" clickorderby="true" datatype="date{yyyy-MM-dd}">
+						<inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)"></inputbox>
+					</col>
+					<col column="kaishishijian" label="开始时间" clickorderby="true" datatype="date{yyyy-MM-dd}">
+						<inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)"></inputbox>
+					</col>
+					<col column="wanchengshijian" label="完成时间" clickorderby="true" datatype="date{yyyy-MM-dd}">
+						<inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)"></inputbox> 
+					</col>
+					<col column="suoshulaiyuan" label="来源">
+						<inputbox type="selectbox">
+						    <option value="机关1" label="机关1"></option> 
+						    <option value="机关2" label="机关2"></option>
+							<option value="机关3" label="机关3"></option> 
+					    </inputbox>
+					</col>
+					<col column="wanchengren" label="完成人" clickorderby="true"></col>
+					<col column="beizhu" label="备注" datatype="clob" valuestyleproperty=" colspan='1'">
+						<inputbox type="textareabox"></inputbox>
+					</col>
+					<col column="{non-fromdb}" property="yanjiuchengguo" label="课题研究成果" />
+				</display>
+				<sql>
+					<select>
+						    <value>
+							    <![CDATA[SELECT * FROM HYJS_HGLZ_KETILIEBIAO where {#condition#} order by id]]>
+						    </value>
+						<condition name="suoshuleixing" label="所属类型" hidden="true">
+							<value>
+								<![CDATA[(suoshuleixing = #data#)]]>
+							</value>
+				    	</condition>
+					</select>
+					<insert pageurl="report{ketiliebiao_detail.ketiliebiao_report_detail}" urlparams="suoshuleixing=request{suoshuleixing}" popupparams="{title:'添加',width:750,height:400}"></insert>
+					<update pageurl="report{ketiliebiao_detail.ketiliebiao_report_detail}" urlparams="id=@{id};suoshuleixing=request{suoshuleixing}" popupparams="{title:'编辑',width:750,height:400}"></update>
+					<!-- <insert>
+					   <value>
+				  		   insert into HYJS_HGLZ_KETILIEBIAO(id=uuid{},@{ketimingcheng},suoshuleixing=url{suoshuleixing},@{kaishishijian},@{wanchengshijian},@{suoshulaiyuan},@{wanchengren},@{beizhu});
+					   </value>
+					</insert>
+					<update>
+					     update HYJS_HGLZ_KETILIEBIAO(@{id},@{ketimingcheng},@{suoshuleixing},@{kaishishijian},@{wanchengshijian},@{suoshulaiyuan},@{wanchengren},@{beizhu}) where id=@{id};					    
+					</update> -->
+					<delete>
+					  	 delete from HYJS_HGLZ_KETILIEBIAO where id=@{id__old};
+					</delete>
+				</sql>
+				<format>
+			  		<value>
+							rrequest.getRequest().setAttribute("ketimingcheng",ketimingcheng);//存放request，以便显示标题时能取到
+							rrequest.getRequest().setAttribute("suoshuleixing",suoshuleixing);//存放request，以便显示标题时能取到
+					     <![CDATA[
+	        				yanjiuchengguo="<span onmouseover=\"this.style.cursor='pointer'\"  >"
+					 		+ "<a href=\"#\" onclick=\"wx_winpage('ShowReport.wx?PAGEID=zbwxjghz_fujian&leibie="+ketimingcheng+"&fujiansuoshu="+suoshuleixing+"',{width:1100,height:400})\" target=\"sampleframe\">"+"<big>"
+					 		+ "附件" + "</big>"+"</a></span>";
+			     		 ]]>  
+					</value>
+				</format>
+			</report>
+        </page>
+        <!-- 课题列表的弹出框 -->
+        <page id="ketiliebiao_detail">
+			<report id="ketiliebiao_report_detail" title="编辑" width="700px" align="center" type="editabledetail" servervalidateclass="com.ShujuJiaoyan">
+				<display>
+					<col column="id" label="id" displaytype="hidden"></col>
+					<col column="ketimingcheng" label="课题名称" clickorderby="true"></col>
+					<col column="suoshuleixing" label="所属类型" clickorderby="true" displaytype="hidden" valuestyleproperty="style='mso-number-format:\@'"></col>
+					<col column="tijiaoriqi" label="提交日期" clickorderby="true" datatype="date{yyyy-MM-dd}" br="true">
+						<inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)"></inputbox>
+					</col>
+					<col column="kaishishijian" label="开始时间" clickorderby="true" datatype="date{yyyy-MM-dd}">
+						<inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)"></inputbox>
+					</col>
+					<col column="wanchengshijian" label="完成时间" clickorderby="true" datatype="date{yyyy-MM-dd}" br="true">
+						<inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)"></inputbox> 
+					</col>
+					<col column="suoshulaiyuan" label="来源">
+						<!-- <inputbox type="selectbox">
+						    <option value="机关1" label="机关1"></option>
+						    <option value="机关2" label="机关2"></option>
+							<option value="机关3" label="机关3"></option>
+					    </inputbox> -->
+					    <inputbox servervalidate="isNotEmpty(#label#列须从查询结果中选取)" servervalidatetype="both">
+				        	<typeprompt count="15" timeout="0" selectbox="true">
+					       		<promptcol label="DANWEIMINGCHENG" title="来源" matchmode="anywhere"></promptcol>
+					       		<datasource>        <option dataset="@{select DANWEIMINGCHENG from XTSZ_JBXXWH_DANWEI where {#matchcondition#}}"></option>       </datasource>
+				        	</typeprompt>
+				     	</inputbox>
+					</col>
+					<col column="wanchengren" label="完成人" clickorderby="true" br="true"></col>
+					<col column="beizhu" label="备注" datatype="clob" valuestyleproperty=" colspan='3'">
+						<inputbox type="textareabox" styleproperty="rows='4'"></inputbox>
+					</col>
+					<!-- <col column="{non-fromdb}" property="yanjiuchengguo" label="课题研究成果"></col> -->
+				</display>
+				<sql>
+			    	<select>
+						    <value>
+							    <![CDATA[SELECT * FROM HYJS_HGLZ_KETILIEBIAO where  {#condition#} order by id]]>
+						    </value>
+						<condition name="suoshuleixing" label="所属类型" hidden="true">
+							<value>
+								<![CDATA[( suoshuleixing = #data#)]]>
+							</value>
+				    	</condition>
+					</select>
+					<insert>
+					   <value>
+				  		   insert into HYJS_HGLZ_KETILIEBIAO(id=uuid{},@{ketimingcheng},suoshuleixing=url{suoshuleixing},@{tijiaoriqi},@{kaishishijian},@{wanchengshijian},@{suoshulaiyuan},@{wanchengren},@{beizhu});
+					   </value>
+					</insert>
+					<update>
+					     update HYJS_HGLZ_KETILIEBIAO(@{id},@{ketimingcheng},@{suoshuleixing},@{tijiaoriqi},@{kaishishijian},@{wanchengshijian},@{suoshulaiyuan},@{wanchengren},@{beizhu}) where id=@{id};					    
+					</update>
+					<delete>
+					  	 delete from HYJS_HGLZ_KETILIEBIAO where id=@{id__old};
+					</delete>
+				</sql>
+			</report>
+		</page>
+	</applications>

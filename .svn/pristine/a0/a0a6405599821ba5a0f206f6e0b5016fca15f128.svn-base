@@ -1,0 +1,15 @@
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tr><td></td><td><wx:title/></td></tr><!--标题栏-->
+
+  		    <tr><td align='left' width='10%'><wx:data col="q_diancijianrong" showlabel="true" showdata="false"/>:</td><td align='left'><wx:data col="q_diancijianrong" showlabel="false" showdata="true"/></td></tr>
+		   <tr><td >&nbsp;&nbsp;&nbsp;&nbsp;</td><td >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+		   <tr><td >&nbsp;&nbsp;&nbsp;&nbsp;</td><td >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+		   <tr><td align='left' width='10%'><wx:data col="q_quanchuanxingjiancha" showlabel="true" showdata="false"/>：</td><td align='left'><wx:data col="q_quanchuanxingjiancha" showlabel="false" showdata="true"/></td></tr>
+		   <tr><td >&nbsp;&nbsp;&nbsp;&nbsp;</td><td >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>	
+		   <tr><td >&nbsp;&nbsp;&nbsp;&nbsp;</td><td >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>	   		 
+		   <tr><td align='left' width='10%'>试验大纲(附件)：</td><td align='left'><wx:data col="ca" showlabel="false" showdata="true"/></td></tr>
+		   <tr><td >&nbsp;&nbsp;&nbsp;&nbsp;</td><td >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+		   <tr><td align='left' width='10%'>试验资料(附件)：</td><td align='left'><wx:data col="cb" showlabel="false" showdata="true"/></td></tr>		   
+
+
+</table>

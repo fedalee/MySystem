@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<applications xmlns="http://www.wabacus.com"
+			   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			   xsi:schemaLocation="http://www.wabacus.com ../../xsd/wabacus.applications.xsd">
+<page  id="shebei" js="/webresources/script/validate.js,/wabacusdemo/js/testcallback.js">
+		 
+		   <report id="report1"  type="list" pagesize="12"  celldrag="0" rowselect="single" >
+		   
+
+
+				 <display valuetdwidth="80px" labeltdwidth="80px" labelbgcolor="#f0f0f0" labelalign="left" valuealign="left">
+                        <col column="id" label="id" displaytype="hidden" />
+                        <col column="suoshuleibie" label="${shebeileibie}" valuestyleproperty="style='mso-number-format:\@'" ></col>
+                        <col column="shebeishuliang" label="${shebei}数量" />	 
+				   </display>
+				  <sql>
+				   <select>
+				     <value>
+						<![CDATA[SELECT * FROM XTSZ_JBXXWH_SHEBEIFENLEI]]>
+					 </value>
+				   </select>
+
+			</sql>
+			<format>
+			<imports>
+				<import>com.wabacus.util.*</import>
+				<import>com.wabacus</import>
+				</imports>
+				<value>
+			
+            <![CDATA[
+			     	
+			     	String querySql_shebeishuliang = null;
+			     	
+			     	querySql_shebeishuliang = "select * from sbgl_shebei_xiangxixinxi where suoshuleibie = '"+suoshuleibie+"'"; 
+			     	shebeishuliang = UserDefinedDatabaseOperations.syshxinghaoshuliang(querySql_shebeishuliang) + "";
+			     	
+			     	
+		   ]]>
+
+             </value>
+
+             
+			</format>
+		 </report> 
+ <report id="shebeiliebiao"  title="url{suoshuleibie}列表" type="editablelist"  rowselect="single" celldrag="0" depends="report1" dependsparams="suoshuleibie=@{suoshuleibie}" > 	 
+			<interceptor>
+				<imports>
+					<import>javax.servlet.http.HttpServletRequest;</import>
+					<import>com.wabacus.system.ReportRequest</import>
+				</imports>
+				<preaction>
+
+					HttpServletRequest r=rrequest.getRequest();
+					r.setAttribute("shebeileibie",r.getParameter("suoshuleibie"));
+
+				</preaction>
+
+			</interceptor>
+
+				 <display valuetdwidth="80px" labeltdwidth="80px" labelbgcolor="#f0f0f0" labelalign="left" valuealign="left">
+                       <col column="{sequence:1}" label="序号"></col>
+                       <col column="id" label="id" displaytype="hidden" />
+                       <col column="suoshuleibie" label="suoshuleibie" displaytype="hidden" />
+               		   <col column="shebeimingcheng" label="${shebeimingcheng}" />   
+					   <col column="xinghaoguige" label="${xinghaoguige}" >	 </col>
+					   <col column="jishuzhibiao" label="${jishuzhibiao}" >	 </col> 
+					   <col column="yanzhidanwei" label="${yanzhidanwei}" >	 </col> 
+					   <col column="shengchandanwei" label="生产单位" >	</col>				     
+					   <col column="jishuzerendanwei" label="${jishuzerendanwei}"  > </col> 
+   					   <col column="jishuxiezuodanwei" label="${jishuxiezuodanwei}" >  </col>           
+					   <col column="gongnengtexing" label="${gongnengtexing}" > </col>					    
+    				   <col column="zhongdawenti" label="重大问题"  > </col>					    				
+					   <col column="shebeigaishu" label="${shebei}概述"  valuestyleproperty="colspan='1'"></col>
+					   <col column="{non-fromdb}"  property="shitingyingyongqingkuang" label="${shitingshiyongqingkuang}" >	 </col>					    
+					   <col column="{non-fromdb}" property="xgzl" label="相关资料"></col>
+					   <col column="{non-fromdb}" property="cc" label="附件"></col>					   
+				  </display>
+				  <sql >
+					  <select>
+   						   <value><![CDATA[SELECT * FROM sbgl_shebei_xiangxixinxi where {#condition#} order by shebeimingcheng]]></value>
+			                   <condition name="suoshuleibie" label=""  hidden="true">
+								  <value>
+										  <![CDATA[(suoshuleibie like '%#data#%' )]]>
+								  </value>					
+							   </condition>		
+					  </select>
+				      <insert refreshparentonsave="report1|true" pageurl="report{shebeixiangxiPopupPage.shebeixiangxiPopup}"
+				 	     urlparams="suoshuleibie=request{shebeileibie}" popupparams="{title:'新增${shebei}',width:980,height:450}">
+				      </insert>
+				      <update pageurl="report{shebeixiangxiPopupPage.shebeixiangxiPopup}"
+					     urlparams="shebeimingcheng=@{shebeimingcheng};suoshuleibie=request{shebeileibie}" popupparams="{title:'修改${shebei}信息',width:980,height:450}">
+				      </update>				
+					  <delete refreshparentonsave="report1|true">
+					      delete from sbgl_shebei_xiangxixinxi where id=@{id__old};					
+					 </delete> 					
+			    </sql>
+			 <format>
+			 <imports>
+			 <import>java.util.*</import>
+			 <import>com.wabacus.util.*</import>
+			 </imports>
+			   <value>
+                   
+                   <![CDATA[
+                   					String str="";
+                   					zhongdawenti=zhongdawenti==null?"":zhongdawenti.trim();
+			  						if(!zhongdawenti.equals(""))
+			  						{
+			  							str=zhongdawenti;
+			  							if(str.length()>7)
+			  							str=str.substring(0,7)+"……";
+			  							zhongdawenti="<span onclick=\"wx_tip('"+zhongdawenti+"',this,{color:'#666666',width:'350px'})\">"+str+"</span>";
+			  						}
+			  						
+	  						
+                   					shebeigaishu=shebeigaishu==null?"":shebeigaishu.trim();
+			  						if(!shebeigaishu.equals(""))
+			  						{
+			  							str=shebeigaishu;
+			  							if(str.length()>7)
+			  							str=str.substring(0,7)+"……";
+			  							shebeigaishu="<span onclick=\"wx_tip('"+shebeigaishu+"',this,{color:'#666666',width:'350px'})\">"+str+"</span>";
+			  						}
+			  						
+
+			  						
+			  						//----------------------------------------
+			  						//打印所有使用shebei的xianhao;
+			  						List cols=new ArrayList();
+			  						cols.add("SHEBEIMING");
+			  						//cols.add("suoshuleibie");
+			  						List values=new ArrayList();
+			  						values.add(shebeimingcheng);
+			  						//values.add(suoshuleibie);
+			  						Dao d=Dao.getInstance();
+			  						List result =d.getRecoed("zbgl_zbjbxx_xianhao_stbz",cols,values);
+			  						String display = " ";	  			
+			  						for(int i=0;i<result.size();i++)
+			  						{
+			  						display+=((Map)(result.get(i))).get("SUOSHUXIANHAO");
+			  						display+=";";
+			  						};			  						
+			  						if (display == " " )
+			  						{
+			  						   shitingyingyongqingkuang="未使用" ;
+			  						   
+			  						}
+			  						else 
+			  						{
+			  						    shitingyingyongqingkuang=display;
+			  						}
+			  						//--------------------------------------
+			  						
+                   					gongnengtexing=gongnengtexing==null?"":gongnengtexing.trim();
+			  						if(!gongnengtexing.equals(""))
+			  						{
+			  							str=gongnengtexing;
+			  							if(str.length()>7)
+			  							str=str.substring(0,7)+"……";
+			  							gongnengtexing="<span onclick=\"wx_tip('"+gongnengtexing+"',this,{color:'#666666',width:'350px'})\">"+str+"</span>";
+			  						}
+			  						
+			  						shitingyingyongqingkuang=shitingyingyongqingkuang==null?"":shitingyingyongqingkuang.trim();
+			  						if(!shitingyingyongqingkuang.equals(""))
+			  						{
+			  							str=shitingyingyongqingkuang;
+			  							if(str.length()>7)
+			  							str=str.substring(0,7)+"……";
+			  							shitingyingyongqingkuang="<span onclick=\"wx_tip('"+shitingyingyongqingkuang+"',this,{color:'#666666',width:'350px'})\">"+str+"</span>";
+			  						}
+			  						
+			  									  									  									  									  						                   					
+			                        cc="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">"
+			        		              +"<a href=\"#\" onclick=\"wx_winpage('ShowReport.wx?PAGEID=xb_fujian&leibie="+shebeimingcheng+"&fujiansuoshu="+suoshuleibie+"',{width:1100,height:400})\" >"
+			        	                +"点击查看"+"</a></span>";
+			        	           xgzl="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">"
+							        + "<a href=\"#\" onclick=\"wx_winpage('ShowReport.wx?PAGEID=xb_fujian&leibie="+shebeimingcheng+"&fujiansuoshu="+suoshuleibie+"相关资料',{width:1100,height:400})\" target=\"sampleframe\">"
+							      + "点击查看" + "</a></span>";
+
+
+			               ]]>  
+			               
+			   </value>
+			</format>
+				 
+		 </report>	 
+		 
+		 
+		 
+		 
+	</page>
+
+
+
+</applications>
+

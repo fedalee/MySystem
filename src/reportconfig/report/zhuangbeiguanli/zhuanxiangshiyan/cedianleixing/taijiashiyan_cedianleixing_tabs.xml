@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<applications xmlns="http://www.wabacus.com"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.wabacus.com ../../../../xsd/wabacus.applications.xsd">
+	<page id="taijiashiyan_cedianleixing_tabs">
+		<tabpanel id="taijiashiyancedianleixing_tabpanel" titlealign="left"
+			titlestyle="2" margin="10px">
+
+			<report id="jizuozhendong_report" title="基座振动_测点" parenttitle="基座振动"
+				type="editablelist2">
+				<display>
+					<col column="{sequence}" label="序号" />
+					<col column="id" label="id" displaytype="optional" />
+					<col column="cedianmingcheng" label="测点名称">
+						<inputbox type="selectbox">
+							<option dataset="class{dataSource.optionList.CeDianMingCheng}"></option>
+						</inputbox>
+					</col>
+					<col column="suoshu" label="所属单机设备" displaytype="hidden" />
+					<col column="cedianleibie" label="测点类别" displaytype="hidden" />
+					<col column="cedianzhi" label="测点值" />
+				</display>
+				<sql>
+					<select>
+						<value>
+							<![CDATA[SELECT * FROM zbgl_zxsy_cedian where {#condition#} and cedianleibie = '基座振动']]>
+						</value>
+						<condition name="suoshudanjishebei" label="所属单机设备"
+							hidden="true">
+							<value>
+								<![CDATA[( suoshu = #data#)]]>
+							</value>
+						</condition>
+					</select>
+					<insert>
+						<params>
+							<param name="cedianleibie" value="基座振动"></param>
+						</params>
+						insert into zbgl_zxsy_cedian
+						(id=uuid{},@{cedianmingcheng},
+						suoshu=url{suoshudanjishebei},
+						cedianleibie=#{cedianleibie}, @{cedianzhi});
+					</insert>
+<!-- 					<update>
+						update zbgl_zxsy_cedian(@{cedianmingcheng},@{cedianzhi})
+						where id = @{id__old};
+					</update> -->
+					<delete>
+						delete from zbgl_zxsy_cedian where id=@{id__old};
+					</delete>
+				</sql>
+				<format>
+					<value>
+						<![CDATA[											
+							cedianmingcheng="<span onmouseover=\"this.style.cursor='pointer'\">"
+								+"<a href=\"ShowReport.wx?PAGEID=cedian&id="+id+"\" target=\"_blank\">"
+								+cedianmingcheng+"</a></span>";
+						]]>
+					</value>
+				</format>
+
+			</report>
+
+
+			<report id="tingneizhendong_report" title="艇内${zhendong}_测点"
+				parenttitle="艇内${zhendong}" type="editablelist2">
+				<display>
+					<col column="{sequence}" label="序号" />
+					<col column="id" label="id" displaytype="optional" />
+					<col column="cedianmingcheng" label="测点名称">
+						<inputbox type="selectbox">
+							<option dataset="class{dataSource.optionList.CeDianMingCheng}"></option>
+						</inputbox>
+					</col>
+					<col column="suoshu" label="所属单机设备" displaytype="hidden" />
+					<col column="cedianleibie" label="测点类别" displaytype="hidden" />
+					<col column="cedianzhi" label="测点值" />
+				</display>
+				<sql>
+					<select>
+						<value>
+							<![CDATA[SELECT * FROM zbgl_zxsy_cedian where {#condition#} and cedianleibie = '艇内振动']]>
+						</value>
+						<condition name="suoshudanjishebei" label="所属单机设备"
+							hidden="true">
+							<value>
+								<![CDATA[( suoshu = #data#)]]>
+							</value>
+						</condition>
+					</select>
+					<insert>
+						<params>
+							<param name="cedianleibie" value="艇内振动"></param>
+						</params>
+						insert into zbgl_zxsy_cedian
+						(id=uuid{},@{cedianmingcheng},
+						suoshu=url{suoshudanjishebei},
+						cedianleibie=#{cedianleibie}, @{cedianzhi});
+					</insert>
+<!-- 					<update>
+						update zbgl_zxsy_cedian(@{cedianmingcheng},@{cedianzhi})
+						where id = @{id__old};
+					</update> -->
+					<delete>
+						delete from zbgl_zxsy_cedian where id=@{id__old};
+					</delete>
+				</sql>
+				<format>
+					<value>
+						<![CDATA[											
+							cedianmingcheng="<span onmouseover=\"this.style.cursor='pointer'\">"
+								+"<a href=\"ShowReport.wx?PAGEID=cedian&id="+id+"\" target=\"_blank\">"
+								+cedianmingcheng+"</a></span>";
+						]]>
+					</value>
+				</format>
+			</report>
+
+			<report id="kongqizaosheng_report" title="空气噪声_测点"
+				parenttitle="空气噪声" type="editablelist2"
+				interceptor="com.wabacus.util.IdentifierGenerator_Interceptor">
+				<display>
+					<col column="{sequence}" label="序号" />
+					<col column="id" label="id" displaytype="optional" />
+					<col column="cedianmingcheng" label="测点名称">
+						<inputbox type="selectbox">
+							<option dataset="class{dataSource.optionList.CeDianMingCheng}"></option>
+						</inputbox>
+					</col>
+					<col column="suoshu" label="所属单机设备" displaytype="hidden" />
+					<col column="cedianleibie" label="测点类别" displaytype="hidden" />
+					<col column="cedianzhi" label="测点值" />
+				</display>
+				<sql>
+					<select>
+						<value>
+							<![CDATA[SELECT * FROM zbgl_zxsy_cedian where {#condition#} and cedianleibie = '空气噪声']]>
+						</value>
+						<condition name="suoshudanjishebei" label="所属单机设备"
+							hidden="true">
+							<value>
+								<![CDATA[( suoshu = #data#)]]>
+							</value>
+						</condition>
+					</select>
+					<insert>
+						<params>
+							<param name="cedianleibie" value="空气噪声"></param>
+						</params>
+						insert into zbgl_zxsy_cedian
+						(id=uuid{},@{cedianmingcheng},
+						suoshu=url{suoshudanjishebei},
+						cedianleibie=#{cedianleibie}, @{cedianzhi});
+					</insert>
+<!-- 					<update>
+						update zbgl_zxsy_cedian(@{cedianmingcheng},@{cedianzhi})
+						where id = @{id__old};
+					</update> -->
+					<delete>
+						delete from zbgl_zxsy_cedian where id=@{id__old};
+					</delete>
+				</sql>
+				<format>
+					<value>
+						<![CDATA[											
+							cedianmingcheng="<span onmouseover=\"this.style.cursor='pointer'\">"
+								+"<a href=\"ShowReport.wx?PAGEID=cedian&id="+id+"\" target=\"_blank\">"
+								+cedianmingcheng+"</a></span>";
+						]]>
+					</value>
+				</format>
+			</report>
+
+
+
+		</tabpanel>
+	</page>
+
+
+
+
+</applications>

@@ -1,0 +1,32 @@
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tr><td></td><td><wx:title/></td></tr><!--标题栏-->
+
+  		   <tr><td align='left' width='12%' ><wx:data col="m_jiangzhuansu" showlabel="true" showdata="false"/>：</td><td align='left'><wx:data col="m_jiangzhuansu" showlabel="false" showdata="true"/></td></tr>
+		   <tr><td >&nbsp;&nbsp;&nbsp;&nbsp;</td><td >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+		   <tr><td >&nbsp;&nbsp;&nbsp;&nbsp;</td><td >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+  		   <tr><td align='left' width='12%'><wx:data col="m_shouxiangjiao" showlabel="true" showdata="false"/>：</td><td align='left'><wx:data col="m_shouxiangjiao" showlabel="false" showdata="true"/></td></tr>
+		   <tr><td >&nbsp;&nbsp;&nbsp;&nbsp;</td><td >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+		   <tr><td >&nbsp;&nbsp;&nbsp;&nbsp;</td><td >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>		   
+  		   <tr><td align='left' width='12%'><wx:data col="m_zongqingjiao" showlabel="true" showdata="false"/>：</td><td align='left'><wx:data col="m_zongqingjiao" showlabel="false" showdata="true"/></td></tr>
+		   <tr><td >&nbsp;&nbsp;&nbsp;&nbsp;</td><td >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+		   <tr><td >&nbsp;&nbsp;&nbsp;&nbsp;</td><td >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>	
+  		   <tr><td align='left' width='12%'><wx:data col="m_fangxiangduoduojiao" showlabel="true" showdata="false"/>：</td><td align='left'><wx:data col="m_fangxiangduoduojiao" showlabel="false" showdata="true"/></td></tr>
+		   <tr><td >&nbsp;&nbsp;&nbsp;&nbsp;</td><td >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+		   <tr><td >&nbsp;&nbsp;&nbsp;&nbsp;</td><td >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+  		   <tr><td align='left' width='12%' ><wx:data col="m_tuijinzhuangtai" showlabel="true" showdata="false"/>：</td><td align='left'><wx:data col="m_tuijinzhuangtai" showlabel="false" showdata="true"/></td></tr>
+		   <tr><td >&nbsp;&nbsp;&nbsp;&nbsp;</td><td >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+		   <tr><td >&nbsp;&nbsp;&nbsp;&nbsp;</td><td >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+  		   <tr><td align='left' width='12%'><wx:data col="shuimianhuizhuanzhijing" showlabel="true" showdata="false"/>：</td><td align='left'><wx:data col="shuimianhuizhuanzhijing" showlabel="false" showdata="true"/></td></tr>
+		   <tr><td >&nbsp;&nbsp;&nbsp;&nbsp;</td><td >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+		   <tr><td >&nbsp;&nbsp;&nbsp;&nbsp;</td><td >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+  		   <tr><td align='left' width='12%'><wx:data col="shuimianzxingcaoduo" showlabel="true" showdata="false"/>：</td><td align='left'><wx:data col="shuimianzxingcaoduo" showlabel="false" showdata="true"/></td></tr>
+		   <tr><td >&nbsp;&nbsp;&nbsp;&nbsp;</td><td >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+		   <tr><td >&nbsp;&nbsp;&nbsp;&nbsp;</td><td >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+  		   <tr><td align='left' width='12%'><wx:data col="shuimiandaoche" showlabel="true" showdata="false"/>：</td><td align='left'><wx:data col="shuimiandaoche" showlabel="false" showdata="true"/></td></tr>
+		   <tr><td >&nbsp;&nbsp;&nbsp;&nbsp;</td><td >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+		   <tr><td >&nbsp;&nbsp;&nbsp;&nbsp;</td><td >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+  		   <tr><td align='left' width='12%'><wx:data col="shuimianzhidong" showlabel="true" showdata="false"/>：</td><td align='left'><wx:data col="shuimianzhidong" showlabel="false" showdata="true"/></td></tr>
+		   <tr><td >&nbsp;&nbsp;&nbsp;&nbsp;</td><td >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+		   <tr><td >&nbsp;&nbsp;&nbsp;&nbsp;</td><td >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+
+</table>

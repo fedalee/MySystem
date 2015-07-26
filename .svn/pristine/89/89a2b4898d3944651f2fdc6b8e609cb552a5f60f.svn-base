@@ -1,0 +1,33 @@
+<applications xmlns="http://www.wabacus.com"
+			   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			   xsi:schemaLocation="http://www.wabacus.com ../xsd/wabacus.applications.xsd">
+	<page id="zhuyaogaidong" js="/MySystem/js/testcallback.js">
+	    <framepanel id="zhuyaogaidong_framepanel" title="主要改动" width="1000px" height="200px" align="center">
+				<report id="zhuyaogaidong_report"   type="editabledetail"
+				         template="relative{htmltemplate/zhuangbeiguanli/zhuangbeijibenxinxi/zhuyaogaidong_template.html}" >
+					<display >
+						<col column="id" label="id" displaytype="hidden"></col>
+                        <col column="zhuyaogaidong" label="主要改动" datatype="clob" valuestyleproperty="colspan='1'">
+                        	<inputbox type="textareabox" styleproperty="rows='8'"></inputbox>
+                        </col>
+					</display>
+					<sql>
+						<select>
+							<value>
+								<![CDATA[SELECT * FROM zbgl_zbjbxx_xianhao where  {#condition#}  order by id]]>
+							</value>
+							<condition name="suoshuxianhao" label="舷号" hidden="true">
+								<value>
+									<![CDATA[(xianhao = #data#)]]>
+								</value>
+							</condition>
+						 </select>					      
+						 <update>
+						     update zbgl_zbjbxx_xianhao(@{zhuyaogaidong}) where id=@{id__old};
+						 </update>
+					</sql>
+				</report>
+		</framepanel>
+	</page>
+</applications>
+			   

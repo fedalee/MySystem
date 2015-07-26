@@ -1,0 +1,232 @@
+<applications xmlns="http://www.wabacus.com"
+			   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			   xsi:schemaLocation="http://www.wabacus.com ../xsd/wabacus.applications.xsd">
+	<page id="changgui_detail">     
+				<report id="changguidetail_report" title="${changgui}"  align="center" type="editabledetail"  >
+					<display colselect='true'>					
+						<col column="id" label="id" displaytype="hidden"></col>
+						<col column="xinghao" label="${xinghao}" ></col>
+						<col column="leixing" label="类型" valuestyleproperty="colspan='3'" br="true">
+							<inputbox type="selectbox">
+								<option value="AIP" label="AIP"></option> 
+								<option value="普通柴电" label="普通柴电"></option>
+								<option value="其它" label="其它"></option>
+							</inputbox>  
+						</col>						
+						<col column="chang" label="长" ></col>
+						<col column="kuan" label="宽"></col>
+						<col column="gao" label="高" br="true"></col>
+						<col column="zaijianshuliang" label="在建数量" ></col>
+						<col column="fuyishuliang" label="${fuyishuliang}"></col>
+						<col column="shengchanchang" label="生产厂" br="true">
+						</col>
+						<col column="beizhu" label="备注" datatype="clob" valuestyleproperty="colspan='5'" >
+							<inputbox type="textareabox" styleproperty="rows='5'"></inputbox>
+				     	</col>					
+					</display>
+					<sql>
+						 <select>
+							<value>
+								<![CDATA[SELECT * FROM zbgl_zbjbxx_xinghao where  {#condition#} order by xinghao]]>
+							</value>
+							<condition name="suoshuxinghao" hidden="true">
+								<value>
+									<![CDATA[(xinghao like '%#data#%' )]]>
+								</value>
+				 			</condition>
+			  			 </select>					      
+						 <insert>					 
+						    	<params> 
+						    		<param name="suoshuleibie" value="常规"/>
+						        </params>
+					  		 insert into zbgl_zbjbxx_xinghao(id=uuid{},@{xinghao},@{leixing},suoshuleibie=#{suoshuleibie},@{chang},@{kuan},@{gao},@{zaijianshuliang},@{fuyishuliang},@{shengchanchang},@{beizhu});				  		
+						 </insert>
+						  <update>
+						     update zbgl_zbjbxx_xinghao(@{xinghao},@{leixing},@{chang},@{kuan},@{gao},@{zaijianshuliang},@{fuyishuliang},@{shengchanchang},@{beizhu}) where id=@{id__old};
+						  </update>
+						  <delete>
+						  	 delete from zbgl_zbjbxx_xinghao where id=@{id__old};
+						  </delete>
+					</sql>		
+				</report>
+	</page>
+	<!--${xianhao}-->
+	<page id="changguixianhao_detail">
+			<report id="changguixianhaodetail_report" title="${xianhao}" align="center" 
+				    type="editabledetail" interceptor="interceptor.DataCopyInterceptor">
+			     <display>
+						   	<col column="id" label="id" displaytype="hidden"></col> 
+						   	<col column="xianhao" label="${xianhao}" >
+				            </col>
+						    <col column="suoshuxinghao" label="所属${xinghao}" displaytype="hidden"></col>
+						    <col column="suoshuleibie" label="所属类别" displaytype="hidden"></col>
+						    <col column="mingminghao" label="${mingminghao}" br="true"></col>
+						    <col column="kaigongshijian" label="开工时间"  datatype="date{yyyy-MM-dd}" >
+						       <inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)"></inputbox>  
+					        </col>
+					        <col column="jiaochuanshijian" label="${jiaochuanshijian}"  datatype="date{yyyy-MM-dd}"  br="true">
+						       <inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)"></inputbox>  
+					        </col>	
+					        <col column="jieduan" label="阶段" displaytype="hidden"/>
+						    <col column="fuyinianxian" label="${fuyinianxian}" ></col>
+						    <col column="shengchanchang" label="生产厂"  ></col>
+						    <col column="liebianzhidui" label="${liebianzhidui}"  br="true"></col>
+						    <col column="beizhu" label="备注" datatype="clob" valuestyleproperty="colspan='5'">
+						       <inputbox type="textareabox" styleproperty="rows='5'"></inputbox>
+						    </col>					    
+					   </display>
+					   <sql>
+					      <select>
+							    <value>
+									<![CDATA[SELECT * from zbgl_zbjbxx_xianhao where  {#condition#} order by id]]>
+							    </value>
+							    <condition name="suoshuxinghao"  hidden="true">
+								     <value>
+										<![CDATA[(suoshuxinghao like  '%#data#%' )]]>
+									 </value>
+							    </condition>
+							    <condition name="suoshuxianhao"  hidden="true">
+								     <value>
+										<![CDATA[(xianhao like  '%#data#%' )]]>
+									 </value>
+							    </condition>							   
+						   </select>
+						   <insert>
+						    	<params> 
+						    		<param name="suoshuxinghao" value="url{suoshuxinghao}"/>
+						    	    <param name="suoshuleibie" value="url{suoshuleibie}"/>
+						    	    <param name="suoshujieduan" value="待建造阶段"/>
+						        </params>					       
+						        <value>
+						        <![CDATA[			      
+					  		    insert into zbgl_zbjbxx_xianhao(id=uuid{},@{xianhao},suoshuxinghao=#{suoshuxinghao},suoshuleibie=#{suoshuleibie},@{mingminghao},@{kaigongshijian},@{jiaochuanshijian},jieduan=#{suoshujieduan},@{fuyinianxian},@{shengchanchang},@{liebianzhidui},@{beizhu});	
+					  		    ]]>
+					  		    </value>    		   
+						   </insert>
+						   <update>
+						        update zbgl_zbjbxx_xianhao(@{xianhao},@{mingminghao},@{kaigongshijian},@{jiaochuanshijian},@{fuyinianxian},@{shengchanchang},@{liebianzhidui},@{beizhu}) where id=@{id__old};
+						  </update>
+						  <delete>
+						  	    delete from zbgl_zbjbxx_xianhao where id=@{id__old};
+						  </delete> 
+					   </sql>
+			    </report>
+	</page>
+	<page id="Hqq_detail" >     
+				<report id="Hqqdetail_report" title="Hqq" type="editabledetail" 
+				rowselect="single-radiobox" extends="changgui_detail.changguidetail_report">
+					<sql>
+					     <select>
+							<value>
+								<![CDATA[SELECT * FROM zbgl_zbjbxx_xinghao where  {#condition#} order by xinghao]]>
+							</value>
+							<condition name="suoshuxinghao" hidden="true">
+								<value>
+									<![CDATA[(xinghao like '%#data#%' )]]>
+								</value>
+				 			</condition>
+			  			 </select>						      
+						 <insert>
+						     <params>
+						        <param name="suoshuleibie" value="Hqq"/> 
+						     </params>
+					  		 insert into zbgl_zbjbxx_xinghao(id=uuid{},@{xinghao},@{leixing},suoshuleibie=#{suoshuleibie},@{chang},@{kuan},@{gao},@{zaijianshuliang},@{fuyishuliang},@{shengchanchang},@{beizhu});				  		
+						 </insert>
+						  <update>
+						     update zbgl_zbjbxx_xinghao(@{xinghao},@{leixing},@{chang},@{kuan},@{gao},@{zaijianshuliang},@{fuyishuliang},@{shengchanchang},@{beizhu}) where id=@{id__old};
+						  </update>
+						  <delete>
+						  	 delete from zbgl_zbjbxx_xinghao where id=@{id__old};
+						  </delete>
+					</sql>		
+				</report>
+	</page>
+	<page id="UUV_detail" >     
+				<report id="UUVdetail_report" title="UUV" type="editabledetail" 
+				rowselect="single-radiobox" extends="changgui_detail.changguidetail_report">
+					<sql>	
+					     <select>
+							<value>
+								<![CDATA[SELECT * FROM zbgl_zbjbxx_xinghao where  {#condition#} order by xinghao]]>
+							</value>
+							<condition name="suoshuxinghao" hidden="true">
+								<value>
+									<![CDATA[(xinghao like '%#data#%' )]]>
+								</value>
+				 			</condition>
+			  			 </select>					      
+						 <insert>
+						     <params>
+						        <param name="suoshuleibie" value="UUV"/> 
+						     </params>
+					  		 insert into zbgl_zbjbxx_xinghao(id=uuid{},@{xinghao},@{leixing},suoshuleibie=#{suoshuleibie},@{chang},@{kuan},@{gao},@{zaijianshuliang},@{fuyishuliang},@{shengchanchang},@{beizhu});				  		
+						 </insert>
+						  <update>
+						     update zbgl_zbjbxx_xinghao(@{xinghao},@{leixing},@{chang},@{kuan},@{gao},@{zaijianshuliang},@{fuyishuliang},@{shengchanchang},@{beizhu}) where id=@{id__old};
+						  </update>
+						  <delete>
+						  	 delete from zbgl_zbjbxx_xinghao where id=@{id__old};
+						  </delete>
+					</sql>		
+				</report>
+	</page>
+	<page id="xiaoh_detail" >     
+				<report id="xiaohdetail_report" title="小H" type="editabledetail" 
+				        rowselect="single-radiobox" extends="changgui_detail.changguidetail_report">
+					<sql>	
+					     <select>
+							<value>
+								<![CDATA[SELECT * FROM zbgl_zbjbxx_xinghao where  {#condition#} order by xinghao]]>
+							</value>
+							<condition name="suoshuxinghao" hidden="true">
+								<value>
+									<![CDATA[(xinghao like '%#data#%' )]]>
+								</value>
+				 			</condition>
+			  			 </select>					      
+						 <insert>
+						     <params>
+						        <param name="suoshuleibie" value="小H"/> 
+						     </params>
+					  		 insert into zbgl_zbjbxx_xinghao(id=uuid{},@{xinghao},@{leixing},suoshuleibie=#{suoshuleibie},@{chang},@{kuan},@{gao},@{zaijianshuliang},@{fuyishuliang},@{shengchanchang},@{beizhu});				  		
+						 </insert>
+						  <update>
+						     update zbgl_zbjbxx_xinghao(@{xinghao},@{leixing},@{chang},@{kuan},@{gao},@{zaijianshuliang},@{fuyishuliang},@{shengchanchang},@{beizhu}) where id=@{id__old};
+						  </update>
+						  <delete>
+						  	 delete from zbgl_zbjbxx_xinghao where id=@{id__old};
+						  </delete>
+					</sql>		
+				</report>
+	</page>
+	<page id="qita_detail" >     
+				<report id="qitadetail_report" title="其它" type="editabledetail" 
+				        rowselect="single-radiobox" extends="changgui_detail.changguidetail_report">
+					<sql>	
+					     <select>
+							<value>
+								<![CDATA[SELECT * FROM zbgl_zbjbxx_xinghao where  {#condition#} order by xinghao]]>
+							</value>
+							<condition name="suoshuxinghao" hidden="true">
+								<value>
+									<![CDATA[(xinghao like '%#data#%' )]]>
+								</value>
+				 			</condition>
+			  			 </select>					      
+						 <insert>
+						     <params>
+						        <param name="suoshuleibie" value="其它"/> 
+						     </params>
+					  		 insert into zbgl_zbjbxx_xinghao(id=uuid{},@{xinghao},@{leixing},suoshuleibie=#{suoshuleibie},@{chang},@{kuan},@{gao},@{zaijianshuliang},@{fuyishuliang},@{shengchanchang},@{beizhu});				  		
+						 </insert>
+						  <update>
+						     update zbgl_zbjbxx_xinghao(@{xinghao},@{leixing},@{chang},@{kuan},@{gao},@{zaijianshuliang},@{fuyishuliang},@{shengchanchang},@{beizhu}) where id=@{id__old};
+						  </update>
+						  <delete>
+						  	 delete from zbgl_zbjbxx_xinghao where id=@{id__old};
+						  </delete>
+					</sql>		
+				</report>
+	</page>
+</applications>
+			   

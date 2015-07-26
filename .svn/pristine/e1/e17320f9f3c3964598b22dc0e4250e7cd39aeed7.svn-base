@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<applications xmlns="http://www.wabacus.com"
+			   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			   xsi:schemaLocation="http://www.wabacus.com ../xsd/wabacus.applications.xsd">
+	<page id="zizaosheng">
+		<report id="report1" title="自${zaosheng}" type="editablelist2">
+			<display mouseoverbgcolor="#0072E3">
+				<col column="{sequence}" label="序号"></col>		
+				<col column="id" label="id" displaytype="hidden"/>
+				<col column="suoshu" label="suoshu" displaytype="hidden"/>
+			    <col column="suoshujieduan" label="suoshujieduan" displaytype="hidden"/>
+				<col column="shengnapingtaiquyu" label="${shengnapingtaiquyu}" />
+				<col column="shengnaleixing" label="${shengnaleixing}" />
+				<col column="beizhu" label="备注" datatype="clob" >
+					<inputbox type="textareabox"  ></inputbox>
+				</col>
+				<col column="zaosheng" label="${zaosheng}（dB）" />   
+			</display>
+			<sql>
+				<value>
+					<![CDATA[SELECT * FROM zbgl_zbjbxx_zttx_zzs where  {#condition#} order by id]]>
+				</value>
+				 <condition name="suoshu" label="${xinghao}" hidden="true">
+										<value>
+											<![CDATA[(suoshu = #data#)]]>
+										</value>
+				</condition>
+				 <condition name="suoshujieduan" label="${xinghao}" hidden="true">
+										<value>
+											<![CDATA[(suoshujieduan = #data#)]]>
+										</value>
+				</condition>				
+			    <insert>
+			     <params> 
+					<param name="suoshu" value="url{suoshu}"/>
+					<param name="suoshujieduan" value="url{suoshujieduan}"/>
+				 </params>
+		  		   insert into zbgl_zbjbxx_zttx_zzs(id=uuid{},suoshu=#{suoshu},suoshujieduan=#{suoshujieduan},@{shengnapingtaiquyu},@{shengnaleixing},@{beizhu},@{zaosheng});		  		 
+			    </insert>
+			   <update>
+			     update zbgl_zbjbxx_zttx_zzs(@{shengnapingtaiquyu},@{shengnaleixing},@{beizhu},@{zaosheng}) where id=@{id__old};			    
+			   </update>
+			   <delete>
+			  	 delete from zbgl_zbjbxx_zttx_zzs where id=@{id__old};			  	
+			   </delete>
+			</sql>	
+		</report>
+	</page>
+</applications>                                                    

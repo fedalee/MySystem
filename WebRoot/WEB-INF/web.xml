@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+ <context-param>
+  <param-name>configpath</param-name>
+  <param-value>classpath{/reportconfig}</param-value>
+ </context-param>
+ <filter>
+  <filter-name>Encoding</filter-name>
+  <filter-class>com.wabacusdemo.util.SetCharacterEncodingFilter</filter-class>
+ </filter>
+ <filter-mapping>
+  <filter-name>Encoding</filter-name>
+  <url-pattern>*.jsp</url-pattern>
+ </filter-mapping>
+ <filter-mapping>
+  <filter-name>Encoding</filter-name>
+  <url-pattern>*.wx</url-pattern>
+ </filter-mapping>
+ <listener>
+  <listener-class>com.wabacus.WabacusServlet</listener-class>
+ </listener>
+ <servlet>
+  <servlet-name>reportservlet</servlet-name>
+  <servlet-class>com.wabacus.WabacusServlet</servlet-class>
+ </servlet>
+ <servlet>
+  <display-name>DynamicColumn</display-name>
+  <servlet-name>DynamicColumn</servlet-name>
+  <servlet-class>ajaxServer.DynamicColumn</servlet-class>
+ </servlet>
+
+ <servlet>
+   <servlet-name>LoginServlet</servlet-name>
+   <servlet-class>servlet.LoginServlet</servlet-class>
+ </servlet>
+
+ 
+ 
+  <servlet>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>CeDian</servlet-name>
+    <servlet-class>ajaxServer.CeDian</servlet-class>
+  </servlet>
+
+ 
+<servlet-mapping>
+  <servlet-name>DynamicColumn</servlet-name>
+  <url-pattern>/DynamicColumn</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>reportservlet</servlet-name>
+  <url-pattern>/ShowReport.wx</url-pattern>
+ </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>CeDian</servlet-name>
+    <url-pattern>/CeDian</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>LoginServlet</servlet-name>
+    <url-pattern>/LoginServlet</url-pattern>
+  </servlet-mapping>  
+  <servlet>
+    <servlet-name>uploadImage</servlet-name>
+    <servlet-class>com.lis.upload.upload</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>uploadImage</servlet-name>
+    <url-pattern>/servlet/upload</url-pattern>
+  </servlet-mapping>
+  
+ <jsp-config>
+  <taglib>
+   <taglib-uri>wabacus</taglib-uri>
+   <taglib-location>/WEB-INF/wabacus.tld</taglib-location>
+  </taglib>
+ </jsp-config>
+ <login-config>
+  <auth-method>BASIC</auth-method>
+ </login-config>
+ 
+  <welcome-file-list>
+    <welcome-file>login.html</welcome-file>
+  </welcome-file-list>
+</web-app>

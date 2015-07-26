@@ -1,0 +1,278 @@
+﻿<applications xmlns="http://www.wabacus.com"
+			   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			   xsi:schemaLocation="http://www.wabacus.com ../../../../xsd/wabacus.applications.xsd">
+	<page id="xinghao" >  
+	<!-- changgui主报表-->
+    	<tabpanel id="xinghao_tab"  align="center" titlestyle="2"  margin="10px">   
+    	    <vpanel id="changgui_vpanel" > 
+				<report id="changgui_report" title="${changgui}" align="center" type="editablelist">	
+					<display >
+						<col column="{sequence:1}" label="${xuhao}"></col>
+						<col column="id" label="id" displaytype="hidden"></col>
+						<col column="xinghao" label="${xinghao}"/>
+						<col column="leixing" label="类型" >
+							<inputbox type="selectbox">
+								<option value="AIP" label="AIP"></option> 
+								<option value="普通柴电" label="普通柴电"></option>
+								<option value="其它" label="其它"></option>
+							</inputbox>  
+						</col>
+						<col column="suoshuleibie" label="所属类别" displaytype="optional"></col>
+						<col column="chang" label="长"></col>
+						<col column="kuan" label="宽"></col>
+						<col column="gao" label="高"></col>
+						<col column="zaijianshuliang" label="在建数量"></col>
+						<col column="fuyishuliang" label="${fuyishuliang}"></col>
+						<col column="shengchanchang" label="生产厂"></col>
+						<col column="beizhu" label="备注" datatype="clob">
+						       <inputbox type="textareabox"></inputbox>
+						</col>	
+					</display>
+					<sql>
+						<select>
+							<value>
+								<![CDATA[SELECT * FROM zbgl_zbjbxx_xinghao where  {#condition#} and suoshuleibie = '常规' order by xinghao]]>
+							</value>
+							<condition name="xinghao" label="${xinghao}" >
+						    	<value>
+						        	<![CDATA[(xinghao like '%#data#%' )]]>
+						        </value>						        							         
+							</condition>
+						 </select>					      
+						 <insert pageurl="report{changgui_detail.changguidetail_report}" popupparams="{title:'新增型号',width:980,height:400}"></insert>
+					     <update pageurl="report{changgui_detail.changguidetail_report}" urlparams="suoshuxinghao=@{xinghao}" popupparams="{title:'编辑型号信息',width:980,height:400}" ></update>
+						  <delete>
+						  	 delete from zbgl_zbjbxx_xinghao where id=@{id__old};
+						  </delete>
+					</sql>
+					<format>
+						<value>
+							<![CDATA[
+							    String str="";
+			  				
+			  				beizhu=beizhu==null?"":beizhu.trim();
+			  				if(!beizhu.equals(""))
+			  				{
+			  					str=beizhu;
+			  					if(str.length()>7)
+			  						str=str.substring(0,7)+"……";
+			  					beizhu="<span onclick=\"wx_tip('"+beizhu+"',this,{color:'#666666',width:'350px'})\">"+str+"</span>";
+			  				}
+							    xinghao="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\"  >"+
+	                       "<a href='ShowReport.wx?PAGEID=xinghaojibenxinxi&suoshuxinghao="+xinghao+"' target=\"sampleframe\">"+xinghao+"</a></span>";
+							]]>
+						</value>
+					</format>
+				</report>			
+		<!-- xianhao从报表 -->
+		<report id="changguixianhao_report" title="url{suoshuxinghao}的${xianhao}"  align="center" 
+				        depends="changgui_report" dependsparams="suoshuxinghao=@{xinghao};suoshuleibie=@{suoshuleibie}"  type="editablelist"> 
+		      <interceptor>
+				  <imports>
+		  	 		   <import>com.wabacus.util.*</import>
+		  	 		   <import>com.wabacus.system.*</import>
+		  	 	  </imports>
+		  	 	  <preaction>
+		  	 	      <![CDATA[
+							String xh = rrequest.getStringAttribute("suoshuxinghao");							
+							rrequest.getRequest().setAttribute("key1" ,xh);	
+							String sslb = rrequest.getStringAttribute("suoshuleibie");							
+							rrequest.getRequest().setAttribute("key2" ,sslb);	
+													
+					  ]]>
+		  	 	  </preaction>
+	  	      </interceptor> 
+			     <display>
+			                <col column="{sequence:1}" label="序号"></col>
+						    <col column="id" label="id" displaytype="hidden"></col> 
+						    <col column="xianhao" label="${xianhao}" >						   						    
+						    </col>
+						    <col column="suoshuxinghao" label="所属型号" displaytype="optional"/>
+						    <col column="suoshuleibie" label="所属类别" displaytype="optional"/>
+						    <col column="mingminghao" label="${mingminghao}" clickorderby="true" width="15%"></col>
+						    <col column="kaigongshijian" label="开工时间"  datatype="date{yyyy-MM-dd}" >
+						       <inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)"></inputbox>  
+					        </col>
+					        <col column="jiaochuanshijian" label="${jiaochuanshijian}"  datatype="date{yyyy-MM-dd}" >
+						       <inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)"></inputbox>  
+					        </col>		
+					        <col column="jieduan" label="阶段" >
+						    </col>
+						    <col column="fuyinianxian" label="${fuyinianxian}" ></col>
+						    <col column="shengchanchang" label="生产厂" ></col>
+						    <col column="liebianzhidui" label="${liebianzhidui}"></col>
+						    <col column="beizhu" label="备注" datatype="clob">
+						       <inputbox type="textareabox"></inputbox>
+						    </col>						   
+					   </display>
+					   <sql>
+					      <select>
+							    <value>
+									<![CDATA[SELECT * from zbgl_zbjbxx_xianhao where  {#condition#} order by id]]>
+							    </value>
+							    <condition name="suoshuleibie" label="suoshuleibie" hidden="true">
+								     <value>
+										<![CDATA[(suoshuleibie like  '%#data#%' )]]>
+									 </value>
+							    </condition>
+							    <condition name="suoshuxinghao" label="${xinghao}" hidden="true">
+								     <value>
+										<![CDATA[(suoshuxinghao like  '%#data#%' )]]>
+									 </value>
+							    </condition>
+							    <condition name="suoshuxianhao" label="${xianhao}">
+									<value>
+										<![CDATA[(xianhao like  '%#data#%' )]]>
+									</value>
+								</condition>
+						   </select>
+						   <insert pageurl="report{changguixianhao_detail.changguixianhaodetail_report}" urlparams="suoshuxinghao=request{key1};suoshuleibie=request{key2}"  popupparams="{title:'新增舷号',width:980,height:400}"/>						 
+					       <update pageurl="report{changguixianhao_detail.changguixianhaodetail_report}" urlparams="suoshuxianhao=@{xianhao}"  popupparams="{title:'编辑舷号信息',width:980,height:400}" ></update>
+						   <delete>
+						  	   delete from zbgl_zbjbxx_xianhao where id=@{id__old};
+						   </delete> 
+					   </sql>
+					   <format>
+						<value>
+						<![CDATA[
+						   String str="";
+			  				
+			  				beizhu=beizhu==null?"":beizhu.trim();
+			  				if(!beizhu.equals(""))
+			  				{
+			  					str=beizhu;
+			  					if(str.length()>7)
+			  						str=str.substring(0,7)+"……";
+			  					beizhu="<span onclick=\"wx_tip('"+beizhu+"',this,{color:'#666666',width:'350px'})\">"+str+"</span>";
+			  				}
+						  xianhao="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\"  >"+
+	                       "<a href='ShowReport.wx?PAGEID=xianhaojibenxinxi&suoshuxianhao="+xianhao+"&suoshuzhuangtai="+jieduan+"&suoshujieduan=交船阶段&&hhangsuhexuhangli_report_ACCESSMODE=readonly' target=\"sampleframe\">"+xianhao+"</a></span>";
+						]]>
+						</value>
+					</format>
+			    </report>
+			</vpanel>
+			<vpanel id="Hqq_vpanel">
+			<report id="Hqq_report11" title="Hqq"  align="center" type="editablelist" 
+			        extends="xinghao.changgui_report" >	    
+				<sql>
+					<select>
+						<value>
+							<![CDATA[SELECT * FROM zbgl_zbjbxx_xinghao where  {#condition#} and suoshuleibie = 'Hqq' order by id]]>
+						</value>
+						<condition name="xinghao" label="${xinghao}" labelposition="left">
+						    <value>
+						       <![CDATA[(xinghao like '%#data#%' )]]>
+						    </value>					       				         
+					     </condition>
+					</select>					      
+					<insert pageurl="report{Hqq_detail.Hqqdetail_report}" popupparams="{title:'新增型号',width:980,height:400}"></insert>
+					<update pageurl="report{Hqq_detail.Hqqdetail_report}" urlparams="suoshuxinghao=@{xinghao}" popupparams="{title:'编辑型号信息',width:980,height:400}" ></update>
+					<delete>
+					  	 delete from zbgl_zbjbxx_xinghao where id=@{id__old};
+					</delete>
+				</sql>
+			    </report>
+				<report id="Hqqxianhao_report" title="url{suoshuxinghao}的${xianhao}"  
+				        align="center"  extends="xinghao.changguixianhao_report"
+				        depends="Hqq_report11" dependsparams="suoshuxinghao=@{xinghao};suoshuleibie=@{suoshuleibie}"  type="editablelist" > 
+			    	 <format>
+						<value>
+						<![CDATA[
+						    String str="";
+			  				
+			  				beizhu=beizhu==null?"":beizhu.trim();
+			  				if(!beizhu.equals(""))
+			  				{
+			  					str=beizhu;
+			  					if(str.length()>7)
+			  						str=str.substring(0,7)+"……";
+			  					beizhu="<span onclick=\"wx_tip('"+beizhu+"',this,{color:'#666666',width:'350px'})\">"+str+"</span>";
+			  				}
+						  xianhao="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\"  >"+
+	                       "<a href='ShowReport.wx?PAGEID=xianhaojibenxinxi&suoshuxianhao="+xianhao+"&cghangsuhexuhangli_report_ACCESSMODE=readonly' target=\"sampleframe\">"+xianhao+"</a></span>";
+						]]>
+						</value>
+					</format>
+				</report>
+			</vpanel>	
+			<vpanel id="UUV_vpanel">			   
+			<report id="UUV_report" title="UUV" align="center" type="editablelist" 
+			        extends="xinghao.changgui_report" >
+				<sql>
+					<select>
+						<value>
+							<![CDATA[SELECT * FROM zbgl_zbjbxx_xinghao where  {#condition#} and suoshuleibie = 'UUV' order by id]]>
+						</value>
+						<condition name="xinghao" label="${xinghao}" labelposition="left">
+					        <value>
+					       		<![CDATA[(xinghao like '%#data#%' )]]>
+					        </value>						   	         
+					    </condition>
+					</select>		      
+					<insert pageurl="report{UUV_detail.UUVdetail_report}" popupparams="{title:'新增型号',width:980,height:400}"></insert>
+					<update pageurl="report{UUV_detail.UUVdetail_report}" urlparams="suoshuxinghao=@{xinghao}" popupparams="{title:'编辑型号信息',width:980,height:400}" ></update>
+					<delete>
+					  	 delete from zbgl_zbjbxx_xinghao where id=@{id__old};
+					</delete>
+				</sql>
+			</report>
+		    <report id="UUVxianhao_report" title="url{suoshuxinghao}的${xianhao}"  
+				        align="center"  extends="xinghao.changguixianhao_report"
+				        depends="UUV_report" dependsparams="suoshuxinghao=@{xinghao};suoshuleibie=@{suoshuleibie}"  type="editablelist" /> 
+			</vpanel>
+			<vpanel id="xiaoh_vpanel">				   
+			<report id="xiaoh_report" title="小H"  align="center" type="editablelist" 
+			        extends="xinghao.changgui_report" >	  
+				<sql>
+					<select>
+						<value>
+							<![CDATA[SELECT * FROM zbgl_zbjbxx_xinghao where  {#condition#} and suoshuleibie = '小H' order by xinghao]]>
+						</value>
+						<condition name="xinghao" label="${xinghao}" labelposition="left">
+						    <value>
+						       <![CDATA[(xinghao like '%#data#%' )]]>
+						    </value>		      	     
+					    </condition>
+					</select>					      
+					<insert pageurl="report{xiaoh_detail.xiaohdetail_report}" popupparams="{title:'新增型号',width:980,height:400}"></insert>
+					<update pageurl="report{xiaoh_detail.xiaohdetail_report}" urlparams="suoshuxinghao=@{xinghao}" popupparams="{title:'编辑型号信息',width:980,height:400}"></update>
+					<delete>
+					  	 delete from zbgl_zbjbxx_xinghao where id=@{id__old};
+					</delete>
+				</sql>
+			</report>
+			<report id="xiaohxianhao_report" title="url{suoshuxinghao}的${xianhao}"  
+				        align="center"  extends="xinghao.changguixianhao_report"
+				        depends="xiaoh_report" dependsparams="suoshuxinghao=@{xinghao};suoshuleibie=@{suoshuleibie}"  type="editablelist" /> 
+			</vpanel>
+			<vpanel id="qita">				   
+			<report id="qita_report" title="其它" align="center" type="editablelist" 
+			        extends="xinghao.changgui_report" >
+				<sql>
+					<select>
+						<value>
+							<![CDATA[SELECT * FROM zbgl_zbjbxx_xinghao where  {#condition#} and suoshuleibie = '其它' order by id]]>
+						</value>
+						<condition name="xinghao" label="${xinghao}" labelposition="left">
+					       <value>
+					       		<![CDATA[(xinghao like '%#data#%' )]]>
+					       </value>
+					      			         
+					    </condition>
+					</select>				      
+					<insert pageurl="report{qita_detail.qitadetail_report}" popupparams="{title:'新增型号',width:980,height:400}"></insert>
+					<update pageurl="report{qita_detail.qitadetail_report}" urlparams="suoshuxinghao=@{xinghao}" popupparams="{title:'编辑型号信息',width:980,height:400}" ></update>
+
+					<delete>
+					  	 delete from zbgl_zbjbxx_xinghao where id=@{id__old};
+					</delete>
+				</sql>				
+			</report>
+			<report id="qitaxianhao_report" title="url{suoshuxinghao}的${xianhao}"  
+				        align="center"  extends="xinghao.changguixianhao_report"
+				        depends="qita_report" dependsparams="suoshuxinghao=@{xinghao};suoshuleibie=@{suoshuleibie}"  type="editablelist" /> 
+			</vpanel>				   
+		</tabpanel>   
+	</page>
+</applications>			   

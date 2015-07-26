@@ -1,0 +1,53 @@
+<applications xmlns="http://www.wabacus.com"
+			   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			   xsi:schemaLocation="http://www.wabacus.com ../xsd/wabacus.applications.xsd">
+	<page id="erjixitong_detail">
+ 		<report id="erjixitongdetail_report" title="二级${xitong}" type="editabledetail" >
+			<display >
+				<col column="id"  label="id" displaytype="hidden"></col>
+				<col column="suoshuyijixitong" label="所属一级${xitong}" displaytype="hidden"/>						    
+				<col column="erjixitongmingcheng" label="二级${xitong}名称" ></col>
+				<col column="zhuyaogongneng" label="主要功能"></col>
+				<col column="zhuyaoxingneng" label="主要性能" br="true"></col>
+				<col column="zhuyaozucheng" label="主要组成" ></col>						 
+				<col column="jishuzerendanwei" label="${jishuzerendanwei}" valuestyleproperty="colspan='3'" br="true" >
+				<inputbox  servervalidate="isNotEmpty(#label#列须从查询结果中选取)" servervalidatetype="both">				
+                           <typeprompt count="15">
+                                 <promptcol label="danweimingcheng" title="挂靠单位" matchmode="anywhere"></promptcol>
+                                    <datasource>        
+                                       <option dataset="@{select DANWEIMINGCHENG from XTSZ_JBXXWH_DANWEI where {#matchcondition#}}"></option>
+                                    </datasource>
+                             </typeprompt>				    
+					    </inputbox>
+				</col>	
+				<col column="beizhu" label="备注" datatype="clob" valuestyleproperty="colspan='5'">
+					<inputbox type="textareabox" styleproperty="rows='5'"></inputbox>
+				</col> 
+			</display>
+			<sql>
+				<select>
+					<value>
+						<![CDATA[SELECT * FROM zbgl_zbjbxx_xinghao_erjixitong  where  {#condition#} order by id]]>
+					</value>
+					<condition name="suoshuerjixitongmingcheng" hidden="true">
+						<value>
+							<![CDATA[(erjixitongmingcheng like  '%#data#%' )]]>
+						</value>
+					</condition>
+				</select>
+				<insert>
+					<params> 
+						<param name="suoshuyijixitong" value="url{suoshuyijixitong}"/>
+					</params>
+				  	insert into zbgl_zbjbxx_xinghao_erjixitong(id=uuid{},suoshuyijixitong=#{suoshuyijixitong},@{erjixitongmingcheng},@{zhuyaogongneng},@{zhuyaoxingneng},@{zhuyaozucheng},@{jishuzerendanwei},@{beizhu});
+				</insert>
+				<update>
+					   update zbgl_zbjbxx_xinghao_erjixitong(@{erjixitongmingcheng},@{zhuyaogongneng},@{zhuyaoxingneng},@{zhuyaozucheng},@{jishuzerendanwei},@{beizhu}) where id=@{id__old};
+				</update>
+				<delete>
+					  delete from zbgl_zbjbxx_xinghao_erjixitong where id=@{id__old};
+				</delete>				
+			</sql>
+		</report> 
+	</page>
+</applications>

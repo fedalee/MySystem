@@ -1,0 +1,313 @@
+<applications xmlns="http://www.wabacus.com"
+			   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			   xsi:schemaLocation="http://www.wabacus.com ../xsd/wabacus.applications.xsd">
+	<page id="xianhaojibenxinxi" >
+	     <interceptor>
+	  		  <imports>
+	  	 		   <import>com.wabacus.util.*</import>	
+	  	 		   <import>com.wabacus.system.*</import>
+	  	 		   <import>javax.servlet.http.HttpServletRequest;</import>
+	  	 		   <import>com.wabacus.system.ReportRequest</import>
+	  	 	  </imports>
+	  	 	  <preaction>
+	  	 	  String zhuangtai=rrequest.getStringAttribute("suoshuzhuangtai");
+	  	 	  if(zhuangtai!=null){
+	  	 	  rrequest.getRequest().getSession().setAttribute("xinghaojibenxinxizhuangtai",zhuangtai);}
+	  	 	  
+	  	 	  String zt=(String)rrequest.getRequest().getSession().getAttribute("xinghaojibenxinxizhuangtai");
+	  	 	  System.out.println("22222222222"+zt);
+	  	 	     if(!zt.equals("已完成") ){
+	  	 		rrequest.authorize("xianhao_tab",Consts.DATA_PART,"2","disabled","true");//将ID为“tab1”的容器第二个tab标签页的disabled权限设置为true
+	  	 	}
+	  	 	</preaction>
+	  	 </interceptor>
+	   <tabpanel id="xianhao_tab"  align="center" titlestyle="2" margin="10px" > 
+		<!-- 基本信息 -->
+	    	<framepanel id="gaishu_framepanel"  parenttitle="url{suoshuxianhao}号基本信息" align="center">
+			<hpanel id="hpanel1"  >
+				<report id="gaishu_report" type="form"  align="left"  right="20px"
+				        template="relative{htmltemplate/zhuangbeiguanli/zhuangbeijibenxinxi/xinghaojibenxinxi_template.html}">
+					<display>
+						<col column="id" label="id" displaytype="hidden"></col> 
+						<col column="xianhao" label="${xianhao}" displaytype="hidden" ></col>
+						<col column="suoshuxinghao" label="所属${xinghao}" displaytype="hidden" ></col>
+						<col column="gaishu" label="概述" datatype="clob" valuestyleproperty="colspan='5'">
+						     <inputbox type="textareabox" styleproperty="rows='18'"></inputbox>
+					    </col>
+					</display>
+					<sql>
+						<select>
+							<value>
+								<![CDATA[SELECT * FROM zbgl_zbjbxx_xianhao where  {#condition#}]]>
+							</value>
+						 	<condition name="suoshuxianhao" hidden="true">
+								<value>
+									<![CDATA[(xianhao =  #data# )]]>
+								</value>
+						    </condition>
+						</select>
+					    <update>
+					     	update zbgl_zbjbxx_xianhao(@{gaishu}) where id=@{id__old};
+			  	        </update>					
+					</sql>
+				</report>	
+				<report id="jibenxinxitupian_report"    pagesize="2" type="form"  width="300px" title="基本信息图片：">
+							<display dataheader="" >
+		                    	<col column="id" label="id" displaytype="hidden"/>
+		                    	<col column="tupiansuoshu" label="" displaytype="hidden"/>
+		                    	<col column="tupianzhonglei" label="" displaytype="hidden"/>
+							  	<col column="photo" label="" valuestyleproperty="align='center' width='10px' height='10px'">							  	
+							    	<!-- <inputbox type="file"   displaytype="image" deletetype="2" savepath="${image.path}" rooturl="/uploadfile/"></inputbox> -->
+						    	</col>  
+						    </display>
+						   <sql>
+							    <select>
+									<value>
+											<![CDATA[SELECT * FROM zbgl_zbwxjghz_pic  where tupianzhonglei='舷号基本信息' and {#condition#} ]]>
+									</value>
+									<condition name="suoshuxianhao"  hidden="true">
+										<value>
+												<![CDATA[(tupiansuoshu = #data#)]]>
+										</value>
+									</condition>
+								</select>
+						      	<delete>
+						      		delete from zbgl_zbwxjghz_pic where id=@{id__old}; 			    
+						  		</delete>     
+						    </sql >
+		  					<format>
+					      		<imports>
+							    	<import>com.wabacus.util.*</import>
+					      		</imports>
+					      		<value>
+					  				<![CDATA[
+					  				if(photo!=null&&!photo.trim().equals(""))
+									{
+									  photo="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">"+"<a href=\"#\" onclick=\"wx_winpage('jsp/showPic.jsp?src="+photo+"',{initsize:'max'})\" >"+"<img src=\""+photo+"\"  width='100' height='100'>"+"</a></span>";
+									}else
+									{
+										photo="无照片";
+									}
+					  				
+					  				]]>
+					  			</value>
+					   		</format>  
+					   		<buttons buttonspacing="5" align="right">
+						  			<button name="upload" position="title" label="上传图片">
+									 <imports>
+							   			   <import>com.wabacus.system.*</import><!-- 用到了这个包下面的CacheDataBean类 -->
+						    		 </imports>
+										  <dynevent>
+											<![CDATA[
+												String str = rrequest.getStringAttribute("suoshuxianhao","");
+												System.out.println("***********************"+str);
+												StringBuffer sbuffer=new StringBuffer();
+												sbuffer.append("wx_winpage('upLoadImage.jsp?table=zbgl_zbwxjghz_pic&amp;tupianzhonglei=舷号基本信息&amp;tupiansuoshu=");
+												sbuffer.append(str);
+												sbuffer.append("&amp;page=xianhaojibenxinxi&amp;report=jibenxinxitupian_report');");
+												return sbuffer.toString();//返回拼凑好的事件
+											]]>
+										</dynevent>
+									</button>
+					  		</buttons>
+					  	</report>			 
+			 </hpanel>
+		</framepanel>  
+		<!-- 主要改动信息 -->
+		<framepanel id="zhuyaogaidong_framepanel" parenttitle="主要改动" height="200px" align="center">
+			<report id="zhuyaogaidong_report"   type="form"
+				    template="relative{htmltemplate/zhuangbeiguanli/zhuangbeijibenxinxi/zhuyaogaidong_template.html}" >
+				<display >
+					<col column="id" label="id" displaytype="hidden"></col>
+                    <col column="zhuyaogaidong" label="主要改动" datatype="clob" valuestyleproperty="colspan='1'">
+                    	<inputbox type="textareabox" styleproperty="rows='18'"></inputbox>
+                    </col>
+				</display>
+				<sql>
+					<select>
+						<value>
+							<![CDATA[SELECT * FROM zbgl_zbjbxx_xianhao where  {#condition#}  order by id]]>
+						</value>
+						<condition name="suoshuxianhao" label="${xianhao}" hidden="true">
+							<value>
+								<![CDATA[(xianhao = #data#)]]>
+							</value>
+						</condition>
+					</select>					      
+					<update>
+						update zbgl_zbjbxx_xianhao(@{zhuyaogaidong}) where id=@{id__old};
+					</update>
+				</sql>
+			</report>
+		</framepanel>
+		<!-- 实艇性能 -->
+		<tabpanel id="shitingxingneng_tab"  parenttitle="${shitingxingneng}" align="center" titlealign="top"   titlestyle="2" titleposition="left" margin="10px"  height="100%">		
+			<vpanel id="wulitexing_vpanel" parenttitle="${wulitexing}" margin="10px" border="0">
+            	<framepanel id="tingxing_framepanel" title="${tingxing}"  margin="10px" border="1">
+               		<report id="tingxing_report"     extends="shitingxingneng.tingxing_report" />
+			    </framepanel>
+			    <framepanel id="zcdhzytxcs_framepanel" title="${zhuchiduhezhuyaotingxingcanshu}"  margin="10px" border="1">
+                	<report id="zcdhzytxcs_report"     extends="shitingxingneng.zcdhzytxcs_report" />
+			    </framepanel>
+			    <framepanel id="pslhcbfl_framepanel" title="${paishuilianghechubeifuli}"  margin="10px" border="1">
+                	<report id="pslhcbfl_report"     extends="shitingxingneng.pslhcbfl_report" />
+			    </framepanel>
+			    <framepanel id="zhswkhft_framepanel" title="${zhihuishiweikehefuti}"  margin="10px" border="1">
+                	<report id="zhswkhft_report"     extends="shitingxingneng.zhswkhft_report" />
+			    </framepanel>
+			</vpanel>
+			<vpanel id="jinglixingneng_vpanel" parenttitle="${jinglixingneng}" margin="10px" border="0">
+			    <framepanel id="fuxing_framepanel" title="${fuxing}"  margin="10px" border="1">
+	                <report id="fuxing_report"     extends="shitingxingneng.fuxing_report" />
+			    </framepanel>
+			    <framepanel id="wenxing_framepanel" title="${wenxing}"  margin="10px" border="1">
+                	<report id="wenxing_report"     extends="shitingxingneng.wenxing_report" />
+			    </framepanel>
+			    <framepanel id="buchenxing_framepanel" title="${buchenxing}"  margin="10px" border="1">
+	                <report id="buchenxing_report"     extends="shitingxingneng.buchenxing_report" />
+			    </framepanel>		  
+			</vpanel>
+			<vpanel id="hangsuhexuhangli_vpanel" parenttitle="${hangsuhexuhangli}">
+			    <framepanel id="cghangsuhexuhangli_framepanel" title="${changgui}"  margin="10px" border="1">
+	                <report id="cghangsuhexuhangli_report"     extends="shitingxingneng.cghangsuhexuhangli_report" />
+			    </framepanel>
+			    <framepanel id="hhangsuhexuhangli_framepanel" title="${he}"  margin="10px" border="1">
+	                <report id="hhangsuhexuhangli_report"     extends="shitingxingneng.hhangsuhexuhangli_report" />	 
+			    </framepanel>			  
+			</vpanel>
+			    <framepanel id="xiaqianshendu_framepanel" title="${xiaqianshendu}"  parenttitle="${xiaqianshendu}"  margin="10px" border="1">
+                	<report id="xiaqianshendu_report"     extends="shitingxingneng.xiaqianshendu_report" />			  
+			    </framepanel>          
+		    <vpanel id="yinbixing_hpanel">
+				<report id="yinbixing_report"          extends="shitingxingneng.yinbixing_report" />					
+				<report id="yinbixingzhibiao_report"   extends="shitingxingneng.yinbixingzhibiao_report" />		    
+			</vpanel>
+			<vpanel id="donglijidianli_vpanel" parenttitle="${donglijidianli}">
+			    <framepanel id="cgdonglijidianli_framepanel" title="${changgui}"  margin="10px" border="1">
+	                <report id="cgdonglijidianli_report"     extends="shitingxingneng.cgdonglijidianli_report" />			  
+			    </framepanel>
+			    <framepanel id="hdianlijidongli_framepanel" title="${he}"  margin="10px" border="1">
+	                <report id="hdianlijidongli"            extends="shitingxingneng.hdianlijidongli" />				  
+			    </framepanel>			  
+			</vpanel>
+			<tabpanel id="tp111"   titlestyle="2"  titlealign="top" parenttitle="ZZ能力" titlewidth="100px" margin="10px">
+		        <vpanel id="jingjietancenengli_vpanel" parenttitle="${jingjietancenengli}" margin="10px" >
+		            <report id="zaoshengmubiaozuoyongjuli_report"     extends="shitingxingneng.zaoshengmubiaozuoyongjuli_report" />
+			        <report id="huishengcejujuli_report"              extends="shitingxingneng.huishengcejujuli_report" />
+					<report id="zhenchajuli_report"                   extends="shitingxingneng.zhenchajuli_report" />
+					<report id="yuleifaxianhebaojingjuli_report"      extends="shitingxingneng.yuleifaxianhebaojingjuli_report" />
+					<report id="zaoshengcexiangguanchafanwei_report"  extends="shitingxingneng.zaoshengcexiangguanchafanwei_report" />
+					<report id="zhenchacepinfanwei_report"            extends="shitingxingneng.zhenchacepinfanwei_report" />
+					<framepanel id="shuishengtongxinjuli_framepanel"  title="${shuishengtongxinjuli}"  margin="10px" border="1">
+			        	<report id="shuishengotngxinjuli_report"      extends="shitingxingneng.shuishengotngxinjuli_report" />
+			        </framepanel>
+			      	<framepanel id="shuishengpengbinengli_framepanel" title="${shuishengpengbinengli}"  margin="10px" border="1">
+			            <report id="shuishengpengbinengli_report"     extends="shitingxingneng.shuishengpengbinengli_report" />
+			        </framepanel>
+			      	<framepanel id="leidatancehezhencha_framepanel"   title="${leidatancehezhencha}"  margin="10px" border="1">
+			            <report id="leidatancehezhencha_report"       extends="shitingxingneng.leidatancehezhencha_report" />
+			        </framepanel>
+			      	<framepanel id="guangdiantance_framepanel"        title="${guangdiantance}"  margin="10px" border="1">
+			            <report id="guangdiantance_report"            extends="shitingxingneng.guangdiantance_report" />
+			        </framepanel>
+                </vpanel>
+                <vpanel id="zhihuikongzhinengli_vpanel"               parenttitle="${zhihuikongzhinengli}" margin="10px" border="0">
+           	    	<framepanel id="chulimubiaonengli_framepanel"     title="${chulimubiaonengli}"  margin="10px" border="1">
+              	 		<report id="chulimubiaonengli_report"         extends="shitingxingneng.chulimubiaonengli_report" />
+			  		</framepanel>
+			  		<framepanel id="mbzsnlhmbxxnl_framepanel"         title="${mubiaozhishinenglihemubiaoxinxinengli}"  margin="10px" border="1">
+			  			<report id="mbzsnlhmbxxnl_report"             extends="shitingxingneng.mbzsnlhmbxxnl_report" />
+			        </framepanel>
+			    	<report id="xitongfanyingshijian_report"      extends="shitingxingneng.xitongfanyingshijian_report" />
+                </vpanel>
+                <vpanel id="gongfangnengi_vpanel"                 parenttitle="${gongfangnengli}" >
+		                <report id="yushuileigongji_report"       extends="shitingxingneng.yushuileigongji_report" />
+					    <report id="daodangongji_report"          extends="shitingxingneng.daodangongji_report" />
+					    <report id="shuishengduikangqicai_report" extends="shitingxingneng.shuishengduikangqicai_report" />
+				</vpanel>
+			    <report id="zzxiaoguo_report"                     extends="shitingxingneng.zzxiaoguo_report" />
+			    <report id="tongxinnengli_report"                 extends="shitingxingneng.tongxinnengli_report" />
+			    <report id="daohangnengli_report" title="${daohangnengli}"   extends="shitingxingneng.daohangnengli_report" />
+            </tabpanel>
+		    <vpanel id="pingtaixitong_vpanel" parenttitle="${pingtaixitong}">
+				<framepanel id="caozongkongzhixitong_framepanel"  title="${caozongkongzhixitong}"    margin="10px" border="1">
+		        	<report id="caozongkongzhixitong_report"      extends="shitingxingneng.caozongkongzhixitong_report" />
+			    </framepanel>
+			    <framepanel id="daqihuanjingzonghekongzhixitong_framepanel" title="${daqihuanjingzonghekongzhixitong}"    margin="10px" border="1">
+		            <report id="daqihuanjingzonghekongzhixitong_report"     extends="shitingxingneng.daqihuanjingzonghekongzhixitong_report" />
+			    </framepanel>
+			    <framepanel id="pingtaiguanlishebei_framepanel" title="${pingtaiguanlishebei}"    margin="10px" border="1">
+		            <report id="pingtaiguanlishebei_report"     extends="shitingxingneng.pingtaiguanlishebei_report" />
+			    </framepanel>
+			</vpanel>
+				<framepanel id="shitingxingnengqita_framepanel" title="其他"  parenttitle="其他"  margin="10px" border="1">
+		            <report id="shitingxingnengqita_report"     extends="shitingxingneng.shitingxingnengqita_report" />
+			    </framepanel>	   
+		</tabpanel>
+		
+		
+		<!-- 实艇布置 -->
+		<hpanel id="shitingbuzhi_hpanel" parenttitle="${shitingbuzhi}" align="center" margin="10px">
+			<report id="shitingbuzhi_report" extends="shitingbuzhi.shitingbuzhi_report" />
+	    	<report id="buzhitu_report"    extends="shitingbuzhi.buzhitu_report" /> 
+		</hpanel>
+		<!-- 实艇系统 -->
+		<vpanel id="shitingxitong_vpanel" parenttitle="${shitingxitong}"  >
+			<report id="yijixitong_report" extends="shitingxitong.yijixitong_report" />
+			<tabpanel id="tab1" margin="10px" titlestyle="2" titlewidth="150px"  align="center" titlealign="center">
+           		<hpanel id="zhuyaogongneng_vp3" parenttitle="主要功能">
+		   			<report id="zhuayaogongneng_report" depends="yijixitong_report" dependsparams="suoshuyijixitong=@{yijixitongmingcheng}"
+		  												extends="shitingxitong.zhuayaogongneng_report" />
+				    <report id="zhuyaogongneng_report"  extends="shitingxitong.zhuyaogongneng_report" />
+		  		</hpanel>
+		  		<vpanel id="vp1" parenttitle="${zhuyaozhanshujishuxingnenghexitongzucheng}">
+		     		<report id="zhuyaozhanjixingneng_report"  depends="yijixitong_report" dependsparams="suoshuyijixitong=@{yijixitongmingcheng}"
+		                                                      extends="shitingxitong.zhuyaozhanjixingneng_report" />
+		 			<report id="erjixitong_report"  depends="yijixitong_report" dependsparams="suoshuyijixitong=@{yijixitongmingcheng}"
+		 			                                extends="shitingxitong.erjixitong_report" />
+		  		</vpanel>  
+		  		<framepanel id="vp2" parenttitle="${buzhiheanzhuang}" >
+		     		<report id="buzhiheanzhuangtupian_report"   extends="shitingxitong.buzhiheanzhuangtupian_report" />
+		        </framepanel>
+		   		<hpanel id="vp3" parenttitle="${jiekouguanxi}">
+		   			<report id="jiekouguanxi_report" depends="yijixitong_report" dependsparams="suoshuyijixitong=@{yijixitongmingcheng}"
+		                                             extends="shitingxitong.jiekouguanxi_report" />
+				    <report id="jiekouguanxitupian_report"   extends="shitingxitong.jiekouguanxitupian_report" />			
+		  		</hpanel>
+		     	<report id="qitagaishu_report" title="其它概述"  depends="yijixitong_report" dependsparams="suoshuyijixitong=@{yijixitongmingcheng}"
+		     								   extends="shitingxitong.qitagaishu_report" />			
+ 
+			</tabpanel> 
+		</vpanel>
+		<!-- 实艇结构 -->
+		<tabpanel id="shitingjiegou_tab"  titlealign="top" parenttitle="${shitingjiegou}" titlestyle="2" margin="10px" height="600px"  align="center">
+	    	<framepanel id="chuantijiegou_framepanel" parenttitle="${chuantijiegou}"  title="url{suoshuxianhao}号结构主尺度" margin="10px">
+	        	<vpanel id="jiegouzhuchidu_vpanel">	   
+					<report id="jiegouzhuchidu_report"      extends="shitingjiegou.jiegouzhuchidu_report" />						  				  			
+				    <report id="chuantizongzhendong_report" extends="shitingjiegou.chuantizongzhendong_report" />						  				  			
+			  	</vpanel>
+			</framepanel>
+			<framepanel id="naiyajiegou_framepanel" parenttitle="${naiyajiegou}"  title="url{suoshuxinghao}${naiyajiegou}" margin="10px">
+			  	<vpanel id="naiyajiegou_vpanel">
+				   <report id="naiyajiegou_report"          extends="shitingjiegou.naiyajiegou_report" />						  				  			
+				   <report id="naiyachuantizhijing_report"  extends="shitingjiegou.naiyachuantizhijing_report" />						  				  			
+				   <report id="naiyakebanhoudu_report"      extends="shitingjiegou.naiyakebanhoudu_report" />						  				  			
+				   <report id="naiyaleigucanshu_report"     extends="shitingjiegou.naiyaleigucanshu_report" />						  				  			
+				   <report id="naiyachuanticailiao_report"  extends="shitingjiegou.naiyachuanticailiao_report" />		
+				   <report id="naiyaleiguxinghao_report"    extends="shitingjiegou.naiyaleiguxinghao_report" />
+				   <report id="naiyachuantiqiangdu_report"  extends="shitingjiegou.naiyachuantiqiangdu_report" />
+				</vpanel>
+			  </framepanel>
+			  <framepanel id="naiyachuanti_framepanel" parenttitle="非${naiyajiegou}"  title="url{suoshuxinghao}${naiyachuanti}" margin="10px">
+				<vpanel id="naiyachuanti_vpanel">
+				   <report id="fnaiyajiegou_report"         extends="shitingjiegou.fnaiyajiegou_report" />
+				   <report id="fnaiyakebanhoudu_report"     extends="shitingjiegou.fnaiyakebanhoudu_report" />
+				   <report id="fnaiyaleigucanshu_report"    extends="shitingjiegou.fnaiyaleigucanshu_report" />
+				   <report id="fnaiyachuanticailiao_report" extends="shitingjiegou.fnaiyachuanticailiao_report" />
+				   <report id="fnaiyaleiguxinghao_report"   extends="shitingjiegou.fnaiyaleiguxinghao_report" />
+				</vpanel>
+			  </framepanel>
+		 </tabpanel> 
+		</tabpanel>
+	</page>
+</applications>			   

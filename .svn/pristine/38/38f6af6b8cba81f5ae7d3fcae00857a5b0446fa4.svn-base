@@ -1,0 +1,868 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<applications xmlns="http://www.wabacus.com"
+			      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			      xsi:schemaLocation="http://www.wabacus.com ../xsd/wabacus.applications.xsd">
+		<page id="hangyeguanli" js="/webresources/script/validate.js">
+ 			<report id="hangyeguanli_report" title="行业管理" rowselect="single" type="editablelist" align="center" template="${articlelist.report.template}">
+				<display>
+					<col column="{sequence}" label="序号"></col>
+					<col column="id" label="id" displaytype="hidden"/>
+					<col column="jigoumingcheng" label="${jigoumingcheng}" clickorderby="true"></col>
+					<col column="guakaodanwei" label="${guakaodanwei}" br="true">
+						<inputbox type="selectbox">
+							<option value="单位1" label="单位1"></option>
+						    <option value="单位2" label="单位2"></option>
+						    <option value="单位3" label="单位3"></option>
+						    <option value="单位4" label="单位4"></option>
+					    </inputbox>
+					</col>
+                    <col column="zuzhanghuozhuren" label="组长或主任" br="true">
+						<inputbox type="selectbox">
+						    <option value="组长1" label="组长1"></option>
+						    <option value="组长2" label="组长2"></option>
+						    <option value="组长3" label="组长3"></option>
+						    <option value="组长4" label="组长4"></option>
+					    </inputbox>
+					</col>
+					<col column="guikoujiguan" label="${guikoujiguan}" br="true">
+						<inputbox type="selectbox">
+						    <option value="机关1" label="机关1"></option>
+						    <option value="机关2" label="机关2"></option>
+						    <option value="机关3" label="机关3"></option>
+						    <option value="机关4" label="机关4"></option>
+					    </inputbox>
+					</col>
+					<col column="beizhu" label="备注"  datatype="clob">
+						<inputbox type="textareabox" styleproperty="rows='1'cols='1'"></inputbox>
+			        </col>
+			        <!-- <col column="{non-fromdb}" property="xiangxixinxi" label="详细信息"></col>  -->
+				</display>
+				<sql>
+					<select>
+						<value>
+							<![CDATA[SELECT * FROM hyjs_hygli where  {#condition#} order by id]]>
+						</value>
+					</select>
+					<!-- <insert>
+				  		 insert into hyjs_hygli(id=uuid{},@{jigoumingcheng},@{guakaodanwei},@{zuzhanghuozhuren},@{guikoujiguan},@{beizhu});
+					</insert>
+					<update>
+					     update hyjs_hygli(@{id},@{jigoumingcheng},@{guakaodanwei},@{zuzhanghuozhuren},@{guikoujiguan},@{beizhu}) where id=@{id__old};					    
+					</update> -->
+					<insert pageurl="report{hangyeguanli_detail.hangyeguanli_report_datail}" popupparams="{title:'添加',width:750,height:400}"></insert>
+					<update pageurl="report{hangyeguanli_detail.hangyeguanli_report_datail}" urlparams="id=@{id}" popupparams="{title:'编辑',width:750,height:400}"></update>
+					<delete>
+					  	 delete from hyjs_hygli where id=@{id__old};
+					</delete>
+				</sql>
+			</report>
+			<!-- 行业管理下面的各个从报表 -->
+			<tabpanel id="hangyeguanli_tabpanel" titlewidth="110px" margin="10px" titlestyle="2">
+				<report id="zuzhijiegoutu_report" title="组织结构图" rowselect="single" depends="hangyeguanli_report" dependsparams="suoshujigou=@{jigoumingcheng}" type="editablelist2" pagesize="15" interceptor="com.wabacus.util.IdentifierGenerator_Interceptor" >
+					<display>
+	                	<col column="id" label="id" displaytype="optional"/>
+						<col column="photo" label=""></col>
+				  	</display>
+				  	<sql>
+					  	<select>
+							<value>
+								<![CDATA[SELECT * FROM zbgl_zbwxjghz_pic WHERE tupianzhonglei='组织结构图' and {#condition#}]]>
+							</value>
+							<condition name="suoshujigou" label="机构名称" hidden="true">
+								<value>
+									<![CDATA[(tupiansuoshu = #data#)]]>
+								</value>
+						    </condition>
+						</select>
+					   	<!-- <insert>
+				  		 	insert into hyjs_hygli_tupian(@{id},@{photo});
+					  	</insert>
+				  		<update>
+				     		update hyjs_hygli_tupian(@{photo}) id=@{id__old};
+				  		</update> -->
+				      	<delete>
+				      		delete from hyjs_hygli_tupian where id=@{id__old};
+				  		</delete>
+				   	</sql>
+	                <format>
+				    	<imports>
+						    <import>com.wabacus.util.*</import>
+				      	</imports>
+				      	<value>
+						  <![CDATA[
+						  	  if(photo!=null&&!photo.trim().equals(""))
+									{
+									  photo="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">"+"<a href=\"#\" onclick=\"wx_winpage('jsp/showPic.jsp?src="+photo+"',{initsize:'max'})\" >"+"<img src=\""+photo+"\"  width='100' height='100'>"+"</a></span>";
+									}else
+									{
+										photo="无照片";
+									}
+						  ]]>
+				  		</value>
+				  	</format>
+					<buttons buttonspacing="5" align="right">
+						<button name="upload" position="title" label="上传图片">
+							<imports>
+								<import>com.wabacus.system.*</import><!-- 用到了这个包下面的CacheDataBean类 -->
+							</imports>
+							<dynevent>
+								<![CDATA[
+									String str = rrequest.getStringAttribute("suoshujigou","");
+									System.out.println("***********************"+str);
+									StringBuffer sbuffer=new StringBuffer();
+									sbuffer.append("wx_winpage('upLoadImage.jsp?table=zbgl_zbwxjghz_pic&amp;tupianzhonglei=组织结构图&amp;tupiansuoshu=");
+									sbuffer.append(str);
+									sbuffer.append("&amp;page=hangyeguanli&amp;report=zuzhijiegoutu_report');");
+									return sbuffer.toString();//返回拼凑好的事件
+								]]>
+							</dynevent>
+						</button>
+					</buttons>
+			  	</report>
+				<report id="nianjujihua_report" title="年度计划" rowselect="single" depends="hangyeguanli_report" dependsparams="suoshujigou=@{jigoumingcheng}" align="center" type="editablelist">
+					<interceptor>
+						<preaction>
+							<![CDATA[
+								String suoshujigou = rrequest.getStringAttribute("suoshujigou","");
+								rrequest.getRequest().setAttribute("suoshujigou",suoshujigou);
+							]]>
+						</preaction>
+			    	</interceptor>
+					<display>
+						<col column="{sequence}" label="序号"></col>
+						<col column="id" label="id" displaytype="hidden"/>
+						<col column="suoshujigou" label="所属机构" displaytype="hidden" clickorderby="true"></col>   
+						<col column="jiedianshijian" label="重要节点事件" datatype="clob" valuestyleproperty=" colspan='1'">
+							<inputbox type="textareabox"></inputbox>
+						</col>
+						<col column="shijian" label="时间" clickorderby="true" datatype="date{yyyy-MM-dd}">
+							<inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)"></inputbox>
+						</col>
+						<col column="neirong" label="内容" />	
+						<col column="yaoqiu" label="要求" />
+						<col column="beizhu" label="备注" datatype="clob" valuestyleproperty=" colspan='1'">
+							<inputbox type="textareabox"></inputbox>
+						</col>
+					</display>
+					<sql>
+						<select>
+							<value>
+								<![CDATA[SELECT * FROM hyjs_hygli_niandujihua where  {#condition#} order by id]]>
+							</value>
+							<condition name="suoshujigou" label="机构名称" hidden="true">
+								<value>
+									<![CDATA[(suoshujigou = #data#)]]>
+								</value>
+						    </condition>
+						</select>
+						<!-- <insert>
+					     		<params>
+									<param name="suoshujigou" value="url{suoshujigou}"/>
+							    </params>
+							    <value>
+					  		       insert into hyjs_hygli_niandujihua(id=uuid{},suoshujigou=#{suoshujigou},@{jiedianshijian},@{shijian},@{neirong},@{yaoqiu},@{beizhu});
+						       	</value>
+						     </insert>
+						     <update>
+						     	update hyjs_hygli_niandujihua(@{id},@{jiedianshijian},@{shijian},@{neirong},@{yaoqiu},@{beizhu}) where id=@{id};
+						     </update> -->
+						<insert pageurl="report{niandujihua_detail.niandujihua_report_datail}" urlparams="suoshujigou=request{suoshujigou}" popupparams="{title:'添加',width:750,height:400}"></insert>
+						<update pageurl="report{niandujihua_detail.niandujihua_report_datail}" urlparams="id=@{id};suoshujigou=request{suoshujigou}" popupparams="{title:'编辑',width:750,height:400}"></update>
+						<delete>
+							delete from hyjs_hygli_niandujihua where id=@{id__old};
+						</delete>
+					</sql>
+				</report>
+				<report id="huiyijilu_report" title="会议记录" rowselect="single" depends="hangyeguanli_report" dependsparams="suoshujigou=@{jigoumingcheng}" align="center" type="editablelist">
+					<interceptor>
+						<preaction>
+							<![CDATA[
+								String suoshujigou = rrequest.getStringAttribute("suoshujigou","");
+								rrequest.getRequest().setAttribute("suoshujigou",suoshujigou);
+							]]>
+						</preaction>
+			    	</interceptor>
+					<display>
+					    <col column="{sequence}" label="序号"></col>						 
+					    <col column="id" label="id" displaytype="hidden"/>
+					    <col column="huiyimingcheng" label="会议名称" clickorderby="true"></col>
+					    <col column="suoshujigou" label="所属机构" displaytype="hidden" clickorderby="true"></col>
+					    <col column="shijian" label="时间" clickorderby="true" datatype="date{yyyy-MM-dd}">
+					      <inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)"></inputbox>
+					    </col>
+					    <col column="didian" label="地点" ></col>					     
+					    <col column="zhuchijiguan" label="${zhuchijiguan}" br="true">
+					       <inputbox type="selectbox">
+						     <option value="机关1" label="机关1"></option> 
+						     <option value="机关2" label="机关2"></option>
+						     <option value="机关3" label="机关3"></option> 
+						     <option value="机关4" label="机关4"></option>
+				           </inputbox>
+				        </col>
+					    <col column="neirong" label="内容" />	
+					    <col column="chengguo" label="成果" ></col>
+					    <col column="{non-fromdb}" property="fujian" label="附件" />
+					</display>
+					<sql>
+				       <select>
+					      <value>
+						      <![CDATA[SELECT * FROM hyjs_hygli_huiyijilu where  {#condition#} order by id]]>
+					      </value>
+				         <condition name="suoshujigou" label="机构名称" hidden="true">
+								<value>
+									<![CDATA[(suoshujigou = #data#)]]>
+								</value>
+						 </condition>
+				       </select>
+				       <!-- <insert>
+					       <params>
+								<param name="suoshujigou" value="url{suoshujigou}"/>							
+						    </params>
+						    <value>
+				  		     insert into hyjs_hygli_huiyijilu(id=uuid{},@{huiyimingcheng},suoshujigou=#{suoshujigou},@{shijian},@{didian},@{zhuchijiguan},@{neirong},@{chengguo});
+					       </value>
+				       </insert>
+				       <update>
+				     		update hyjs_hygli_huiyijilu(@{huiyimingcheng},@{suoshujigou},@{shijian},@{didian},@{zhuchijiguan},@{neirong},@{chengguo}) where id=@{id__old};
+				  	   </update> -->
+						<insert pageurl="report{huiyijilu_detail.huiyijilu_report_datail}" urlparams="suoshujigou=request{suoshujigou}" popupparams="{title:'添加',width:750,height:400}"></insert>
+						<update pageurl="report{huiyijilu_detail.huiyijilu_report_datail}" urlparams="id=@{id};suoshujigou=request{suoshujigou}" popupparams="{title:'编辑',width:750,height:400}"></update>
+						<delete>
+							delete from hyjs_hygli_huiyijilu where id=@{id__old};
+						</delete>
+					</sql>
+					<format>
+				    	<value>
+				  			<![CDATA[
+				        		fujian="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">"
+				        		+"<a href=\"#\" onclick=\"wx_winpage('ShowReport.wx?PAGEID=zbwxjghz_fujian&leibie="+huiyimingcheng+"&fujiansuoshu="+suoshujigou+"',{width:1100,height:400})\"  target=\"sampleframe\">"
+				        		+"附件"+"</a></span>";		        	
+				     		]]>
+				  		</value>
+					</format>
+				</report>
+				<report id="guanliwenjian_report" title="管理文件" rowselect="single" depends="hangyeguanli_report" dependsparams="suoshujigou=@{jigoumingcheng}" align="center" type="editablelist">
+					<interceptor>
+						<preaction>
+							<![CDATA[
+								String suoshujigou = rrequest.getStringAttribute("suoshujigou","");
+								rrequest.getRequest().setAttribute("suoshujigou",suoshujigou);
+							]]>
+						</preaction>
+			    	</interceptor>
+					<display>
+					 	<col column="{sequence}" label="序号"></col>
+					    <col column="id" label="id" displaytype="hidden"/>
+					    <col column="mingcheng" label="名称" clickorderby="true"></col>
+					    <col column="suoshujigou" label="所属机构" clickorderby="true" displaytype="hidden"></col>
+					    <col column="pifushijian" label="批复时间" clickorderby="true" datatype="date{yyyy-MM-dd}">
+							<inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)"></inputbox>
+					    </col>
+					    <col column="neirongzhaiyao" label="内容摘要" datatype="clob" valuestyleproperty=" colspan='1'">
+					    	<inputbox type="textareabox"></inputbox>
+					    </col>
+					    <col column="{non-fromdb}" property="fujian" label="附件" />
+					</display>
+					<sql>
+				       	<select>
+					    	<value>
+						    	<![CDATA[SELECT * FROM hyjs_hygli_guanlibanfa where  {#condition#} order by id]]>
+					      	</value>
+					      	<condition name="suoshujigou" label="机构名称" hidden="true">
+								<value>
+									<![CDATA[(suoshujigou = #data#)]]>
+								</value>
+				          	</condition>
+				       	</select>
+				       	<!-- <insert>
+				            <params>
+								<param name="suoshujigou" value="url{suoshujigou}"/>							
+						    </params>
+						    <value>
+			  		            insert into hyjs_hygli_guanlibanfa(id=uuid{},@{mingcheng},suoshujigou=#{suoshujigou},@{pifushijian},@{neirongzhaiyao});
+				           	</value>
+				      	</insert>
+				       	<update>
+				        	update hyjs_hygli_guanlibanfa(@{mingcheng},@{pifushijian},@{neirongzhaiyao}) where id=@{id};
+				  		</update> -->
+				  		<insert pageurl="report{guanliwenjian_detail.guanliwenjian_report_datail}" urlparams="suoshujigou=request{suoshujigou}" popupparams="{title:'添加',width:750,height:400}"></insert>
+						<update pageurl="report{guanliwenjian_detail.guanliwenjian_report_datail}" urlparams="id=@{id};suoshujigou=request{suoshujigou}" popupparams="{title:'编辑',width:750,height:400}"></update>
+				       	<delete>
+				  	 		delete from hyjs_hygli_guanlibanfa where id=@{id__old};
+				  		</delete>
+					</sql>
+				    <format>
+				    	<value>
+				  			<![CDATA[
+				        		fujian="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">"
+				        		+"<a href=\"#\" onclick=\"wx_winpage('ShowReport.wx?PAGEID=zbwxjghz_fujian&leibie="+mingcheng+"&fujiansuoshu="+suoshujigou+"',{width:1100,height:400})\"  target=\"sampleframe\">"
+				        		+"附件"+"</a></span>";		        	
+				     		]]>   
+				  		</value>
+					</format>	
+				</report>
+				<report id="dashijian_report" title="大事件" rowselect="single" depends="hangyeguanli_report" dependsparams="suoshujigou=@{jigoumingcheng}" align="center" type="editablelist">
+					<interceptor>
+						<preaction>
+							<![CDATA[
+								String suoshujigou = rrequest.getStringAttribute("suoshujigou","");
+								rrequest.getRequest().setAttribute("suoshujigou",suoshujigou);
+							]]>
+						</preaction>
+			    	</interceptor>
+					<display>
+					    <col column="{sequence}" label="序号"></col>
+					    <col column="id" label="id" displaytype="optional"/>
+					    <col column="huiyimingcheng" label="会议名称" clickorderby="true"></col>
+					    <col column="suoshujigou" label="所属机构" clickorderby="true"></col>
+					    <col column="shijian" label="时间" clickorderby="true" datatype="date{yyyy-MM-dd}">
+							<inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)"></inputbox>
+					    </col>
+					    <col column="didian" label="地点" clickorderby="true"></col>
+				        <col column="zhuchijiguan" label="${zhuchijiguan}" br="true">
+					    	<inputbox type="selectbox">
+							     <option value="机关1" label="机关1"></option>
+							     <option value="机关2" label="机关2"></option>
+							     <option value="机关3" label="机关3"></option>
+							     <option value="机关4" label="机关4"></option>
+				        	</inputbox>
+				        </col>
+					    <col column="neirong" label="内容"></col>
+					    <col column="chengguo" label="成果" clickorderby="true"></col>
+					    <col column="{non-fromdb}" property="fujian" label="附件" />
+					    <!-- <col column="fujian" label="附件" clickorderby="true">
+					    	<inputbox type="file" savepath="${file.path}" rooturl="${file.path}" uploadcount="3" allowedtypes="docx;doc;txt;html;pdf" interceptor="com.wabacus.util.TestFileUploadInterceptor"></inputbox>
+					    </col> -->
+					</display>
+					<sql>
+						<select>
+							<value>
+								<![CDATA[SELECT * FROM hyjs_hygli_zhuanjiazuhuodong where  {#condition#} order by id]]>
+							</value>
+							<condition name="suoshujigou" label="${jigoumingcheng}" hidden="true">
+								<value>
+									<![CDATA[(suoshujigou = #data#)]]>
+								</value>
+							</condition>
+						</select>
+						<!-- <insert>
+							<params>
+								<param name="suoshujigou" value="url{suoshujigou}"/>							
+							</params>
+							<value>
+					  			insert into hyjs_hygli_zhuanjiazuhuodong(id=uuid{},@{huiyimingcheng},suoshujigou=#{suoshujigou},@{shijian},@{didian},@{zhuchijiguan},@{neirong},@{chengguo},@{fujian});
+						    </value>
+						</insert>
+						<update>
+							update hyjs_hygli_zhuanjiazuhuodong(@{id},@{huiyimingcheng},@{shijian},@{didian},@{zhuchijiguan},@{neirong},@{chengguo},@{fujian}) where id=@{id};					    
+						</update> -->
+						<insert pageurl="report{dashijian_detail.dashijian_report_datail}" urlparams="suoshujigou=request{suoshujigou}" popupparams="{title:'添加',width:750,height:400}"></insert>
+						<update pageurl="report{dashijian_detail.dashijian_report_datail}" urlparams="id=@{id};suoshujigou=request{suoshujigou}" popupparams="{title:'编辑',width:750,height:400}"></update>
+						<delete>
+							delete from hyjs_hygli_zhuanjiazuhuodong where id=@{id__old};
+						</delete>
+					</sql>
+					<format>
+				    	<value>
+				  			<![CDATA[
+				        		fujian="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">"
+				        		+"<a href=\"#\" onclick=\"wx_winpage('ShowReport.wx?PAGEID=zbwxjghz_fujian&leibie="+huiyimingcheng+"&fujiansuoshu="+suoshujigou+"',{width:1100,height:400})\"  target=\"sampleframe\">"
+				        		+"附件"+"</a></span>";		        	
+				     		]]>   
+				  		</value>
+					</format>
+				</report>
+				<report id="zhuanjiaku_report" title="专家库" rowselect="single" depends="hangyeguanli_report" dependsparams="suoshujigou=@{jigoumingcheng}" align="center" type="editablelist">
+					<interceptor>
+						<preaction>
+							<![CDATA[
+								String suoshujigou = rrequest.getStringAttribute("suoshujigou","");
+								rrequest.getRequest().setAttribute("suoshujigou",suoshujigou);
+							]]>
+						</preaction>
+			    	</interceptor>
+					<display>
+					   <col column="{sequence}" label="序号"></col>
+					   <col column="id" label="id" displaytype="hidden"/>
+					   <col column="suoshujigou" label="所属机构" clickorderby="true"></col>
+					   <col column="xingming" label="姓名" clickorderby="true"></col>
+					   <col column="chushengriqi" label="出生日期" clickorderby="true" datatype="date{yyyy-MM-dd}">
+					   		<inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)"></inputbox>
+					   </col>
+					   <col column="zhichengzhiwu" label="职称/职务" clickorderby="true"></col>
+					   <col column="suoshugongzuodanwei" label="工作单位" filter="true" filterwidth="120px" clickorderby="true" valuestyleproperty="style='mso-number-format:\@'"></col>
+					   <col column="zhuanyefangxiang" label="专业方向" clickorderby="true"></col>
+					   <col column="lianxifangshi" label="联系方式" clickorderby="true"></col>
+					   <col column="shenfenzheng" label="身份证" clickorderby="true"></col>
+					   <col column="qita" label="其他" clickorderby="true"></col>
+					</display>
+					<sql>
+			       		<select>
+				      		<value>
+					      		<![CDATA[SELECT * FROM hyjs_hygli_zhuanjiaku where  {#condition#} order by id]]>
+				      		</value>
+				     		<condition name="suoshujigou" label="机构名称" hidden="true">
+								<value>
+									<![CDATA[(suoshujigou = #data#)]]>
+								</value>
+				        	</condition>
+			       		</select>
+			       		<!-- <insert>
+			            	<params>
+								<param name="suoshujigou" value="url{suoshujigou}"/>							
+					    	</params>
+					    	<value>
+		  		            	insert into hyjs_hygli_zhuanjiaku(id=uuid{},suoshujigou=#{suoshujigou},@{xingming},@{chushengriqi},@{zhichengzhiwu},@{suoshugongzuodanwei},@{zhuanyefangxiang},@{lianxifangshi},@{shenfenzheng},@{qita});
+			            	</value>
+			        	</insert>
+			       		<update>
+			            	update hyjs_hygli_zhuanjiaku(@{id},@{xingming},@{chushengriqi},@{zhichengzhiwu},@{suoshugongzuodanwei},@{zhuanyefangxiang},@{lianxifangshi},@{shenfenzheng},@{qita}) where id=@{id};					    
+			       		</update> -->
+			       		<insert pageurl="report{zhuanjiaku_detail.zhuanjiaku_report_datail}" urlparams="suoshujigou=request{suoshujigou}" popupparams="{title:'添加',width:750,height:400}"></insert>
+						<update pageurl="report{zhuanjiaku_detail.zhuanjiaku_report_datail}" urlparams="id=@{id};suoshujigou=request{suoshujigou}" popupparams="{title:'编辑',width:750,height:400}"></update>
+			       		<delete>
+			  	        	delete from hyjs_hygli_zhuanjiaku where id=@{id__old};
+			        	</delete>
+					</sql>
+				</report>
+				<report id="zhuyaochengguo_report" title="主要成果" rowselect="single" depends="hangyeguanli_report" dependsparams="suoshujigou=@{jigoumingcheng}" align="center" type="editablelist">
+					<interceptor>
+						<preaction>
+							<![CDATA[
+								String suoshujigou = rrequest.getStringAttribute("suoshujigou","");
+								rrequest.getRequest().setAttribute("suoshujigou",suoshujigou);
+							]]>
+						</preaction>
+			    	</interceptor>
+					<display>
+					 	<col column="{sequence}" label="序号"></col>
+					    <col column="id" label="id" displaytype="hidden"></col>
+					    <col column="mingcheng" label="名称" clickorderby="true"></col>
+					    <col column="suoshujigou" label="目的" clickorderby="true"></col>
+					    <col column="pifushijian" label="完成时间" clickorderby="true" datatype="date{yyyy-MM-dd}">
+							<inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)"></inputbox>
+					    </col>
+					    <col column="neirongzhaiyao" label="摘要" datatype="clob" valuestyleproperty=" colspan='1'">
+					    	<inputbox type="textareabox"></inputbox>
+					    </col>					    
+					    <col column="{non-fromdb}" property="fujian" label="附件"></col>
+					</display>
+					<sql>
+				       <select>
+					      <value>
+						       <![CDATA[SELECT * FROM hyjs_hygli_guanlibanfa where  {#condition#} order by id]]>
+					      </value>
+					      <condition name="suoshujigou" label="机构名称" hidden="true">
+							<value>
+								<![CDATA[(suoshujigou = #data#)]]>
+							</value>
+				          </condition>
+				       </select>
+				       <!-- <insert>
+				            <params>
+								<param name="suoshujigou" value="url{suoshujigou}"/>							
+						    </params>
+						    <value>
+			  		             insert into hyjs_hygli_guanlibanfa(id=uuid{},@{mingcheng},suoshujigou=#{suoshujigou},@{pifushijian},@{neirongzhaiyao});
+				           </value>
+				       </insert>
+				       <update>
+				         update hyjs_hygli_guanlibanfa(@{mingcheng},@{pifushijian},@{neirongzhaiyao}) where id=@{id};
+				  	   </update> -->
+				  	   <insert pageurl="report{zhuyaochengguo_detail.zhuyaochengguo_report_datail}" urlparams="suoshujigou=request{suoshujigou}" popupparams="{title:'添加',width:750,height:400}"></insert>
+						<update pageurl="report{zhuyaochengguo_detail.zhuyaochengguo_report_datail}" urlparams="id=@{id};suoshujigou=request{suoshujigou}" popupparams="{title:'编辑',width:750,height:400}"></update>
+				       <delete>
+				  	   		delete from hyjs_hygli_guanlibanfa where id=@{id__old};
+				  	   </delete>
+					</sql>
+					<format>
+				    	<value>
+				  			<![CDATA[
+				        		fujian="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">"
+				        		+"<a href=\"#\" onclick=\"wx_winpage('ShowReport.wx?PAGEID=zbwxjghz_fujian&leibie="+mingcheng+"&fujiansuoshu="+suoshujigou+"',{width:1100,height:400})\"  target=\"sampleframe\">"
+				        		+"附件"+"</a></span>";		        	
+				     		]]>
+				  		</value>
+					</format>
+				</report>
+		    </tabpanel>
+		</page>
+		<!-- 下面是各个报表的弹出框 -->
+		<!-- 行业管理主表的弹出框 -->
+		<page id="hangyeguanli_detail" js="/webresources/script/validate.js">
+			<report id="hangyeguanli_report_datail" title="编辑" width="700px" align="center" type="editabledetail" servervalidateclass="com.ShujuJiaoyan">
+				<display>
+					<col column="id" label="id" displaytype="hidden"/>
+					<col column="jigoumingcheng" label="${jigoumingcheng}" clickorderby="true"></col>
+					<col column="guakaodanwei" label="${guakaodanwei}" br="true">
+						<!-- <inputbox type="selectbox">
+							<option value="单位1" label="单位1"></option>
+						    <option value="单位2" label="单位2"></option>
+						    <option value="单位3" label="单位3"></option>
+						    <option value="单位4" label="单位4"></option>
+					    </inputbox> -->
+					    <inputbox servervalidate="isNotEmpty(#label#列须从查询结果中选取)" servervalidatetype="both">
+				        	<typeprompt count="15" timeout="0" selectbox="true">
+					       		<promptcol label="DANWEIMINGCHENG" title="挂靠单位" matchmode="anywhere"></promptcol>
+					       		<datasource>        <option dataset="@{select DANWEIMINGCHENG from XTSZ_JBXXWH_DANWEI where {#matchcondition#}}"></option>       </datasource>
+				        	</typeprompt>
+				     	</inputbox>
+					</col>
+                    <col column="zuzhanghuozhuren" label="组长或主任">
+						<inputbox type="selectbox">
+						    <option value="组长1" label="组长1"></option>
+						    <option value="组长2" label="组长2"></option>
+						    <option value="组长3" label="组长3"></option>
+						    <option value="组长4" label="组长4"></option>
+					    </inputbox>
+					</col>
+					<col column="guikoujiguan" label="${guikoujiguan}" br="true">
+						<inputbox type="selectbox">
+						    <option value="机关1" label="机关1"></option> 
+						    <option value="机关2" label="机关2"></option>
+						    <option value="机关3" label="机关3"></option> 
+						    <option value="机关4" label="机关4"></option>
+					    </inputbox>
+					</col>
+					<col column="beizhu" label="备注" datatype="clob" valuestyleproperty="colspan='3'">
+						<inputbox type="textareabox" styleproperty="rows='4'"></inputbox>
+			        </col>
+				</display>
+				<sql>
+					<select>
+						<value>
+							<![CDATA[SELECT * FROM hyjs_hygli where  {#condition#} order by id]]>
+						</value>
+						<condition name="id" label="id" hidden="true">
+							<value>
+								<![CDATA[(id like  '%#data#%' )]]>
+							</value>
+						</condition>
+						<!-- <condition name="guakaodanwei" label="挂靠单位">
+					    	<value>
+								<![CDATA[(guakaodanwei like  '%#data#%')]]>
+							</value>
+					     	<inputbox>
+					        	<typeprompt count="15">
+						       		<promptcol label="guakaodanwei" title="挂靠单位" matchmode="anywhere"></promptcol>
+						       		<datasource>        <option dataset="@{select DANWEIMINGCHENG from XTSZ_JBXXWH_DANWEI where {#matchcondition#}}"></option>       </datasource>
+					        	</typeprompt>
+					     	</inputbox>
+				    	</condition> -->
+					</select>
+					<insert>
+				  		 insert into hyjs_hygli(id=uuid{},@{jigoumingcheng},@{guakaodanwei},@{zuzhanghuozhuren},@{guikoujiguan},@{beizhu});
+					</insert>
+					<update>
+					     update hyjs_hygli(@{id},@{jigoumingcheng},@{guakaodanwei},@{zuzhanghuozhuren},@{guikoujiguan},@{beizhu}) where id=@{id__old};					    
+					</update>
+					<delete>
+					  	 delete from hyjs_hygli where id=@{id__old};
+					</delete>
+				</sql>
+			</report>
+		</page>
+		<!-- 年度计划子表的弹出框 -->
+		<page id="niandujihua_detail">
+			<report id="niandujihua_report_datail" title="编辑" width="700px" align="center" type="editabledetail">
+				<display>
+					<col column="id" label="id" displaytype="hidden"></col>
+					<col column="suoshujigou" label="所属机构" displaytype="hidden" clickorderby="true"></col>   
+					<col column="jiedianshijian" label="重要节点事件" datatype="clob" valuestyleproperty="colspan='3'" br="true">
+						<inputbox type="textareabox" styleproperty="rows='4'"></inputbox>
+					</col>
+					<col column="shijian" label="时间" clickorderby="true" datatype="date{yyyy-MM-dd}">
+						<inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)"></inputbox>
+					</col>
+					<col column="neirong" label="内容" br="true"></col>	
+					<col column="yaoqiu" label="要求" datatyep="clob" valuestyleproperty="colspan='3'" br="true">
+						<inputbox type="textareabox" styleproperty="rows='4'"></inputbox>
+					</col>
+					<col column="beizhu" label="备注" datatype="clob" valuestyleproperty="colspan='3'">
+						<inputbox type="textareabox" styleproperty="rows='4'"></inputbox>
+					</col>
+				</display>
+				<sql>
+					<select>
+						<value>
+							<![CDATA[SELECT * FROM hyjs_hygli_niandujihua where {#condition#} order by id]]>
+						</value>
+						<condition name="id" label="id" hidden="true">
+							<value>
+								<![CDATA[(id like  '%#data#%' )]]>
+							</value>
+						</condition>
+					</select>
+					<insert>
+						<params>
+							<param name="suoshujigou" value="url{suoshujigou}"/>							
+						</params>
+						<value>
+					  		insert into hyjs_hygli_niandujihua(id=uuid{},suoshujigou=#{suoshujigou},@{jiedianshijian},@{shijian},@{neirong},@{yaoqiu},@{beizhu});
+						</value>
+					</insert>
+					<update>
+						update hyjs_hygli_niandujihua(@{id},@{jiedianshijian},@{shijian},@{neirong},@{yaoqiu},@{beizhu}) where id=@{id};
+					</update>
+					<delete>
+						delete from hyjs_hygli_niandujihua where id=@{id__old};
+					</delete>
+				</sql>
+			</report>
+		</page>
+		<!-- 会议记录子表的弹出框 -->
+		<page id="huiyijilu_detail">
+			<report id="huiyijilu_report_datail" title="编辑" width="700px" align="center" type="editabledetail" servervalidateclass="com.ShujuJiaoyan">
+				<display>
+					<col column="id" label="id" displaytype="hidden"/>
+					<col column="huiyimingcheng" label="会议名称" clickorderby="true"></col>
+					<col column="suoshujigou" label="所属机构" displaytype="hidden" clickorderby="true"></col>
+					<col column="shijian" label="时间" clickorderby="true" datatype="date{yyyy-MM-dd}" br="true">
+						<inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)"></inputbox>
+					</col>
+					<col column="didian" label="地点"></col>
+					<col column="zhuchijiguan" label="${zhuchijiguan}" br="true">
+				       <!-- <inputbox type="selectbox">
+					     <option value="机关1" label="机关1"></option> 
+					     <option value="机关2" label="机关2"></option>
+					     <option value="机关3" label="机关3"></option> 
+					     <option value="机关4" label="机关4"></option>
+			           </inputbox> -->
+			           <inputbox servervalidate="isNotEmpty(#label#列须从查询结果中选取)" servervalidatetype="both">
+				        	<typeprompt count="15" timeout="0" selectbox="true">
+					       		<promptcol label="DANWEIMINGCHENG" title="主持机关" matchmode="anywhere"></promptcol>
+					       		<datasource>        <option dataset="@{select DANWEIMINGCHENG from XTSZ_JBXXWH_DANWEI where {#matchcondition#}}"></option>       </datasource>
+				        	</typeprompt>
+				     	</inputbox>
+					</col>
+				    <col column="neirong" label="内容" br="true"></col>
+				    <col column="chengguo" label="成果" valuestyleproperty="colspan='3'">
+				    	<inputbox type="textareabox" styleproperty="rows='4'"></inputbox>
+				    </col>
+				</display>
+				<sql>
+					<select>
+				      <value>
+					      <![CDATA[SELECT * FROM hyjs_hygli_huiyijilu where  {#condition#} order by id]]>
+				      </value>
+				      <condition name="id" label="id" hidden="true">
+					  		<value>
+								<![CDATA[(id like  '%#data#%' )]]>
+							</value>
+					  </condition>
+			       </select>
+			       <insert>
+				       <params>
+							<param name="suoshujigou" value="url{suoshujigou}"/>							
+					    </params>
+					    <value>
+			  		     insert into hyjs_hygli_huiyijilu(id=uuid{},@{huiyimingcheng},suoshujigou=#{suoshujigou},@{shijian},@{didian},@{zhuchijiguan},@{neirong},@{chengguo});
+				       </value>
+			       </insert>
+					<update>
+					     update hyjs_hygli_huiyijilu(@{huiyimingcheng},@{suoshujigou},@{shijian},@{didian},@{zhuchijiguan},@{neirong},@{chengguo}) where id=@{id__old};
+					</update>
+					<delete>
+					  	delete from hyjs_hygli_huiyijilu where id=@{id__old};
+					</delete>
+				</sql>
+			</report>
+		</page>
+		<!-- 管理文件子表的弹出框 -->
+		<page id="guanliwenjian_detail">
+			<report id="guanliwenjian_report_datail" title="编辑" width="700px" align="center" type="editabledetail">
+				<display>
+					<col column="id" label="id" displaytype="hidden"/>
+				    <col column="mingcheng" label="名称" clickorderby="true"></col>
+				    <col column="suoshujigou" label="所属机构" clickorderby="true" displaytype="hidden"></col>
+				    <col column="pifushijian" label="批复时间" clickorderby="true" datatype="date{yyyy-MM-dd}" br="true">
+						<inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)"></inputbox>
+				    </col>
+				    <col column="neirongzhaiyao" label="内容摘要" datatype="clob" valuestyleproperty=" colspan='3'">
+				    	<inputbox type="textareabox" styleproperty="rows='4'"></inputbox>
+				    </col>
+				    <!-- <col column="{non-fromdb}" property="fujian" label="附件" /> -->
+				</display>
+				<sql>
+					<select>
+				    	<value>
+					    	<![CDATA[SELECT * FROM hyjs_hygli_guanlibanfa where  {#condition#} order by id]]>
+				      	</value>
+				      	<condition name="id" label="id" hidden="true">
+					  		<value>
+								<![CDATA[(id like  '%#data#%' )]]>
+							</value>
+					  	</condition>
+			       	</select>
+			       	<insert>
+			            <params>
+							<param name="suoshujigou" value="url{suoshujigou}"/>							
+					    </params>
+					    <value>
+		  		            insert into hyjs_hygli_guanlibanfa(id=uuid{},@{mingcheng},suoshujigou=#{suoshujigou},@{pifushijian},@{neirongzhaiyao});
+			           	</value>
+			      	</insert>
+			       	<update>
+			        	update hyjs_hygli_guanlibanfa(@{mingcheng},@{pifushijian},@{neirongzhaiyao}) where id=@{id};
+			  		</update>
+			       	<delete>
+			  	 		delete from hyjs_hygli_guanlibanfa where id=@{id__old};
+			  		</delete>
+				</sql>
+			</report>
+		</page>
+		<!-- 大事件子表的弹出框 -->
+		<page id="dashijian_detail">
+			<report id="dashijian_report_datail" title="编辑" width="700px" align="center" type="editabledetail" servervalidateclass="com.ShujuJiaoyan">
+				<display>
+					<col column="id" label="id" displaytype="hidden"/>
+				    <col column="huiyimingcheng" label="会议名称" clickorderby="true"></col>
+				    <col column="suoshujigou" label="所属机构" clickorderby="true" displaytype="hidden"></col>
+				    <col column="shijian" label="时间" clickorderby="true" datatype="date{yyyy-MM-dd}" br="true">
+						<inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)"></inputbox>
+				    </col>
+				    <col column="didian" label="地点" clickorderby="true"></col>
+			        <col column="zhuchijiguan" label="${zhuchijiguan}"  br="true">
+				    	<!-- <inputbox type="selectbox">
+						     <option value="机关1" label="机关1"></option>
+						     <option value="机关2" label="机关2"></option>
+						     <option value="机关3" label="机关3"></option>
+						     <option value="机关4" label="机关4"></option>
+			        	</inputbox> -->
+			        	<inputbox servervalidate="isNotEmpty(#label#列须从查询结果中选取)" servervalidatetype="both">
+				        	<typeprompt count="15" timeout="0" selectbox="true">
+					       		<promptcol label="DANWEIMINGCHENG" title="主持机关" matchmode="anywhere"></promptcol>
+					       		<datasource>        <option dataset="@{select DANWEIMINGCHENG from XTSZ_JBXXWH_DANWEI where {#matchcondition#}}"></option>       </datasource>
+				        	</typeprompt>
+				     	</inputbox>
+			        </col>
+				    <col column="neirong" label="内容"></col>
+				    <col column="chengguo" label="成果" clickorderby="true"></col>
+				    <!-- <col column="fujian" label="附件" clickorderby="true">
+				    	<inputbox type="file" savepath="${file.path}" rooturl="${file.path}" uploadcount="3" allowedtypes="docx;doc;txt;html;pdf" interceptor="com.wabacus.util.TestFileUploadInterceptor"></inputbox>
+				    </col> -->
+				</display>
+				<sql>
+					<select>
+						<value>
+							<![CDATA[SELECT * FROM hyjs_hygli_zhuanjiazuhuodong where  {#condition#} order by id]]>
+						</value>
+						<condition name="id" label="id" hidden="true">
+					  		<value>
+								<![CDATA[(id like  '%#data#%' )]]>
+							</value>
+					  	</condition>
+					</select>
+					<insert>
+						<params>
+							<param name="suoshujigou" value="url{suoshujigou}"/>							
+						</params>
+						<value>
+				  			insert into hyjs_hygli_zhuanjiazuhuodong(id=uuid{},@{huiyimingcheng},suoshujigou=#{suoshujigou},@{shijian},@{didian},@{zhuchijiguan},@{neirong},@{chengguo});
+					    </value>
+					</insert>
+					<update>
+						update hyjs_hygli_zhuanjiazuhuodong(@{id},@{huiyimingcheng},@{shijian},@{didian},@{zhuchijiguan},@{neirong},@{chengguo}) where id=@{id};					    
+					</update>
+					<delete>
+						delete from hyjs_hygli_zhuanjiazuhuodong where id=@{id__old};
+					</delete>
+				</sql>
+			</report>
+		</page>
+		<!-- 专家库子表的弹出框 -->
+		<page id="zhuanjiaku_detail">
+			<report id="zhuanjiaku_report_datail" title="编辑" width="700px" align="center" type="editabledetail" servervalidateclass="com.ShujuJiaoyan">
+				<display>
+					<col column="id" label="id" displaytype="hidden"/>
+				   <col column="suoshujigou" label="所属机构" clickorderby="true" displaytype="hidden"></col>
+				   <col column="xingming" label="姓名" clickorderby="true"></col>
+				   <col column="chushengriqi" label="出生日期" clickorderby="true" datatype="date{yyyy-MM-dd}"  br="true">
+				   		<inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)"></inputbox>
+				   </col>
+				   <col column="zhichengzhiwu" label="职称/职务" clickorderby="true"></col>
+				   <col column="suoshugongzuodanwei" label="工作单位" filter="true" filterwidth="120px" clickorderby="true" valuestyleproperty="style='mso-number-format:\@'"  br="true">
+				   		<inputbox servervalidate="isNotEmpty(#label#列须从查询结果中选取)" servervalidatetype="both">
+				        	<typeprompt count="15" timeout="0" selectbox="true">
+					       		<promptcol label="DANWEIMINGCHENG" title="工作单位" matchmode="anywhere"></promptcol>
+					       		<datasource>        <option dataset="@{select DANWEIMINGCHENG from XTSZ_JBXXWH_DANWEI where {#matchcondition#}}"></option>       </datasource>
+				        	</typeprompt>
+				     	</inputbox>
+				   </col>
+				   <col column="zhuanyefangxiang" label="专业方向" clickorderby="true"></col>
+				   <col column="lianxifangshi" label="联系方式" clickorderby="true"  br="true"></col>
+				   <col column="shenfenzheng" label="身份证" clickorderby="true"></col>
+				   <col column="qita" label="其他" clickorderby="true"></col>
+				</display>
+				<sql>
+					<select>
+			      		<value>
+				      		<![CDATA[SELECT * FROM hyjs_hygli_zhuanjiaku where  {#condition#} order by id]]>
+			      		</value>
+			        	<condition name="id" label="id" hidden="true">
+					  		<value>
+								<![CDATA[(id like  '%#data#%' )]]>
+							</value>
+					  	</condition>
+		       		</select>
+		       		<insert>
+		            	<params>
+							<param name="suoshujigou" value="url{suoshujigou}"/>							
+				    	</params>
+				    	<value>
+	  		            	insert into hyjs_hygli_zhuanjiaku(id=uuid{},suoshujigou=#{suoshujigou},@{xingming},@{chushengriqi},@{zhichengzhiwu},@{suoshugongzuodanwei},@{zhuanyefangxiang},@{lianxifangshi},@{shenfenzheng},@{qita});
+		            	</value>
+		        	</insert>
+		       		<update>
+		            	update hyjs_hygli_zhuanjiaku(@{id},@{xingming},@{chushengriqi},@{zhichengzhiwu},@{suoshugongzuodanwei},@{zhuanyefangxiang},@{lianxifangshi},@{shenfenzheng},@{qita}) where id=@{id};					    
+		       		</update>
+		       		<delete>
+		  	        	delete from hyjs_hygli_zhuanjiaku where id=@{id__old};
+		        	</delete>
+				</sql>
+			</report>
+		</page>
+		<!-- 主要成果子表的弹出框 -->
+		<page id="zhuyaochengguo_detail">
+			<report id="zhuyaochengguo_report_datail" title="编辑" width="700px" align="center" type="editabledetail">
+				<display>
+					<col column="id" label="id" displaytype="hidden"></col>
+				    <col column="mingcheng" label="名称" clickorderby="true"></col>
+				    <col column="suoshujigou" label="所属机构" clickorderby="true" displaytype="hidden"></col>
+				    <col column="pifushijian" label="完成时间" clickorderby="true" datatype="date{yyyy-MM-dd}" br="true">
+						<inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)"></inputbox>
+				    </col>
+				    <col column="neirongzhaiyao" label="摘要" datatype="clob" valuestyleproperty="colspan='3'">
+				    	<inputbox type="textareabox" styleproperty="rows='4'"></inputbox>
+				    </col>					    
+				    <!-- <col column="{non-fromdb}" property="fujian" label="附件"></col> -->
+				</display>
+				<sql>
+					<select>
+				      <value>
+					       <![CDATA[SELECT * FROM hyjs_hygli_guanlibanfa where  {#condition#} order by id]]>
+				      </value>
+				      <condition name="id" label="id" hidden="true">
+					  		<value>
+								<![CDATA[(id like  '%#data#%' )]]>
+							</value>
+					  	</condition>
+			       </select>
+			       <insert>
+			            <params>
+							<param name="suoshujigou" value="url{suoshujigou}"/>							
+					    </params>
+					    <value>
+		  		             insert into hyjs_hygli_guanlibanfa(id=uuid{},@{mingcheng},suoshujigou=#{suoshujigou},@{pifushijian},@{neirongzhaiyao});
+			           </value>
+			       </insert>
+			       <update>
+			         update hyjs_hygli_guanlibanfa(@{mingcheng},@{pifushijian},@{neirongzhaiyao}) where id=@{id};
+			  	   </update>
+			       <delete>
+			  	   		delete from hyjs_hygli_guanlibanfa where id=@{id__old};
+			  	   </delete>
+				</sql>
+			</report>
+		</page>
+	</applications>

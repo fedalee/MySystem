@@ -1,0 +1,119 @@
+@charset "utf-8";
+/* CSS Document */
+*
+{
+	margin:0px;
+	padding:0px;
+}
+html, body
+{
+	width:100%;
+	height:100%;
+}
+body
+{
+	background:url(../images/login/login_bg.jpg) no-repeat;
+	background-size:100% 100%;
+}
+.login_tit
+{
+	width:448px;
+	height:34px;
+	position:absolute;
+	top:50%;
+	left:50%;
+	margin-left:-224px;
+	margin-top:-172px;
+	text-align:center;
+}
+.login_main
+{
+	width:448px;
+	height:248px;
+	background:url(../images/login/login_main.png) no-repeat left top;
+	position:absolute;
+	top:50%;
+	left:50%;
+	margin-left:-224px;
+	margin-top:-124px;
+	padding-top:20px;
+}
+.login_main p
+{
+	width:448px;
+	float:left;
+	margin-top:25px;
+}
+.login_main p span
+{
+	width:100px;
+	height:33px;
+	line-height:33px;
+	float:left;
+	text-align:right;
+	color:#0d1215;
+	font-size:14px;
+	font-family:"微软雅黑";
+}
+.login_main p .input_01
+{
+	width:238px;
+	height:33px;
+	line-height:33px;
+	float:left;
+	margin-left:15px;
+	background-image:linear-gradient( #dde4ec, #f0f2f1 );
+	-moz-border-radius: 5px;
+	-khtml-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	color:#7a8288;
+	text-indent:10px;
+	font-family:"微软雅黑";
+	box-shadow:-1px 1px 1px #7d8b8e inset;
+	border:1px solid #f5fdff;
+}
+.login_main p .input_02
+{
+	width:147px;
+	height:38px;
+	float:left;
+	margin-left:15px;
+	border:0px;
+	background:url(../images/login/login_but.png) no-repeat left top;
+	cursor:pointer;
+}
+.login_main p .input_02:hover
+{
+	width:147px;
+	height:38px;
+	float:left;
+	margin-left:15px;
+	border:0px;
+	background:url(../images/login/login_but_hov.png) no-repeat left top;
+	cursor:pointer;
+}
+.login_car
+{
+	width:211px;
+	height:231px;
+	position:absolute;
+	top:50%;
+	left:50%;
+	margin-top:-33px;
+	margin-left:134px;
+	background:url(../images/login/login_car.png) no-repeat left top;
+	z-index:1;
+}
+.login_user
+{
+	width:211px;
+	height:231px;
+	position:absolute;
+	top:50%;
+	left:50%;
+	margin-top:-33px;
+	margin-left:134px;
+	background:url(../images/login/login_user.png) no-repeat left top;
+	z-index:1;
+}

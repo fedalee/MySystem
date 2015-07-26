@@ -1,0 +1,13 @@
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+
+	<tr><td align='left' width='18%'><wx:data col="guyoukeyongdu" showlabel="true" showdata="false"/></td><td><wx:data col="guyoukeyongdu" showlabel="false" showdata="true"/></td></tr>
+	<tr><td align='left' colspan='2'>&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+	<tr><td align='left'  width='18%'><wx:data col="renwukekaodu" showlabel="true" showdata="false"/></td><td><wx:data col="renwukekaodu" showlabel="false" showdata="true"/></td></tr>
+	<tr><td align='left' colspan='2'>&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+	<tr><td align='left'  width='18%'><wx:data col="shiyongshouming" showlabel="true" showdata="false"/></td><td><wx:data col="shiyongshouming" showlabel="false" showdata="true"/></td></tr>
+	<tr><td align='left' colspan='2'>&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+	<tr><td align='left' colspan='2'><wx:data col="dingxingyaoqiu" showlabel="true" showdata="false"/><wx:data col="dingxingyaoqiu" showlabel="false" showdata="true"/></td></tr>
+	<tr><td >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+	<tr><td align='right' colspan='2'><wx:button type="save" /></td></tr>
+</table>

@@ -1,0 +1,482 @@
+<applications xmlns="http://www.wabacus.com"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.wabacus.com ../../../../../xsd/wabacus.applications.xsd">
+
+
+	<!-- shebeiguanli弹窗 -->
+	<page id="zhuangbeiyanzhiPopupPage" js="/webresources/script/validate.js,/WebRoot/js/testcallback.js">
+		<report id="zhuangbeiyanzhiPopup" title="url{suoshuxinghao}" align="left"
+			type="editabledetail" servervalidateclass="com.ShujuJiaoyan">
+			<display valuetdwidth="80px" labeltdwidth="80px" labelbgcolor="#f0f0f0" labelalign="left" valuealign="left">
+				<col column="id" label="id" displaytype="hidden"></col>
+
+				<col column="xinghao" label="${xinghao}" >
+					<inputbox type="selectbox" >
+						<option dataset="@{select xinghao from zbgl_zbjbxx_xinghao}"
+							label="xinghao" value="xinghao"></option>
+					</inputbox>
+				</col>			
+				<col column="lixianglunzhengjihuahao" label="${lixianglunzhengjihuahao}"
+					clickorderby="true"  br="true"/>
+
+				<col column="lunzhengdanwei" label="${lunzhengdanwei}" clickorderby="true" >
+                  <inputbox  servervalidate="isNotEmpty(#label#列须从查询结果中选取)" servervalidatetype="both">
+					<typeprompt count="15" timeout="0" selectbox="true">
+						<promptcol label="DANWEIMINGCHENG" title="论证单位" matchmode="anywhere"></promptcol>
+						<datasource>
+							<option dataset="@{select DANWEIMINGCHENG from XTSZ_JBXXWH_DANWEI where {#matchcondition#}}"></option> 
+						</datasource>
+					</typeprompt>
+				  </inputbox>				
+				</col>
+
+				<col column="shejidanwei" label="${shejidanwei}" clickorderby="true" br="true">
+                  <inputbox  servervalidate="isNotEmpty(#label#列须从查询结果中选取)" servervalidatetype="both">
+					<typeprompt count="15" timeout="0" selectbox="true">
+						<promptcol label="DANWEIMINGCHENG" title="设计单位" matchmode="anywhere"></promptcol>
+						<datasource>
+							<option dataset="@{select DANWEIMINGCHENG from XTSZ_JBXXWH_DANWEI where {#matchcondition#}}"></option> 
+						</datasource>
+					</typeprompt>
+				  </inputbox>
+				</col>
+
+				<col column="jianzaodanwei" label="${jianzaodanwei}" datatype="clob" br="true">
+                  <inputbox  servervalidate="isNotEmpty(#label#列须从查询结果中选取)" servervalidatetype="both">
+					<typeprompt count="15" timeout="0" selectbox="true">
+						<promptcol label="DANWEIMINGCHENG" title="建造单位" matchmode="anywhere"></promptcol>
+						<datasource>
+							<option dataset="@{select DANWEIMINGCHENG from XTSZ_JBXXWH_DANWEI where {#matchcondition#}}"></option> 
+						</datasource>
+					</typeprompt>
+				  </inputbox>
+				  </col>				
+                <col column="gaishu" label="概述" datatype="clob" br="true" valuestyleproperty="colspan='3'">
+					<inputbox type="textareabox" styleproperty="rows='10'"></inputbox>
+				</col>
+
+				<col column="beizhu" label="备注" datatype="clob" br="true" valuestyleproperty="colspan='3'">
+					<inputbox type="textareabox" styleproperty="rows='10'"></inputbox>
+				</col>
+
+
+			</display>
+			<sql>
+				<select>
+					<value>
+					<![CDATA[SELECT * FROM zbgl_zbyz_xinghaoxinxi where {#condition#}]]>
+					</value>
+
+					<condition name="suoshuxinghao" hidden="true">
+						<value>
+									<![CDATA[(xinghao like '%#data#%'  )]]>
+						</value>
+					</condition>
+
+					<condition name="suoshuxianhao" hidden="true">
+						<value>
+									<![CDATA[(xianhao like '%#data#%'  )]]>
+						</value>
+					</condition>
+				</select>
+
+				<insert>
+					<params>
+			  	 	      <param name="myid" value="uuid{}"></param>
+			  	    </params>
+			  	      <value>				
+					          insert into
+					          zbgl_zbyz_xinghaoxinxi(id=#{myid},@{xinghao},@{gaishu},@{lixianglunzhengjihuahao},@{lunzhengdanwei},@{shejidanwei},@{jianzaodanwei},@{beizhu});
+                              insert into zbgl_zbyz_shitingxingneng(id=uuid{},suoshu=#{myid},@{xinghao},suoshujieduan='立项论证阶段');
+                              insert into zbgl_zbyz_shitingxingneng(id=uuid{},suoshu=#{myid},@{xinghao},suoshujieduan='方案设计阶段');
+                              insert into zbgl_zbyz_shitingxingneng(id=uuid{},suoshu=#{myid},@{xinghao},suoshujieduan='技术设计阶段');
+                      </value>
+				</insert>
+
+
+				<update>
+					update
+					zbgl_zbyz_xinghaoxinxi(@{id},@{gaishu},@{lixianglunzhengjihuahao},@{lunzhengdanwei},@{shejidanwei},@{jianzaodanwei},@{beizhu})
+					where id=@{id__old};
+				</update>
+			</sql>
+		</report>
+	</page>
+
+
+
+
+
+	<!-- jianzaojihua阶段弹窗 -->
+<page id="jianzaojihuaPopupPage">
+		<report id="jianzaojihuaPopup" title="${jianzaojihua}" align="left"	  type="editabledetail" servervalidateclass="com.ShujuJiaoyan" interceptor="interceptor.ZhuangBeiYanZhiJianZaoJiHuaInterceptor">
+			<interceptor>
+				<imports>
+					<import>javax.servlet.http.HttpServletRequest;</import>
+					<import>com.wabacus.system.ReportRequest</import>
+				</imports>
+				<preaction>
+					HttpServletRequest r=rrequest.getRequest();
+					r.setAttribute("suoshuxinghao",r.getParameter("xinghao"));
+				</preaction>
+			</interceptor>
+			<display>
+ 				<col column="id" label="id" displaytype="hidden" />
+				<col column="xinghao" label="${xinghao}" displaytype="hidden"> </col>
+			    <col column="xianhao" label="${xianhao}" >
+			    		<inputbox type="selectbox">
+					        <option dataset="@{select xianhao from zbgl_zbjbxx_xianhao where {#condition#}}" label="xianhao" value="xianhao">
+							     <datasetconditions>
+								       <condition name="xinghao" hidden="true">
+								          <value>
+								            	<![CDATA[(suoshuxinghao = #data#)]]>
+								          </value>
+								       </condition>
+								       </datasetconditions>
+							</option>
+					    </inputbox>             
+			    </col>					
+	     		<col column="jianzaofangshi" label="${jianzaofangshi}"  br="true"></col>			
+			
+				<col column="jianzaojihuashijian" label="${jianzaojihuashijian}" datatype="date{yyyy-MM-dd}">
+					<inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)" ></inputbox>
+				</col>
+				<col column="jianzaoshijishijian" label="${jianzaoshijishijian}" clickorderby="true"
+					datatype="date{yyyy-MM-dd}" br="true">
+					<inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)"></inputbox>
+				</col>				
+				<col column="zongzhuangchang" label="${zongzhuangchang}" >
+				<inputbox  servervalidate="isNotEmpty(#label#列须从查询结果中选取)" servervalidatetype="both">
+					<typeprompt count="15" timeout="0" selectbox="true">
+						<promptcol label="DANWEIMINGCHENG" title="技术责任单位" matchmode="anywhere"></promptcol>
+						<datasource>
+							<option dataset="@{select DANWEIMINGCHENG from XTSZ_JBXXWH_DANWEI where {#matchcondition#}}"></option> 
+						</datasource>
+					</typeprompt>
+				</inputbox>
+				</col>
+				<col column="jianzaozhouqi" label="${jianzaozhouqi}" br="true" ></col>
+				<col column="jianzaotedian" label="${jianzaotedian}" >
+					<inputbox type="textareabox" styleproperty="rows='5'"></inputbox>
+				</col>
+				<col column="guanjiangongyi" label="${guanjiangongyi}" br="true">
+					<inputbox type="textareabox" styleproperty="rows='5'"></inputbox>
+				</col>
+				<col column="yanshoupinggujieguo" label="验收评估结果"  >
+				    <inputbox type="textareabox" styleproperty="rows='5'"></inputbox>
+				</col>
+				<col column="dashiji" label="大事记" br="true">
+				    <inputbox type="textareabox" styleproperty="rows='5'"></inputbox>
+				</col>
+				<col column="zhongdawentishuoming" label="重大问题说明" br="true" valuestyleproperty="colspan='3'">
+				     <inputbox type="textareabox" styleproperty="rows='5'"></inputbox>
+				</col>
+				<col column="jianzaozhuangtai" label="建造状态">
+				    	<inputbox type="selectbox">						  
+							<option value="进行中" label="进行中"></option>
+						    <option value="已完成" label="已完成"></option>
+					    </inputbox>
+				</col>
+			</display>
+			<sql>
+			
+				<select>
+					<value>
+					<![CDATA[SELECT * FROM zbgl_zbyz_jianzaojihua where  {#condition#}]]>
+					</value>
+
+					<condition name="suoshuxinghao" hidden="true">
+						<value>
+								<![CDATA[(xinghao =  #data# )]]>
+						</value>
+
+					</condition>
+					<condition name="suoshuxianhao" hidden="true">
+						<value>
+								<![CDATA[(xianhao =  #data# )]]>
+						</value>
+					</condition>
+
+
+				</select>
+				<insert>
+					 <params>
+			  	 	      <param name="xinghao" value="url{xinghao}"></param>
+			  	      </params>
+				<![CDATA[
+					insert into zbgl_zbyz_jianzaojihua (id=uuid{},@{xianhao},xinghao=#{xinghao},@{jianzaojihuashijian},@{jianzaozhuangtai},@{jianzaoshijishijian},@{jianzaofangshi},@{jianzaotedian},@{guanjiangongyi},@{zongzhuangchang},@{jianzaozhouqi},
+					                                                                           @{yanshoupinggujieguo},@{dashiji},@{zhongdawentishuoming});
+				]]>
+				</insert>
+				<update>
+				<![CDATA[
+				    update
+					zbgl_zbyz_jianzaojihua(@{jianzaojihuashijian},@{jianzaozhuangtai},@{jianzaoshijishijian},@{jianzaofangshi},@{jianzaotedian},@{guanjiangongyi},@{zongzhuangchang},@{jianzaozhouqi},
+					@{yanshoupinggujieguo},@{dashiji},@{zhongdawentishuoming})
+					where id
+					= @{id__old};
+				]]>
+				</update>
+				<delete>
+				<![CDATA[
+					delete from zbgl_zbyz_jianzaojihua where id=@{id__old};
+					update zbgl_zbjbxx_xianhao set jieduan = '待建造' where xianhao=@{xianhao};
+					
+				]]>
+				</delete>
+			</sql>
+
+			   
+		</report>
+
+	</page>
+	<!-- xibojieduan弹窗 -->
+	<page id="xiboshiyanPopupPage">
+		<report id="xiboshiyanPopup" title="${xibo}" align="left" 
+			height="500" type="editabledetail"  interceptor="interceptor.ZhuangBeiYanZhiXiBoInterceptor">
+			<interceptor>
+				<imports>
+					<import>javax.servlet.http.HttpServletRequest;</import>
+					<import>com.wabacus.system.ReportRequest</import>
+				</imports>
+				<preaction>
+
+					HttpServletRequest r=rrequest.getRequest();
+					r.setAttribute("suoshuxinghao",r.getParameter("xinghao"));
+
+
+				</preaction>
+
+			</interceptor>
+			<display>
+				<col column="id" label="id" displaytype="hidden" br="true"/>
+				<col column="xinghao" label="${xinghao}" displaytype="hidden" br="true"/>
+				<col column="xianhao" label="${xianhao}" br="true">
+			    		<inputbox type="selectbox">
+					        <option dataset="@{select xianhao from zbgl_zbyz_jianzaojihua where {#condition#}}" label="xianhao" value="xianhao">
+							     <datasetconditions>
+								       <condition name="xinghao" hidden="true">
+								          <value>
+								            	<![CDATA[(xinghao = #data# and jianzaozhuangtai='已完成')]]>
+								          </value>
+								       </condition>
+								</datasetconditions>
+							</option>
+					    </inputbox>
+				</col>
+				<col column="jihuashijian" label="${xibojihuashijian}" clickorderby="true"
+					datatype="date{yyyy-MM-dd}" br="true">
+					<inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)"></inputbox>
+				</col>
+				<col column="shijishijian" label="${xiboshijishijian}" clickorderby="true"
+					datatype="date{yyyy-MM-dd}" br="true">
+					<inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)" br="true"></inputbox>
+				</col>
+					<col column="xibozhuangtai" label="${xibo}状态">
+				    	<inputbox type="selectbox">						  
+							<option value="进行中" label="进行中"></option>
+						    <option value="已完成" label="已完成"></option>
+					    </inputbox>
+				</col>
+
+			</display>
+			<sql>
+				<select>
+					<value>
+					<![CDATA[SELECT * FROM zbgl_zbyz_xibo where  {#condition#}]]>
+					</value>
+					<condition name="suoshuxinghao" hidden="true">
+						<value>
+								<![CDATA[(xinghao =  #data# )]]>
+						</value>
+					</condition>
+										
+					<condition name="suoshuxianhao" hidden="true">
+						<value>
+								<![CDATA[(xianhao =  #data# )]]>
+						</value>
+
+					</condition>
+				</select>
+				<insert>
+					<params>
+			  	 	      <param name="xinghao" value="url{xinghao}"></param>
+			  	      </params>
+				<![CDATA[
+					insert into zbgl_zbyz_xibo (id=uuid{},@{xibozhuangtai},@{xianhao},xinghao=#{xinghao},@{jihuashijian},@{shijishijian});
+				]]>
+				</insert>
+				<update>
+				<![CDATA[
+					update
+					zbgl_zbyz_xibo(@{jihuashijian},@{xibozhuangtai},@{shijishijian})
+					where id= @{id__old};
+				]]>
+				</update>
+			</sql>
+
+		</report>
+
+	</page>
+
+	<!-- jiaochuanjieduan弹窗 -->
+	<page id="jiaochuanPopupPage" >
+		<report id="jiaochuanPopup" title="添加${jiaochuan}阶段${xianhao}" align="left" 
+			height="500" type="editabledetail" interceptor="interceptor.ZhuangbeiyanzhiJiaoChuanInterceptor">
+			<interceptor>
+				<imports>
+					<import>javax.servlet.http.HttpServletRequest;</import>
+					<import>com.wabacus.system.ReportRequest</import>
+				</imports>
+				<preaction>
+
+					HttpServletRequest r=rrequest.getRequest();
+					r.setAttribute("suoshuxinghao",r.getParameter("xinghao"));
+
+
+				</preaction>
+
+			</interceptor>
+			<display>
+				<col column="id" label="id" displaytype="hidden" br="true"/>
+				<col column="xianhao" label="${xianhao}" br="true">
+			    		<inputbox type="selectbox">
+					        <option dataset="@{select xianhao from zbgl_zbyz_xibo where {#condition#}}" label="xianhao" value="xianhao">
+							     <datasetconditions>
+								       <condition name="xinghao" hidden="true">
+								          <value>
+								            	<![CDATA[(xinghao = #data# )]]>
+								          </value>
+								       </condition>
+								</datasetconditions>
+							</option>
+					    </inputbox>
+				</col>
+				<col column="xinghao" label="所属${xinghao}" displaytype="hidden"></col>
+				<col column="jiaochuanjihuashijian" label="${jiaochuanjihuashijian}" clickorderby="true"
+					datatype="date{yyyy-MM-dd}" br="true">
+					<inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)"></inputbox>
+				</col>
+				<col column="jiaochuanshijishijian" label="${jiaochuanshijishijian}" clickorderby="true"
+					datatype="date{yyyy-MM-dd}" br="true">
+					<inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)" br="true"></inputbox>
+				</col>
+				<col column="jiaochuanzhuangtai" label="${jiaochuanzhuangtai}">
+				    	<inputbox type="selectbox">						  
+							<option value="进行中" label="进行中"></option>
+						    <option value="已完成" label="已完成"></option>
+					    </inputbox>
+				</col>
+
+			</display>
+			<sql>
+				<select>
+					<value>
+					<![CDATA[SELECT * FROM zbgl_zbyz_jiaochuan where  {#condition#}]]>
+					</value>
+					
+					<condition name="suoshuxinghao" hidden="true">
+						<value>
+								<![CDATA[(xinghao =  #data# )]]>
+						</value>
+					</condition>
+					<condition name="suoshuxianhao" hidden="true">
+						<value>
+								<![CDATA[(xianhao =  #data# )]]>
+						</value>
+
+					</condition>
+					
+				</select>
+			
+				<insert>
+					 <params>
+			  	 	      <param name="myid" value="uuid{}"></param>
+			  	 	      <param name="xinghao" value="url{xinghao}"></param>
+			  	      </params>
+			  	      
+				     <value>
+                          insert into zbgl_zbyz_jiaochuan (id=#{myid},@{xianhao},xinghao=#{xinghao},@{jiaochuanzhuangtai},@{jiaochuanjihuashijian},@{jiaochuanshijishijian});	
+					       
+                             
+				    </value>
+				</insert>
+				
+				<update>
+				
+					<![CDATA[
+					update	zbgl_zbyz_jiaochuan(@{jiaochuanjihuashijian},@{jiaochuanshijishijian},@{jiaochuanzhuangtai})	where id = @{id__old};
+					]]>
+				  </update>
+			<!--   <delete>
+				   <![CDATA[
+					delete from zbgl_zbyz_jianzaojihua where id=@{id__old};
+				]]>   
+				</delete>  -->
+			</sql>
+		</report>
+		</page>
+	<page id="jiaochuan_QQzongtiPopupPage">	
+					<report id="qiantingzongti_kuaisuxing_pop" title="快速性" type="editabledetail"  celldrag="0" rowselect="single"
+							interceptor="com.wabacus.util.IdentifierGenerator_Interceptor">
+									<interceptor>
+				<imports>
+					<import>javax.servlet.http.HttpServletRequest;</import>
+					<import>com.wabacus.system.ReportRequest</import>
+				</imports>
+				<preaction>
+
+					HttpServletRequest r=rrequest.getRequest();
+					r.setAttribute("gongkuangmingcheng",r.getParameter("gongkuangmingcheng"));
+
+
+				</preaction>
+
+			</interceptor>
+						<display>	
+							<col column="id" displaytype="hidden"  />
+							<col column="gongkuangsuoshu" displaytype="hidden"  />
+							<col column="gongkuangmingcheng" label="${gongkuang}名称" />
+							<col column="hangsu" label="${hangsu}" br="true" >
+								<inputbox jsvalidate="isNumeric(#data#不是合法数字)" ></inputbox>
+							</col>
+							<col column="jiangzhuansu" label="${jiangzhuansu}"  >
+								<inputbox jsvalidate="isNumeric(#data#不是合法数字)"></inputbox>
+							</col>
+							<col column="gonglv" label="功率"  br="true" >
+								<inputbox jsvalidate="isNumeric(#data#不是合法数字)" ></inputbox>
+							</col>
+							<col column="tuijinzhuangtai" label="${tuijinzhuangtai}"  valuestyleproperty="colspan='3'"  datatype="clob">
+								<inputbox type="textareabox" styleproperty="rows='5' " ></inputbox>
+							</col>
+						</display>
+						<sql>
+							<select>
+							   <value>
+									<![CDATA[SELECT *  FROM zbgl_zbyz_jiaochuangongkuang where  {#condition#} ]]>
+							   </value>
+				               <condition name="gongkuangmingcheng" label="gongkuangmingcheng" hidden="true">
+						          <value>
+										<![CDATA[(gongkuangmingcheng = #data#)]]>
+						          </value>
+					          </condition>							
+							  <condition name="gongkuangsuoshu" label="gongkuangsuoshu" hidden="true">
+						          <value>
+										<![CDATA[(gongkuangsuoshu = #data#)]]>
+						          </value>
+					          </condition>
+							</select>
+							<insert>
+								insert into zbgl_zbyz_jiaochuangongkuang(id=uuid{},gongkuangsuoshu=url{gongkuangsuoshu},@{gongkuangmingcheng},@{hangsu},@{jiangzhuansu},@{gonglv},@{tuijinzhuangtai});
+							</insert>
+							<update>
+								update zbgl_zbyz_jiaochuangongkuang(@{gongkuangmingcheng},@{hangsu},@{jiangzhuansu},@{gonglv},@{tuijinzhuangtai}) 
+								where id=@{id__old};
+							</update>
+					  </sql>
+					</report>
+	</page>
+
+
+
+</applications>

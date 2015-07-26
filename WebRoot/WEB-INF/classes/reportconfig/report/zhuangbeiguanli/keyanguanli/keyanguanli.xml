@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<applications xmlns="http://www.wabacus.com"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.wabacus.com ../xsd/wabacus.applications.xsd">
+	<page id="keyanguanli"
+		js="/webresources/script/validate.js,/wabacusdemo/js/testcallback.js">
+		<report id="report1" title="${keyanguanli}" align="center"
+			type="editablelist" template="${articlelist.report.template}">
+			<display>
+				<!-- 
+				<col column="{sequence:1}" label="序号"></col>
+			-->
+				<col column="id" label="id" displaytype="hidden" />
+
+				<!-- 2014/10/11 -->
+
+				<group label="项目分类">
+
+					<!-- 项目一级分类 -->
+					<col column="xiangmuyijifenlei" label="${xiangmumingcheng}"
+						rowgroup="true" />
+					<!-- 项目二级分类 -->
+					<col column="xiangmuerjifenlei" label="${xiangmufenlei}" rowgroup="true" />
+
+				</group>
+				<!-- 2014/10/5 加 -->
+				<!--  
+				<col column="ketishuliang" label="项目数量" clickorderby="true" />
+				-->
+				<col column="{non-fromdb}" property="xiangmushuliang" label="项目数量"></col>
+				<col column="beijingxinghao" label="${beijingxinghao}"
+					clickorderby="true" displaytype="hidden" />
+				<col column="gaishu" label="概述" datatype="clob">
+					<inputbox type="textareabox"></inputbox>
+				</col>
+
+
+				<col column="beizhu" label="备注" datatype="clob">
+					<inputbox type="textareabox"></inputbox>
+				</col>
+				
+				<!-- 
+				<col column="{non-fromdb}" property="cz" label="操作"></col>
+				 -->
+			</display>
+			<sql>
+
+				<value>
+					<![CDATA[SELECT * FROM XTSZ_JBXXWH_KYGLXMFL  order by xiangmuyijifenlei]]>
+				</value>
+<!-- 
+				<insert>
+					insert into
+					zbgl_keyanguanli(id=uuid{},@{gaishu},@{beizhu},@{beijingxinghao};
+
+				</insert>
+				<update>
+					update
+					zbgl_keyanguanli(@{gaishu},@{beizhu},@{beijingxinghao}) where
+					id=@{id__old};
+
+				</update>
+
+ -->
+ 				<!-- 
+				<insert pageurl="report{keyanguanli_detail.keyanguanli_report_detail}" popparams="{title:'添加',width:750,height:400}"></insert>
+				<update pageurl="report{keyanguanli_detail.keyanguanli_report_detail}" urlparams=" id=@{id}" popparams="{title:'编辑',width:750,height:400}"></update>
+				<delete confirmessage="删除吗？">
+					delete from zbgl_keyanguanli where id=@{id__old};
+
+				</delete>
+				 -->
+
+			</sql>
+			<format>
+				<value>	
+				
+			     <![CDATA[
+			     	
+			     	String querySql_xiangmushuliang = null;
+			     	
+			     	querySql_xiangmushuliang = "select * from zbgl_kygl_keti where xiangmuerjifenlei = '"+xiangmuerjifenlei+"'"; 
+			     	xiangmushuliang = UserDefinedDatabaseOperations.syshxinghaoshuliang(querySql_xiangmushuliang) + "";
+			     	
+			     	
+			     ]]>
+			     
+			     
+			      <![CDATA[
+			      
+			      	if(xiangmuerjifenlei.equals("背景型号")){
+			      		xiangmuerjifenlei="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">"
+			        +"<a href=\"ShowReport.wx?PAGEID=xiangmuliebiao&xiangmuerjifenlei="+xiangmuerjifenlei +"&id="+id +"'\" target=\"sampleframe\">"+xiangmuerjifenlei+"</a></span>";
+			      	}else{
+			      		xiangmuerjifenlei="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">"
+			        +"<a href=\"ShowReport.wx?PAGEID=CopyOfxiangmuliebiao&xiangmuerjifenlei="+xiangmuerjifenlei +"&id="+id +"'\" target=\"sampleframe\">"+xiangmuerjifenlei+"</a></span>";
+			      	}
+			     ]]>
+			     	
+				</value>
+			</format>
+
+		</report>
+	</page>
+
+
+
+
+
+
+
+
+	<!--  弹出框表
+		================================================================================================================================================
+	-->
+	<page id="keyanguanli_detail"
+		js="/webresources/script/validate.js,/webresources/script/wabacus_util.js">
+		<report id="keyanguanli_report_detail" title="编辑" width="700px"
+			align="center" type="editabledetail">
+			<display>
+				<!-- 
+				<col column="{sequence:1}" label="序号"></col>
+				-->
+				<col column="id" label="id" displaytype="hidden" />
+
+				<!-- 2014/10/11 -->
+
+				<group label="项目分类">
+
+					<!-- 项目一级分类 -->
+					<col column="xiangmuyijifenlei" label="${xiangmumingcheng}"
+						rowgroup="true" />
+					<!-- 项目二级分类 -->
+					<col column="xiangmuerjifenlei" label="${xiangmufenlei}" rowgroup="true" />
+
+				</group>
+				<!-- 2014/10/5 加 -->
+				<!--  
+				<col column="ketishuliang" label="项目数量" clickorderby="true" />
+				-->
+				<col column="beijingxinghao" label="${beijingxinghao}"
+					clickorderby="true" displaytype="hidden" />
+				<col column="gaishu" label="概述" datatype="clob" valuestyleproperty="colspan='5'" br="true">
+					<inputbox type="textareabox" styleproperty="rows='5'"></inputbox>
+				</col>
+
+
+				<col column="beizhu" label="备注" datatype="clob" valuestyleproperty="colspan='5'" >
+					<inputbox type="textareabox" styleproperty="rows='5'"></inputbox>
+				</col>	
+				<!-- 
+				<col column="{non-fromdb}" property="cz" label="操作"></col>
+ 				-->
+			</display>
+			<sql>
+
+				<value>
+					<![CDATA[SELECT * FROM zbgl_keyanguanli where {#condition#}]]>
+				</value>
+
+				<condition name="id" hidden="true">
+					<value>
+						<![CDATA[id=#data#]]>
+					</value>							
+				</condition>
+				<insert>
+					insert into
+					zbgl_keyanguanli(id=uuid{},@{gaishu},@{beizhu},@{beijingxinghao});
+
+				</insert>
+				<update>
+					update
+					zbgl_keyanguanli(@{gaishu},@{beizhu},@{beijingxinghao}) where
+					id=@{id__old};
+
+				</update>
+				<!-- 
+				<delete>
+					delete from zbgl_keyanguanli where id=@{id__old};
+				</delete>
+ 				-->
+			</sql>
+		</report>
+	</page>
+</applications>

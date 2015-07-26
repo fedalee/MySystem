@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<applications xmlns="http://www.wabacus.com"
+			   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			   xsi:schemaLocation="http://www.wabacus.com ../../xsd/wabacus.applications.xsd">
+	<page id="shujuziyuan">
+		<vpanel id="fenxibaogao_vpanel" dataexport="word">
+			<tabpanel id="fenxibaogao_tab" titleposition="left" titlealign="top" titlestyle="2" margin="10px" height="600px">
+				<report id="jiancemudi_report" title="一、检测目的" align="center" type="editablelist2" template="relative{htmltemplate/xinxijiansuo/shujuziyuan/jiancemudi_template.html}">
+					<display>
+						<col column="id" label="id" displaytype="hidden" />
+						<col column="jiancemudi" label="检测目的" datatype="clob">
+							<inputbox type="textareabox" styleproperty="rows='5'cols='3'"></inputbox>
+						</col>
+					</display>
+					<sql>
+						<select>
+							<value>
+								<![CDATA[SELECT * FROM XXJS_SJZY_JCMD where {#condition#} order by id]]>
+							</value>
+							<condition name="id" label="id" hidden="true">
+								<value>
+									<![CDATA[(id = #data#)]]>
+								</value>
+					    	</condition>
+						</select>
+						<insert>
+					  		 insert into XXJS_SJZY_JCMD(id=uuid{},@{jiancemudi});
+						</insert>
+						<update>
+						     update XXJS_SJZY_JCMD(@{id},@{jiancemudi}) where id=@{id__old};					    
+						</update>
+						<delete>
+						  	 delete from XXJS_SJZY_JCMD where id=@{id__old};
+						</delete>
+					</sql>
+				</report>
+				<report id="jianceshuoming_report" title="二、检测说明" align="center" type="editablelist2">
+					<display>
+						<col column="id" label="id" displaytype="hidden" />
+						<col column="jianceshuoming" label="检测说明" datatype="clob">
+							<inputbox type="textareabox" styleproperty="rows='5'cols='3'"></inputbox>
+						</col>
+					</display>
+					<sql>
+						<select>
+							<value>
+								<![CDATA[SELECT * FROM XXJS_SJZY_JCSM where {#condition#} order by id]]>
+							</value>
+							<condition name="id" label="id" hidden="true">
+								<value>
+									<![CDATA[(id = #data#)]]>
+								</value>
+					    	</condition>
+						</select>
+						<insert>
+					  		 insert into XXJS_SJZY_JCSM(id=uuid{},@{jianceshuoming});
+						</insert>
+						<update>
+						     update XXJS_SJZY_JCSM(@{id},@{jianceshuoming}) where id=@{id__old};					    
+						</update>
+						<delete>
+						  	 delete from XXJS_SJZY_JCMD where id=@{id__old};
+						</delete>
+					</sql>
+				</report>
+				<vpanel id="jianceneirong_vpanel" title="三、检测内容" dataexport="word">
+					<report id="jianceneirong_report1" title="表一：[系泊试验]测量内容及运行" align="center" type="editablelist">
+						<display>
+							<col column="id" label="id" displaytype="hidden" />
+							<group label="系泊试验对应数据项">
+								<!-- 项目一级分类 -->
+								<col column="xiangmuyijifenlei" label="测点数据类"	rowgroup="true" />
+								<!-- 项目二级分类 -->
+								<col column="xiangmuerjifenlei" label="测点数据项" rowgroup="true" />
+							</group>
+							<col column="{non-fromdb}" property="xiangmushuliang" label="系泊试验测点"></col>
+							<col column="beijingxinghao" label="${beijingxinghao}" clickorderby="true" displaytype="hidden" />
+							<col column="gaishu" label="工况类型" datatype="clob">
+								<inputbox type="textareabox"></inputbox>
+							</col>
+							<col column="beizhu" label="工况说明" datatype="clob">
+								<inputbox type="textareabox"></inputbox>
+							</col>
+						</display>
+						<sql>
+							<value>
+								<![CDATA[SELECT * FROM XXJS_SJZY_FXBG  order by xiangmuyijifenlei]]>
+							</value>
+						</sql>
+						<format>
+							<value>	
+							 <![CDATA[
+						     	String querySql_xiangmushuliang = null;
+						     	querySql_xiangmushuliang = "select * from zbgl_kygl_keti where xiangmuerjifenlei = '"+xiangmuerjifenlei+"'"; 
+						     	xiangmushuliang = UserDefinedDatabaseOperations.syshxinghaoshuliang(querySql_xiangmushuliang) + "";
+						     ]]>
+						     <![CDATA[
+						      	if(xiangmuerjifenlei.equals("背景型号")){
+						      		xiangmuerjifenlei="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">"
+						        +"<a href=\"ShowReport.wx?PAGEID=xiangmuliebiao&xiangmuerjifenlei="+xiangmuerjifenlei +"&id="+id +"'\" target=\"sampleframe\">"+xiangmuerjifenlei+"</a></span>";
+						      	}else{
+						      		xiangmuerjifenlei="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">"
+						        +"<a href=\"ShowReport.wx?PAGEID=CopyOfxiangmuliebiao&xiangmuerjifenlei="+xiangmuerjifenlei +"&id="+id +"'\" target=\"sampleframe\">"+xiangmuerjifenlei+"</a></span>";
+						      	}
+						     ]]>
+							</value>
+						</format>
+					</report>
+					<report id="jianceneirong_report2" title="表二：[航行试验]测量内容及运行" align="center" type="editablelist">
+						<display>
+							<col column="id" label="id" displaytype="hidden" />
+							<group label="航行试验对应数据项">
+								<!-- 项目一级分类 -->
+								<col column="xiangmuyijifenlei" label="测点数据类"	rowgroup="true" />
+								<!-- 项目二级分类 -->
+								<col column="xiangmuerjifenlei" label="测点数据项" rowgroup="true" />
+							</group>
+							<col column="{non-fromdb}" property="xiangmushuliang" label="航行试验测点"></col>
+							<col column="beijingxinghao" label="${beijingxinghao}" clickorderby="true" displaytype="hidden" />
+							<col column="gaishu" label="工况类型" datatype="clob">
+								<inputbox type="textareabox"></inputbox>
+							</col>
+							<col column="beizhu" label="工况说明" datatype="clob">
+								<inputbox type="textareabox"></inputbox>
+							</col>
+						</display>
+						<sql>
+							<value>
+								<![CDATA[SELECT * FROM XXJS_SJZY_FXBG  order by xiangmuyijifenlei]]>
+							</value>
+						</sql>
+						<format>
+							<value>	
+							 <![CDATA[
+						     	String querySql_xiangmushuliang = null;
+						     	querySql_xiangmushuliang = "select * from zbgl_kygl_keti where xiangmuerjifenlei = '"+xiangmuerjifenlei+"'"; 
+						     	xiangmushuliang = UserDefinedDatabaseOperations.syshxinghaoshuliang(querySql_xiangmushuliang) + "";
+						     ]]>
+						     <![CDATA[
+						      	if(xiangmuerjifenlei.equals("背景型号")){
+						      		xiangmuerjifenlei="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">"
+						        +"<a href=\"ShowReport.wx?PAGEID=xiangmuliebiao&xiangmuerjifenlei="+xiangmuerjifenlei +"&id="+id +"'\" target=\"sampleframe\">"+xiangmuerjifenlei+"</a></span>";
+						      	}else{
+						      		xiangmuerjifenlei="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">"
+						        +"<a href=\"ShowReport.wx?PAGEID=CopyOfxiangmuliebiao&xiangmuerjifenlei="+xiangmuerjifenlei +"&id="+id +"'\" target=\"sampleframe\">"+xiangmuerjifenlei+"</a></span>";
+						      	}
+						     ]]>
+							</value>
+						</format>
+					</report>
+				</vpanel>
+				<report id="jiancejieguo_report" title="四、监测结果" align="center" dataexport="word" type="editablelist">
+					<display>
+						<col column="id" label="id" displaytype="hidden" />
+						<group label="监测结果数据项">
+							<!-- 项目一级分类 -->
+							<col column="xiangmuyijifenlei" label="测点数据类"	rowgroup="true" />
+							<!-- 项目二级分类 -->
+							<col column="xiangmuerjifenlei" label="测点数据项" rowgroup="true" />
+						</group>
+						<col column="{non-fromdb}" property="xiangmushuliang" label="监测结果数量"></col>
+						<col column="beijingxinghao" label="${beijingxinghao}" clickorderby="true" displaytype="hidden" />
+						<col column="gaishu" label="工况类型" datatype="clob">
+							<inputbox type="textareabox"></inputbox>
+						</col>
+						<col column="beizhu" label="工况说明" datatype="clob">
+							<inputbox type="textareabox"></inputbox>
+						</col>
+					</display>
+					<sql>
+						<value>
+							<![CDATA[SELECT * FROM XXJS_SJZY_FXBG  order by xiangmuyijifenlei]]>
+						</value>
+					</sql>
+					<format>
+						<value>	
+						 <![CDATA[
+					     	String querySql_xiangmushuliang = null;
+					     	querySql_xiangmushuliang = "select * from zbgl_kygl_keti where xiangmuerjifenlei = '"+xiangmuerjifenlei+"'"; 
+					     	xiangmushuliang = UserDefinedDatabaseOperations.syshxinghaoshuliang(querySql_xiangmushuliang) + "";
+					     ]]>
+					     <![CDATA[
+					      	if(xiangmuerjifenlei.equals("背景型号")){
+					      		xiangmuerjifenlei="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">"
+					        +"<a href=\"ShowReport.wx?PAGEID=xiangmuliebiao&xiangmuerjifenlei="+xiangmuerjifenlei +"&id="+id +"'\" target=\"sampleframe\">"+xiangmuerjifenlei+"</a></span>";
+					      	}else{
+					      		xiangmuerjifenlei="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">"
+					        +"<a href=\"ShowReport.wx?PAGEID=CopyOfxiangmuliebiao&xiangmuerjifenlei="+xiangmuerjifenlei +"&id="+id +"'\" target=\"sampleframe\">"+xiangmuerjifenlei+"</a></span>";
+					      	}
+					     ]]>
+						</value>
+					</format>
+				</report>
+			</tabpanel>
+		</vpanel>
+	</page>
+</applications>

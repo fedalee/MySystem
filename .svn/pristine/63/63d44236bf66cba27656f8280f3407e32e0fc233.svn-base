@@ -1,0 +1,12 @@
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+
+	<tr><td align='center'>&nbsp;&nbsp;</td></tr>
+    <tr><td align='left'> <wx:title type="title"/></td></tr>
+	<tr><td align='left'><wx:data /></td></tr>
+	<tr><td align='center'><wx:fileupload savepath="relative{/upload/files}" allowtypes="xls;doc;txt;" uploadcount="1" inputboxparams="leibie=eeeee"
+	  popupparams="{width:260,height:200}" interceptor="interceptor.ZhuangBeiweixiuGaihuanFileupInterceptor"/>
+	<wx:button type="delete" /></td></tr>
+	<tr><td align='center'>&nbsp;&nbsp;</td></tr>
+
+</table>

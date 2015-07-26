@@ -1,0 +1,25 @@
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+ 
+	<tr><td align='left' width='30%'><wx:data col="zongchangdu" showlabel="true" showdata="false"/></td><td align='left'><wx:data col="zongchangdu" showlabel="false" showdata="true"/></td></tr>
+	<tr><td colspan='2'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+	<tr><td align='left' width='30%'><wx:data col="zcdxingkuan" showlabel="true" showdata="false"/></td><td align='left'><wx:data col="zcdxingkuan" showlabel="false" showdata="true"/></td></tr>
+	<tr><td colspan='2'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+	<tr><td align='left' width='30%'><wx:data col="zcdxingshen" showlabel="true" showdata="false"/></td><td align='left'><wx:data col="zcdxingshen" showlabel="false" showdata="true"/></td></tr>
+	<tr><td colspan='2'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+	<tr><td align='left' width='30%'><wx:data col="naiyachuanti" showlabel="true" showdata="false"/></td><td align='left'><wx:data col="naiyachuanti" showlabel="false" showdata="true"/></td></tr>
+	<tr><td colspan='2'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+	<tr><td align='left' width='30%'><wx:data col="yuanzhukezhijing" showlabel="true" showdata="false"/></td><td align='left'><wx:data col="yuanzhukezhijing" showlabel="false" showdata="true"/></td></tr>
+	<tr><td colspan='2'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+	<tr><td align='left' width='30%'><wx:data col="fasheshuicangcd" showlabel="true" showdata="false"/></td><td align='left'><wx:data col="fasheshuicangcd" showlabel="false" showdata="true"/></td></tr>
+	<tr><td colspan='2'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+	<tr><td align='left' width='30%'><wx:data col="shuichuanmiducd" showlabel="true" showdata="false"/></td><td align='left'><wx:data col="shuichuanmiducd" showlabel="false" showdata="true"/></td></tr>
+	<tr><td colspan='2'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+	<tr><td align='left' width='30%'><wx:data col="wendingyikuandu" showlabel="true" showdata="false"/></td><td align='left'><wx:data col="wendingyikuandu" showlabel="false" showdata="true"/></td></tr>
+	<tr><td colspan='2'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+	<tr><td align='left' width="30%"><wx:data col="jixianzhihuixian" showlabel="true" showdata="false"/></td><td align='left'><wx:data col="jixianzhihuixian" showlabel="false" showdata="true"/></td></tr>
+	<tr><td colspan='2'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+	<tr><td align='left' colspan='2'><wx:data col="zcdjiegouchengyanengli" showlabel="true" showdata="false"/></td></tr>
+	<tr><td colspan='2'><wx:data col="zcdjiegouchengyanengli" showlabel="false" showdata="true"/></td></tr>
+    <tr><td align='right' width='30%' colspan='2'><wx:button type="save" /></td></tr>
+
+</table>

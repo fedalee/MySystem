@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<applications xmlns="http://www.wabacus.com"
+			   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			   xsi:schemaLocation="http://www.wabacus.com ../xsd/wabacus.applications.xsd">
+	<page id="beijingxinghao" js="/webresources/script/validate.js,/wabacusdemo/js/testcallback.js">
+		<report id="report1" title="${beijingxinghao}" align="center" type="editablelist2"  template="${articlelist.report.template}">
+			<display>
+			<col column="{sequence:1}" label="序号"></col>
+			   			<col column="id" label="id" displaytype="hidden" />
+			   
+				<col column="zhuanjiazuming" label="专家组名" clickorderby="true" valuestyleproperty="style='mso-number-format:\@;'">
+				
+						     </col>     
+				
+				 <col column="zuzhang" label="组长" clickorderby="true" />
+				<col column="danwei" label="单位" clickorderby="true" >
+				
+						     </col>   
+				
+				 <col column="{non-fromdb}" property="cz" label="专家组"></col>  
+			</display>
+			<sql>
+				<value>
+					<![CDATA[SELECT * FROM zbgl_kygl_beijingxinghao ]]>
+				</value>
+				
+			<insert>
+		  		 insert into zbgl_kygl_beijingxinghao(id=uuid{},@{zhuanjiazuming},@{zuzhang},@{danwei});
+		  		 
+			  </insert>
+			     <update>
+			     update zbgl_kygl_beijingxinghao(@{id},@{zhuanjiazuming},@{zuzhang},@{danwei}) where id=@{id__old};
+			    
+			  </update>
+			     <delete>
+			  	 delete from zbgl_kygl_beijingxinghao where id=@{id__old};
+			  	
+			  </delete>
+			</sql>
+			<format>
+			  <value>
+			  <![CDATA[
+			        cz="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">"
+			        +"<a href=\"ShowReport.wx?PAGEID=zhuanjiaku\" target=\"sampleframe\">"
+			        +"选择专家组"+"</a></span>";
+			     ]]>   
+			  </value>
+			</format>
+			
+		</report>
+	</page>
+</applications>

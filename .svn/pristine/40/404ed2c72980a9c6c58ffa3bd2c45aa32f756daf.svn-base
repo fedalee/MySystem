@@ -1,0 +1,605 @@
+<applications xmlns="http://www.wabacus.com"
+			   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			   xsi:schemaLocation="http://www.wabacus.com ../../../xsd/wabacus.applications.xsd">
+<page id="zaoshengmubiaozuoyongjuli_pop" >
+<!-- 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 -->				  
+ <report id="zaoshengmubiaozuoyongjuli_report" title="${zaoshengmubiaozuoyongjuli}"  type="editabledetail"  >   	
+			<display valuealign="left">		
+					<col column="id" label="id" displaytype="hidden"/>
+					<col column="suoshujieduan" label="所属阶段" displaytype="hidden"/>
+					<col column="suoshu" label="${xianhao}" displaytype="hidden"/>								    
+					<col column="tancemubiao" label="${tancemubiao}" />						
+					<col column="shengnaleixing" label="${shengnaleixing}" br="true" />
+					<col column="mubiaofaxianzuixiaojuli" label="${mubiaofaxianzuixiaojuli}" />
+					<col column="mubiaogenzongzuixiaojuli" label="${mubiaogenzongzuixiaojuli}" br="true" />
+					<col column="zaoshengcejuzuixiaojuli" label="${zaoshengcejuzuixiaojuli}" />
+					<col column="kaoheshuiwentiaojian" label="${kaoheshuiwentiaojian}" br="true" />	
+					<col column="beizhu" label="备注" datatype="clob" valuestyleproperty="colspan='3'" br="true">
+							 <inputbox type="textareabox" styleproperty="rows='8'"></inputbox>
+					</col>
+						  	  </display>
+						  	<sql >
+						  	<select>				     
+								<value>					
+									<![CDATA[SELECT * FROM zbgl_zbjbxx_stxn_zsmbzyjl where  {#condition#} order by id]]>
+								</value>
+								<condition name="suoshu" label="${xianhao}" hidden="true">
+										<value>
+										<![CDATA[(suoshu = #data#)]]>
+										</value>
+								</condition>
+					         	<condition name="suoshujieduan" label="所属阶段" hidden="true">
+						         	<value>
+								         <![CDATA[(suoshujieduan like '%#data#%')]]>
+							        </value>
+						      </condition>
+					         	<condition name="suoshuid" label="id" hidden="true">
+						         	<value>
+								         <![CDATA[(id like '%#data#%')]]>
+							        </value>
+						      </condition>							      								
+							</select>
+							<insert>
+								<value>
+						  			insert into zbgl_zbjbxx_stxn_zsmbzyjl(id=uuid{},suoshujieduan=url{suoshujieduan},suoshu=url{suoshu},@{tancemubiao},@{shengnaleixing},@{mubiaofaxianzuixiaojuli},@{mubiaogenzongzuixiaojuli},@{zaoshengcejuzuixiaojuli},@{kaoheshuiwentiaojian},@{beizhu});
+								</value>
+							</insert>    					
+						    <update>
+						     	update zbgl_zbjbxx_stxn_zsmbzyjl(@{tancemubiao},@{shengnaleixing},@{mubiaofaxianzuixiaojuli},@{mubiaogenzongzuixiaojuli},@{zaoshengcejuzuixiaojuli},@{kaoheshuiwentiaojian},@{beizhu}) where id=@{id__old};				    
+						    </update>		     
+						    </sql>
+</report>
+</page>	
+			   	
+<page id = "huishengcejujuli_pop">
+ <report id="huishengcejujuli_report" title="${huishengcejujuli}"  type="editabledetail"  >
+								<display valuealign="left">
+								    <col column="id" label="id" displaytype="hidden"/>
+								    <col column="suoshu" label="${xianhao}" displaytype="hidden"/>
+								    <col column="tancemubiao" label="${tancemubiao}" />						
+								    <col column="shengnaleixing" label="${shengnaleixing}" br="true" />
+								    <col column="huishengcejuzuixiaojuli" label="${huishengcejuzuixiaojuli}" />
+								    <col column="kaoheshuiwentiaojian" label="${kaoheshuiwentiaojian}" br="true" />	
+								    <col column="beizhu" label="备注" datatype="clob" valuestyleproperty="colspan='3'">
+									    <inputbox type="textareabox" styleproperty="rows='8'"></inputbox>
+								    </col>
+						  	  </display>
+						  	<sql>
+						  	<select>				     
+								<value>					
+									<![CDATA[SELECT * FROM zbgl_zbjbxx_stxn_hscjjl where  {#condition#} order by id]]>
+								</value>
+								<condition name="suoshu" label="${xianhao}" hidden="true">
+										<value>
+										<![CDATA[(suoshu = #data#)]]>
+										</value>
+								</condition>
+						  <condition name="suoshujieduan" label="所属阶段" hidden="true">
+							  <value>
+								     <![CDATA[(suoshujieduan = #data#)]]>
+							  </value>
+						  </condition>
+						  	<condition name="suoshuid" label="id" hidden="true">
+						         	<value>
+								         <![CDATA[(id like '%#data#%')]]>
+							        </value>
+						      </condition>								
+							</select>
+							<insert>
+								<params>
+									<param name="suoshu" value="url{suoshu}"/>
+									<param name="suoshujieduan" value="url{suoshujieduan}"/>
+								</params>
+								<value>
+						  			insert into zbgl_zbjbxx_stxn_hscjjl(id=uuid{},suoshu=#{suoshu},suoshujieduan=#{suoshujieduan},@{tancemubiao},@{shengnaleixing},@{huishengcejuzuixiaojuli},@{kaoheshuiwentiaojian},@{beizhu});
+								</value>
+							</insert>    					
+						    <update>
+						     	update zbgl_zbjbxx_stxn_hscjjl(@{tancemubiao},@{shengnaleixing},@{huishengcejuzuixiaojuli},@{kaoheshuiwentiaojian},@{beizhu}) where id=@{id};				    
+						    </update>		     
+						    </sql>
+</report>
+</page>
+
+<page id ="zhenchajuli_pop" >
+<report id="zhenchajuli_report" title="${zhenchajuli}"  type="editabledetail"  >
+								<display valuealign="left">
+								    <col column="id" label="id" displaytype="hidden"/>
+								    <col column="suoshu" label="${xianhao}" displaytype="hidden"/>
+								    <col column="tancemubiao" label="${tancemubiao}" />						
+								    <col column="shengnaleixing" label="${shengnaleixing}" br="true" />
+								    <col column="zhenchazuixiaojuli" label="${zhenchazuixiaojuli}" />
+								    <col column="kaoheshuiwentiaojian" label="${kaoheshuiwentiaojian}"  br="true" />	
+								    <col column="beizhu" label="备注" datatype="clob" valuestyleproperty="colspan='3'">
+									    <inputbox type="textareabox" styleproperty="rows='8'"></inputbox>
+								    </col>
+						  	  </display>
+						  	<sql>
+						  	<select>				     
+								<value>					
+									<![CDATA[SELECT * FROM zbgl_zbjbxx_stxn_zcjl where  {#condition#} order by id]]>
+								</value>
+								<condition name="suoshu" label="${xianhao}" hidden="true">
+										<value>
+										<![CDATA[(suoshu = #data#)]]>
+										</value>
+								</condition>
+						<condition name="suoshujieduan" label="所属阶段" hidden="true">
+							<value>
+								<![CDATA[(suoshujieduan = #data#)]]>
+							</value>
+						</condition>
+							<condition name="suoshuid" label="id" hidden="true">
+						         	<value>
+								         <![CDATA[(id like '%#data#%')]]>
+							        </value>
+						      </condition>
+							</select>
+							<insert>
+								<params>
+									<param name="suoshu" value="url{suoshu}"/>
+									<param name="suoshujieduan" value="url{suoshujieduan}"/>
+								</params>
+								<value>
+						  			insert into zbgl_zbjbxx_stxn_zcjl(id=uuid{},suoshu=#{suoshu},suoshujieduan=#{suoshujieduan},@{tancemubiao},@{shengnaleixing},@{zhenchazuixiaojuli},@{kaoheshuiwentiaojian},@{beizhu});
+								</value>
+							</insert>    					
+						    <update>
+						     	update zbgl_zbjbxx_stxn_zcjl(@{tancemubiao},@{shengnaleixing},@{zhenchazuixiaojuli},@{kaoheshuiwentiaojian},@{beizhu}) where id=@{id};				    
+						    </update>		     
+						    </sql>
+</report>
+</page>
+<page id="yuleifaxianhebaojingjuli_pop" >
+<report id="yuleifaxianhebaojingjuli_report" title="${yuleifaxianhebaojingjuli}"  type="editabledetail"  >
+								<display valuealign="left">
+								    <col column="id" label="id" displaytype="hidden"/>
+								    <col column="suoshu" label="${xianhao}" displaytype="hidden"/>
+								    <col column="tancemubiao" label="${tancemubiao}" />						
+								    <col column="shengnaleixing" label="${shengnaleixing}" br="true" />
+								    <col column="ylfxhbjzuixiaojuli" label="${yuleifaxianhebaojingzuixiaojuli}" />
+								    <col column="kaoheshuiwentiaojian" label="${kaoheshuiwentiaojian}" br="true" />	
+								    <col column="beizhu" label="备注" datatype="clob" valuestyleproperty="colspan='3'">
+									    <inputbox type="textareabox" styleproperty="rows='8'"></inputbox>
+								    </col>
+						  	  </display>
+						  	<sql>
+						  	<select>				     
+								<value>					
+									<![CDATA[SELECT * FROM zbgl_zbjbxx_stxn_ylfxhbjjl where  {#condition#} order by id]]>
+								</value>
+								<condition name="suoshu" label="${xianhao}" hidden="true">
+										<value>
+										<![CDATA[(suoshu = #data#)]]>
+										</value>
+								</condition>
+								<condition name="suoshujieduan" label="所属阶段" hidden="true">
+							        <value>
+								         <![CDATA[(suoshujieduan = #data#)]]>
+							       </value>
+						       </condition>
+						      <condition name="suoshuid" label="id" hidden="true">
+						         	<value>
+								         <![CDATA[(id like '%#data#%')]]>
+							        </value>
+						      </condition>
+							</select>
+							<insert>
+								<params>
+									<param name="suoshu" value="url{suoshu}"/>
+									<param name="suoshujieduan" value="url{suoshujieduan}"/>
+								</params>
+								<value>
+						  			insert into zbgl_zbjbxx_stxn_ylfxhbjjl(id=uuid{},suoshu=#{suoshu},@{tancemubiao},suoshujieduan=#{suoshujieduan},@{shengnaleixing},@{ylfxhbjzuixiaojuli},@{kaoheshuiwentiaojian},@{beizhu});
+								</value>
+							</insert>    					
+						    <update>
+						     	update zbgl_zbjbxx_stxn_ylfxhbjjl(@{tancemubiao},@{shengnaleixing},@{ylfxhbjzuixiaojuli},@{kaoheshuiwentiaojian},@{beizhu}) where id=@{id};				    
+						    </update>
+						      <delete>
+						      delete from zbgl_zbjbxx_stxn_ylfxhbjjl where id=@{id__old};			    
+						    </delete>		     
+						    </sql>
+</report>
+</page>
+<page id = "zaoshengcexiangguanchafanwei_pop">					   	
+<report id="zaoshengcexiangguanchafanwei_report" title="${zaoshengcexiangguanchafanwei}"  type="editabledetail"  >
+								<display valuealign="left">
+								    <col column="id" label="id" displaytype="hidden"/>
+								    <col column="suoshu" label="${xianhao}" displaytype="hidden"/>				
+								    <col column="shengnaleixing" label="${shengnaleixing}" />
+								    <col column="guanchafanwei" label="${zaoshengcexiangguanchafanwei}/度" br="true" />
+								    <col column="beizhu" label="备注" datatype="clob" valuestyleproperty="colspan='3'">
+									    <inputbox type="textareabox" styleproperty="rows='8'"></inputbox>
+								    </col>
+						  	  </display>
+						  	<sql>
+						  	<select>				     
+								<value>					
+									<![CDATA[SELECT * FROM zbgl_zbjbxx_stxn_zscxgcfw where  {#condition#} order by id]]>
+								</value>
+								<condition name="suoshu" label="${xianhao}" hidden="true">
+										<value>
+										<![CDATA[(suoshu = #data#)]]>
+										</value>
+								</condition>
+						        <condition name="suoshujieduan" label="所属阶段" hidden="true">
+							         <value>
+								         <![CDATA[(suoshujieduan = #data#)]]>
+							         </value>
+						       </condition>
+						       <condition name="suoshuid" label="id" hidden="true">
+						         	<value>
+								         <![CDATA[(id like '%#data#%')]]>
+							        </value>
+						      </condition>
+							</select>
+							<insert>
+								<params>
+									<param name="suoshu" value="url{suoshu}"/>
+									<param name="suoshujieduan" value="url{suoshujieduan}"/>
+								</params>
+								<value>
+						  			insert into zbgl_zbjbxx_stxn_zscxgcfw(id=uuid{},suoshu=#{suoshu},suoshujieduan=#{suoshujieduan},@{shengnaleixing},@{guanchafanwei},@{beizhu});
+								</value>
+							</insert>    					
+						    <update>
+						     	update zbgl_zbjbxx_stxn_zscxgcfw(@{shengnaleixing},@{guanchafanwei},@{beizhu}) where id=@{id};				    
+						    </update>		     
+						    </sql>
+</report>
+</page>
+<page id = "zhenchacepinfanwei_pop">
+<report id="zhenchacepinfanwei_report" title="${zhenchacepinfanwei}"  type="editabledetail"  >
+								<display valuealign="left">
+								    <col column="id" label="id" displaytype="hidden"/>
+								    <col column="suoshu" label="${xianhao}" displaytype="hidden"/>				
+								    <col column="shengnaleixing" label="${shengnaleixing}" />
+								    <col column="cepinfanwei" label="${zhenchacepinfanwei}/千赫兹" br="true" />
+								    <col column="beizhu" label="备注" datatype="clob" valuestyleproperty="colspan='3'">
+									    <inputbox type="textareabox" styleproperty="rows='8'"></inputbox>
+								    </col>
+						  	  </display>
+						  	<sql>
+						  	<select>				     
+								<value>					
+									<![CDATA[SELECT * FROM zbgl_zbjbxx_stxn_zccpfw where  {#condition#} order by id]]>
+								</value>
+								<condition name="suoshu" label="${xianhao}" hidden="true">
+										<value>
+										<![CDATA[(suoshu = #data#)]]>
+										</value>
+								</condition>
+						        <condition name="suoshujieduan" label="所属阶段" hidden="true">
+							         <value>
+								         <![CDATA[(suoshujieduan = #data#)]]>
+							         </value>
+						       </condition>	
+							<condition name="suoshuid" label="id" hidden="true">
+						         	<value>
+								         <![CDATA[(id like '%#data#%')]]>
+							        </value>
+						      </condition>						       						
+							</select>
+							<insert>
+								<params>
+									<param name="suoshu" value="url{suoshu}"/>
+									<param name="suoshujieduan" value="url{suoshujieduan}"/>
+								</params>
+								<value>
+						  			insert into zbgl_zbjbxx_stxn_zccpfw(id=uuid{},suoshu=#{suoshu},suoshujieduan=#{suoshujieduan},@{shengnaleixing},@{cepinfanwei},@{beizhu});
+								</value>
+							</insert>    					
+						    <update>
+						     	update zbgl_zbjbxx_stxn_zccpfw(@{shengnaleixing},@{cepinfanwei},@{beizhu}) where id=@{id};				    
+						    </update>	     
+						    </sql>
+</report>
+</page>
+
+<page id= "xitongfanyingshijian_pop">
+<report id="xitongfanyingshijian_report" title="系统反应时间"  type="editabledetail"  >
+								<display >
+								    <col column="id" label="id" displaytype="hidden"/>
+								    <col column="suoshu" label="${xianhao}" displaytype="hidden"/>				
+								    <col column="caozuoduixiang" label="操作对象" />
+								    <col column="shuzhi" label="数值/秒" br="true" />
+								    <col column="beizhu" label="备注" datatype="clob" valuestyleproperty="colspan='3'">
+									    <inputbox type="textareabox" styleproperty="rows='8'"></inputbox>
+								    </col>
+						  	  </display>
+						  	<sql>
+						  	<select>				     
+								<value>					
+									<![CDATA[SELECT * FROM zbgl_zbjbxx_stxn_xtfysj where  {#condition#} order by id]]>
+								</value>
+								<condition name="suoshu" label="${xianhao}" hidden="true">
+										<value>
+										<![CDATA[(suoshu = #data#)]]>
+										</value>
+								</condition>
+						        <condition name="suoshujieduan" label="所属阶段" hidden="true">
+							         <value>
+								         <![CDATA[(suoshujieduan = #data#)]]>
+							         </value>
+						       </condition>	
+							<condition name="suoshuid" label="id" hidden="true">
+						         	<value>
+								         <![CDATA[(id like '%#data#%')]]>
+							        </value>
+						      </condition>						       							
+							</select>
+							<insert>
+								<params>
+									<param name="suoshu" value="url{suoshu}"/>
+									<param name="suoshujieduan" value="url{suoshujieduan}"/>
+								</params>
+								<value>
+						  			insert into zbgl_zbjbxx_stxn_xtfysj(id=uuid{},suoshu=#{suoshu},suoshujieduan=#{suoshujieduan},@{caozuoduixiang},@{shuzhi},@{beizhu});
+								</value>
+							</insert>    					
+						    <update>
+						     	update zbgl_zbjbxx_stxn_xtfysj(@{caozuoduixiang},@{shuzhi},@{beizhu}) where id=@{id};				    
+						    </update>	     
+						    </sql>
+</report>
+</page>
+
+<page id ="yushuileigongji_pop">
+<report id="yushuileigongji_report" title="${yushuileigongji}"  type="editabledetail"  >
+							<display valuetdwidth="80px" labeltdwidth="80px" labelbgcolor="#f0f0f0" labelalign="left" valuealign="left">
+							    <col column="id" label="id" displaytype="hidden"/>
+							    <col column="suoshu" label="${xianhao}" displaytype="hidden"/>
+							    <col column="yuleixinghao" label="${yuleixinghao}" />						
+							    <col column="gongjimubiao" label="${tongshigongjimubiao}" br="true" />
+							    <col column="zhunbeiyuleishuliang" label="${yuleishuliang}" />
+							    <col column="daoyinxiandaoyuleishuliang" label="${ketongshidaoyinxiandaoyuleishuliang}" br="true" />				   
+							    <col column="kongzhizidaoyuleishuliang" label="${zhihangyuleishuliang}" br="true" />							    	
+							    <col column="beizhu" label="备注" datatype="clob" valuestyleproperty="colspan='1'">
+								    <inputbox type="textareabox" styleproperty="rows='8'"></inputbox>
+							    </col>
+						    </display>
+						  	<sql>
+						  	<select>				     
+								<value>					
+									<![CDATA[SELECT * FROM zbgl_zbjbxx_stxn_yslgj where  {#condition#} order by id]]>
+								</value>
+								<condition name="suoshu" label="xianhao" hidden="true">
+										<value>
+										<![CDATA[(suoshu = #data#)]]>
+										</value>
+								</condition>
+						        <condition name="suoshujieduan" label="所属阶段" hidden="true">
+							         <value>
+								         <![CDATA[(suoshujieduan = #data#)]]>
+							         </value>
+						       </condition>	
+							<condition name="suoshuid" label="id" hidden="true">
+						         	<value>
+								         <![CDATA[(id like '%#data#%')]]>
+							        </value>
+						      </condition>						       							
+							</select>
+							<insert>
+								<params>
+									<param name="suoshu" value="url{suoshu}"/>
+									<param name="suoshujieduan" value="url{suoshujieduan}"/>
+								</params>
+								<value>
+						  			insert into zbgl_zbjbxx_stxn_yslgj(id=uuid{},suoshu=#{suoshu},@{yuleixinghao},suoshujieduan=#{suoshujieduan},@{gongjimubiao},@{zhunbeiyuleishuliang},@{daoyinxiandaoyuleishuliang},@{kongzhizidaoyuleishuliang},@{beizhu});
+								</value>
+							</insert>    					
+						    <update>
+						     	update zbgl_zbjbxx_stxn_yslgj(@{yuleixinghao},@{gongjimubiao},@{zhunbeiyuleishuliang},@{daoyinxiandaoyuleishuliang},@{kongzhizidaoyuleishuliang},@{beizhu}) where id=@{id__old};						    
+						    </update>		     
+						    </sql>
+</report>
+</page>
+
+<page id = "daodangongji_pop">
+<report id="daodangongji_report" title="${daodangongji}"  type="editabledetail"  >
+							<display valuetdwidth="80px" labeltdwidth="80px" labelbgcolor="#f0f0f0" labelalign="left" valuealign="left">
+							    <col column="id" label="id" displaytype="hidden"/>
+							    <col column="suoshu" label="${xianhao}" displaytype="hidden"/>
+							    <col column="daodanxinghao" label="${daodanxinghao}" />						
+							    <col column="zuixiaoyouxiaoshecheng" label="${duihaiyouxiaoshecheng}" br="true" />
+							    <col column="zuidayouxiaoshecheng" label="${duihaizuidayouxiaoshecheng}" />
+							    <col column="gongjifanwei" label="${duihaigongjifanwei}" br="true" />				   
+							    <col column="daodanshuliang" label="${tongshikongzhidaodanshuliang}" />
+							    <col column="mubiaoshuliang" label="${tongshikongzhimubiaoshuliang}" br="true" />
+							    <col column="gongjijuli" label="${duilugongjijuli}" br="true"/>							    	
+							    <col column="beizhu" label="备注" datatype="clob" valuestyleproperty="colspan='3'">
+								    <inputbox type="textareabox" styleproperty="rows='8'"></inputbox>
+							    </col>
+						    </display>
+						  	<sql>
+						  	<select>				     
+								<value>					
+									<![CDATA[SELECT * FROM zbgl_zbjbxx_stxn_ddgj where  {#condition#} order by id]]>
+								</value>
+								<condition name="suoshu" label="xianhao" hidden="true">
+										<value>
+										<![CDATA[(suoshu = #data#)]]>
+										</value>
+								</condition>
+						        <condition name="suoshujieduan" label="所属阶段" hidden="true">
+							         <value>
+								         <![CDATA[(suoshujieduan = #data#)]]>
+							         </value>
+						       </condition>	
+							<condition name="suoshuid" label="id" hidden="true">
+						         	<value>
+								         <![CDATA[(id like '%#data#%')]]>
+							        </value>
+						      </condition>						       							
+							</select>
+							<insert>
+								<params>
+									<param name="suoshu" value="url{suoshu}"/>
+									<param name="suoshujieduan" value="url{suoshujieduan}"/>
+								</params>
+								<value>
+						  			insert into zbgl_zbjbxx_stxn_ddgj(id=uuid{},suoshu=#{suoshu},suoshujieduan=#{suoshujieduan},@{daodanxinghao},@{zuixiaoyouxiaoshecheng},@{zuidayouxiaoshecheng},@{gongjifanwei},@{daodanshuliang},@{mubiaoshuliang},@{gongjijuli},@{beizhu});
+								</value>
+							</insert>    					
+						    <update>
+						     	update zbgl_zbjbxx_stxn_ddgj(@{daodanxinghao},@{zuixiaoyouxiaoshecheng},@{zuidayouxiaoshecheng},@{gongjifanwei},@{daodanshuliang},@{mubiaoshuliang},@{gongjijuli},@{beizhu}) where id=@{id__old};						    
+						    </update>		     
+						    </sql>
+</report>
+</page>
+
+<page id = "shuishengduikangqicai_pop">
+<report id="shuishengduikangqicai_report" title="${shuishengduikangqicai}"  type="editabledetail"  >
+							<display valuetdwidth="80px" labeltdwidth="80px" labelbgcolor="#f0f0f0" labelalign="left" valuealign="left">
+							    <col column="id" label="id" displaytype="hidden"/>
+							    <col column="suoshu" label="${xianhao}" displaytype="hidden"/>
+							    <col column="qicaileixing" label="${xukongzhideqicaileixing}" />						
+							    <col column="shuliang" label="数量/管" br="true" />					    	
+							    <col column="beizhu" label="备注" datatype="clob" valuestyleproperty="colspan='3'">
+								    <inputbox type="textareabox" styleproperty="rows='8'"></inputbox>
+							    </col>
+						    </display>
+						  	<sql>
+						  	<select>				     
+								<value>					
+									<![CDATA[SELECT * FROM zbgl_zbjbxx_stxn_ssdkqc where  {#condition#} order by id]]>
+								</value>
+								<condition name="suoshu" label="xianhao" hidden="true">
+										<value>
+										<![CDATA[(suoshu = #data#)]]>
+										</value>
+								</condition>
+						        <condition name="suoshujieduan" label="所属阶段" hidden="true">
+							         <value>
+								         <![CDATA[(suoshujieduan = #data#)]]>
+							         </value>
+						       </condition>	
+							<condition name="suoshuid" label="id" hidden="true">
+						         	<value>
+								         <![CDATA[(id like '%#data#%')]]>
+							        </value>
+						      </condition>						       							
+							</select>
+							<insert>
+								<params>
+									<param name="suoshu" value="url{suoshu}"/>
+									<param name="suoshujieduan" value="url{suoshujieduan}"/>
+								</params>
+								<value>
+						  			insert into zbgl_zbjbxx_stxn_ssdkqc(id=uuid{},suoshu=#{suoshu},suoshujieduan=#{suoshujieduan},@{qicaileixing},@{shuliang},@{beizhu});
+								</value>
+							</insert>    					
+						    <update>
+						     	update zbgl_zbjbxx_stxn_ssdkqc(@{qicaileixing},@{shuliang},@{beizhu}) where id=@{id__old};						    
+						    </update>		     
+						    </sql>
+</report>
+</page>
+<page id = "tongxinnengli_pop">
+<report id="tongxinnengli_report" title="${tongxinnengli}"  parenttitle="${tongxinnengli}" type="editabledetail"  >
+								<display valuetdwidth="80px" labeltdwidth="80px" labelbgcolor="#f0f0f0" labelalign="left" valuealign="left">
+								    <col column="id" label="id" displaytype="hidden"/>
+								    <col column="suoshu" label="${xianhao}" displaytype="hidden"/>
+								    <col column="tongxinleixing" label="${tongxinleixing}" />			
+								    <col column="tongxinjuli" label="${tongxinjuli}" br="true"/>						
+								    <col column="shijian" label="时间/min" />
+								    <col column="pinlv" label="${pinlv}/Hz" br="true"/>
+								    <col column="gongzuotiaojian" label="工作条件" br="true" />						
+								    <col column="beizhu" label="备注" datatype="clob" valuestyleproperty="colspan='3'">
+									    <inputbox type="textareabox" styleproperty="rows='8'"></inputbox>
+								    </col>
+						  	  </display>
+						  	<sql>
+						  	<select>				     
+								<value>					
+									<![CDATA[SELECT * FROM zbgl_zbjbxx_stxn_txnl where  {#condition#} order by id]]>
+								</value>
+								<condition name="suoshu" label="${xianhao}" hidden="true">
+										<value>
+										<![CDATA[(suoshu = #data#)]]>
+										</value>
+								</condition>
+						        <condition name="suoshujieduan" label="所属阶段" hidden="true">
+							         <value>
+								         <![CDATA[(suoshujieduan = #data#)]]>
+							         </value>
+						       </condition>	
+							<condition name="suoshuid" label="id" hidden="true">
+						         	<value>
+								         <![CDATA[(id like '%#data#%')]]>
+							        </value>
+						      </condition>						       							
+							</select>
+							<insert>
+								<params>
+									<param name="suoshu" value="url{suoshu}"/>
+									<param name="suoshujieduan" value="url{suoshujieduan}"/>
+								</params>
+								<value>
+						  			insert into zbgl_zbjbxx_stxn_txnl(id=uuid{},suoshu=#{suoshu},suoshujieduan=#{suoshujieduan},@{tongxinleixing},@{tongxinjuli},@{shijian},@{pinlv},@{gongzuotiaojian},@{beizhu});
+								</value>
+							</insert>    					
+						    <update>
+						     	update zbgl_zbjbxx_stxn_txnl(@{tongxinleixing},@{tongxinjuli},@{shijian},@{pinlv},@{gongzuotiaojian},@{beizhu}) where id=@{id};				    
+						    </update>		     
+						    </sql>
+</report>
+</page>
+<page id = "daohangnengli_pop">
+<report id="daohangnengli_report" title="${daohangnengli}"  parenttitle="${daohangnengli}" type="editabledetail"  >
+								<display valuetdwidth="80px" labeltdwidth="80px" labelbgcolor="#f0f0f0" labelalign="left" valuealign="left">
+								    <col column="id" label="id" displaytype="hidden"/>
+								    <col column="suoshu" label="${xianhao}" displaytype="hidden"/>
+								    <col column="daohangleixing" label="${daohangleixing}" />						
+								    <col column="dingweijingdu" label="${dingweijingdu}" br="true"/>
+								    <col column="hangxiangjingdu" label="${hangxiangjingdu}" />
+								    <col column="shuipingjingdu" label="${shuipingjingdu}" br="true" />
+								    <col column="ceshenceqianjingdu" label="${ceshenceqianjingdu}" />						
+								    <col column="dongxiangjueduisudujingdu" label="东向${jueduisudujingdu}" br="true" />
+								    <col column="beixiangjueduisudujingdu" label="北向${jueduisudujingdu}" />
+								    <col column="shoushijingdu" label="${shoushijingdu}" br="true"/>
+								    <col column="ssjingdu" label="${ssjingdu}" />						
+								    <col column="zhengchangshujujilunengli" label="${zhengchangshujujilunengli}" br="true"/>
+								    <col column="beizhu" label="备注" datatype="clob" valuestyleproperty="colspan='3'">
+									    <inputbox type="textareabox" styleproperty="rows='8'"></inputbox>
+								    </col>
+						  	  </display>
+						  	<sql>
+						  	<select>				     
+								<value>					
+									<![CDATA[SELECT * FROM zbgl_zbjbxx_stxn_dhnl where  {#condition#} order by id]]>
+								</value>
+								<condition name="suoshu" label="${xianhao}" hidden="true">
+										<value>
+										<![CDATA[(suoshu = #data#)]]>
+										</value>
+								</condition>
+						        <condition name="suoshujieduan" label="所属阶段" hidden="true">
+							         <value>
+								         <![CDATA[(suoshujieduan = #data#)]]>
+							         </value>
+						       </condition>	
+							<condition name="suoshuid" label="id" hidden="true">
+						         	<value>
+								         <![CDATA[(id like '%#data#%')]]>
+							        </value>
+						      </condition>						       							
+							</select>
+							<insert>
+								<params>
+									<param name="suoshu" value="url{suoshu}"/>
+									<param name="suoshujieduan" value="url{suoshujieduan}"/>
+								</params>
+								<value>
+						  			insert into zbgl_zbjbxx_stxn_dhnl(id=uuid{},suoshu=#{suoshu},suoshujieduan=#{suoshujieduan},@{daohangleixing},@{dingweijingdu},@{hangxiangjingdu},@{shuipingjingdu},@{ceshenceqianjingdu},@{dongxiangjueduisudujingdu},@{beixiangjueduisudujingdu},@{shoushijingdu},@{ssjingdu},@{zhengchangshujujilunengli},@{beizhu});
+								</value>
+							</insert>    					
+						    <update>
+						     	update zbgl_zbjbxx_stxn_dhnl(@{daohangleixing},@{dingweijingdu},@{hangxiangjingdu},@{shuipingjingdu},@{ceshenceqianjingdu},@{dongxiangjueduisudujingdu},@{beixiangjueduisudujingdu},@{shoushijingdu},@{ssjingdu},@{zhengchangshujujilunengli},@{beizhu}) where id=@{id};				    
+						    </update>		     
+						    </sql>
+					   	</report>
+
+	</page>
+</applications>			   

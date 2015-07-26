@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<applications xmlns="http://www.wabacus.com"
+			      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			      xsi:schemaLocation="http://www.wabacus.com ../xsd/wabacus.applications.xsd">
+		<page id="zhuangbeiweixiu" js="/webresources/script/validate.js,/webresources/script/wabacus_util.js">	
+		<vpanel id="vp1">
+			<report id="zhuangbeiweixiu_report" title="${zhuangbeiweixiu}"  type="editablelist" rowselect="single" align="center"   template="${articlelist.report.template}">
+				<display valuetdwidth="80px" labeltdwidth="80px" labelbgcolor="#f0f0f0" labelalign="left" valuealign="left" >
+					<col column="{sequence}" label="序号"></col>					
+					<col column="id" label="id" displaytype="hidden"/>
+				    <col column="suoshuxinghao" label="${xinghao}" >
+					    <inputbox type="selectbox" servervalidate="isNotEmpty(${invalid.isnotempty})">
+						     <option dataset="@{select xinghao from zbgl_zbjbxx_xinghao}" label="xinghao" value="xinghao"></option>
+					    </inputbox>
+				   </col>
+				   <col column="suoshuxianhao" label="${xianhao}"  />
+					<col column="gaishu" label="概述" datatype="clob"></col>
+					<col column="jingfei" label="${jingfei}" />
+				    	<col column="beizhu" label="备注" datatype="clob" >
+						<inputbox type="textareabox" styleproperty="rows='4'"></inputbox>
+				   	</col>
+					
+				</display>
+				<sql>
+				<select>
+					<value>
+						<![CDATA[SELECT * FROM zbgl_zbwxjghz_zhuangbeiweixiu order by id]]>
+					</value>	
+				</select>		
+				<insert pageurl="report{zhuangbeiweixiu_detail.zhuangbeiweixiu_report_detail}" popparams="{title:'添加',width:750,height:400}"></insert>
+				<update pageurl="report{zhuangbeiweixiu_detail.zhuangbeiweixiu_report_detail}" urlparams="id=@{id};suoshuxinghao=@{suoshuxinghao};suoshuxianhao=@{suoshuxianhao}" popparams="{title:'编辑',width:750,height:400}"></update>
+				<delete confirmessage="删除吗？">
+					  delete from zbgl_zbwxjghz_zhuangbeiweixiu where id=@{id__old};
+				</delete>
+				</sql>
+				<format>
+			    	<value>
+			  			<![CDATA[
+			  				String str="";
+			  				
+			  				gaishu=gaishu==null?"":gaishu.trim();
+			  				if(!gaishu.equals(""))
+			  				{
+			  					str=gaishu;
+			  					if(str.length()>7)
+			  						str=str.substring(0,7)+"……";
+			  					gaishu="<span onclick=\"wx_tip('"+gaishu+"',this,{color:'#666666',width:'350px'})\">"+str+"</span>";
+			  				}
+			  				
+			  				beizhu=beizhu==null?"":beizhu.trim();
+			  				if(!beizhu.equals(""))
+			  				{
+			  					str=beizhu;
+			  					if(str.length()>7)
+			  						str=str.substring(0,7)+"……";
+			  					beizhu="<span onclick=\"wx_tip('"+beizhu+"',this,{color:'#666666',width:'350px'})\">"+str+"</span>";
+			  				}
+			  				
+			  				//<!-- xiulineirong=xiulineirong==null?"":xiulineirong.trim();
+			  				//if(!xiulineirong.equals(""))
+			  				//{
+			  				//	str=xiulineirong;
+			  				//	if(str.length()>7)
+			  				//		str=str.substring(0,7)+"……";
+			  				//	xiulineirong="<span onclick=\"wx_tip('"+xiulineirong+"',this,{color:'#666666',width:'350px'})\">"+str+"</span>";
+			  				//} -->
+			  				
+			  				
+			     		]]>
+			  		</value>
+				</format>
+			</report>
+			<report id="report2"  title="详细资料" type="detail" depends="zhuangbeiweixiu_report" dependsparams="id=@{id}">
+				<display>
+					<col column="id" label="id" displaytype="hidden"/>
+					<col column="xiulishijian" label="${xiulishijian}"  datatype="date{yyyy-MM-dd}">
+						<inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)"></inputbox>  
+					</col>
+					<col column="suoshuxianhao" label="${xianhao}"  displaytype="hidden"/>
+					<col column="weixiujieduan" label="${weixiujieduan}" br="true"/>
+					<col column="{non-fromdb}" property="xiulifangan" label="${xiulifangan}" />
+					<col column="{non-fromdb}" property="xiulijieguo" label="${xiulijieguo}"  br="true"/>
+					<col column="{non-fromdb}" property=" weixiuqianxingneng" label="维修前性能"/>
+					<col column="{non-fromdb}" property="weixiuqianzhuangxiangshiyan" label="维修前专项实验"  br="true"/>
+					<col column="{non-fromdb}" property=" weixiuhouxingneng" label="${weixiuhouxingneng}"/>
+					<col column="{non-fromdb}" property="weixiuhouzhuangxiangshiyan" label="维修后专项实验"  br="true"/>
+					<col label="修理内容" column="{non-value}" labelstyleproperty="colspan='6' bgcolor='#f0f0f0' align='left'" br="true"></col>
+				   <col column="xiulineirong" datatype="clob" valuestyleproperty="colspan='6' align='center'"></col>
+				</display>
+				<sql>
+				<select>
+					<value>
+						<![CDATA[SELECT * FROM zbgl_zbwxjghz_zhuangbeiweixiu {#condition#} order by id]]>
+					</value>
+					<condition name="id" hidden="true" >
+						 <value>
+								<![CDATA[(id = '#data#' )]]>
+						</value>
+					</condition>	
+				</select>	
+				</sql>
+				<format>
+				<value>
+			  			<![CDATA[
+			  				String str="";
+					weixiujieduan=weixiujieduan==null?"":weixiujieduan.trim();
+			  				String weixiuqian = "";
+			  				String weixiuhou = "";
+			  				if(!weixiujieduan.equals(""))
+			  				{
+			  					str=weixiujieduan;
+			  					weixiuqian = str+"前";
+			  					weixiuhou = str+"后";
+			  				}
+			        		
+			        		xiulifangan="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">"
+			        		+"<a href=\"#\" onclick=\"wx_winpage('ShowReport.wx?PAGEID=zbwxjghz_fujian&leibie=修理方案&fujiansuoshu="+suoshuxianhao+"',{width:1100,height:400})\" >"
+			        		+"报告"+"</a></span>";
+			        		xiulijieguo="<span onmouseover=\"this.style.cursor='pointer'\"  >"
+							 + "<a href=\"#\" onclick=\"wx_winpage('ShowReport.wx?PAGEID=zbwxjghz_fujian&leibie=修理结果&fujiansuoshu="+suoshuxianhao+"',{width:1100,height:400})\" target=\"sampleframe\">"
+							 + "报告" + "</a></span>";
+							 
+							 
+							weixiuhouzhuangxiangshiyan="<span onmouseover=\"this.style.cursor='pointer'\">"+"<a href=\"#\" onclick=\"wx_winpage('ShowReport.wx?PAGEID=zhendongzaosheng_tabs&suoshuxianhao="+suoshuxianhao+"&zhuangtai="+weixiuhou+"',{width:1100,height:400})\" target=\"sampleframe\">"
+								+"维修后专项实验</a></span>";
+							weixiuqianzhuangxiangshiyan="<span onmouseover=\"this.style.cursor='pointer'\">"+"<a href=\"#\" onclick=\"wx_winpage('ShowReport.wx?PAGEID=zhendongzaosheng_tabs&suoshuxianhao="+suoshuxianhao+"&zhuangtai="+weixiuqian+"',{width:1100,height:400})\" target=\"sampleframe\">"
+								+"维修前专项实验</a></span>";
+								
+							weixiuqianxingneng="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">"
+							 + "<a href=\"ShowReport.wx?PAGEID=jiaochuan_shitingxingneng_button&suoshu="+suoshuxianhao+"&suoshujieduan="+weixiuqian+" \" target=\"blank\">"
+							 + "点击查看" + "</a></span>";
+							weixiuhouxingneng="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">"
+							 + "<a href=\"ShowReport.wx?PAGEID=jiaochuan_shitingxingneng_button&suoshu="+suoshuxianhao+"&suoshujieduan="+weixiuhou+" \" target=\"blank\">"
+							 + "点击查看" + "</a></span>";]]>
+							 </value>
+				</format>
+			</report>
+			</vpanel>
+		</page>
+		
+		<page id="zhuangbeiweixiu_detail" js="/webresources/script/validate.js,/webresources/script/wabacus_util.js">	
+			<report id="zhuangbeiweixiu_report_detail" title="编辑" width="700px" align="center" type="editabledetail"  interceptor="interceptor.Zhuangbeiweixiu_Interceptor" >
+				<display valuetdwidth="200px" labeltdwidth="150px" labelbgcolor="#f0f0f0" labelalign="right" valuealign="left">							
+					<col column="id" label="id" displaytype="hidden"/>
+				    <col column="suoshuxinghao" label="${xinghao}"  >
+					    <inputbox type="selectbox" servervalidate="isNotEmpty(${invalid.isnotempty})">
+						     <option dataset="@{select xinghao from zbgl_zbjbxx_xinghao}" label="xinghao" value="xinghao"></option>
+					    </inputbox>
+				   </col>
+				   <col column="suoshuxianhao" label="${xianhao}"  br="true">
+				   	<inputbox type="selectbox" servervalidate="isNotEmpty(${invalid.isnotempty})" depends="suoshuxinghao"> 
+				   		<option dataset="@{select xianhao from zbgl_zbjbxx_xianhao where suoshuxinghao='#suoshuxinghao#' and  {#condition#} }" label="xianhao" value="xianhao" >
+					   		<condition name="suoshuxianhao">
+								<value>
+									<![CDATA[suoshuxianhao = '%#data#%']]>
+								</value>
+							</condition>
+				   		</option>>
+				   	</inputbox>
+				   </col>		
+				   <col column="weixiujieduan" label="${weixiujieduan}"  >
+				    	<inputbox type="selectbox" >						  
+							<option value="第一次大修" label="第一次大修"></option>
+						    <option value="第一次中修" label="第一次中修"></option>
+						    <option value="第一次小修" label="第一次小修"></option>
+						    <option value="第二次大修" label="第二次大修"></option>
+						    <option value="第二次中修" label="第二次中修"></option>
+						    <option value="第二次小修" label="第二次小修"></option>
+						    <option value="第三次大修" label="第三次大修"></option>
+						    <option value="第三次中修" label="第三次中修"></option>
+						    <option value="第三次小修" label="第三次小修"></option>
+					    </inputbox>
+					</col>		  
+				    <col column="xiulineirong" label="${xiulineirong}" br="true"/> 		
+					<col column="jingfei" label="${jingfei}"  />				
+					<col column="xiulishijian" label="${xiulishijian}"  datatype="date{yyyy-MM-dd}" br="true">
+						<inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)"></inputbox>  
+					</col>
+					<col column="jieshushijian" label="结束时间"  datatype="date{yyyy-MM-dd}" br="true">
+						<inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)"></inputbox>  
+					</col>
+					<col column="gaishu" label="概述" datatype="clob" valuestyleproperty="colspan='3'" br="true">
+				    	<inputbox type="textareabox" styleproperty="rows='4'"></inputbox>
+				    </col>
+					<col column="beizhu" label="备注" datatype="clob" valuestyleproperty="colspan='3'">
+						<inputbox type="textareabox" styleproperty="rows='4'"></inputbox>
+				   	</col>							
+				</display>
+				<sql>	
+					<select>	
+						<value>
+							<![CDATA[SELECT * FROM zbgl_zbwxjghz_zhuangbeiweixiu where {#condition#}]]>
+						</value>
+						<condition name="id" hidden="true">
+							<value>
+								<![CDATA[id=#data#]]>
+							</value>							
+						</condition>
+					</select>					
+					<insert>
+					<params>
+						<param name="myid" value="uuid{}"></param>
+						<param name="null" value="-1" />
+						<param name="id1" value="uuid{}" />
+						<param name="id2" value="uuid{}" />
+						<param name="id3" value="uuid{}" />
+						<param name="id4" value="uuid{}" />
+						<param name="id5" value="uuid{}" />
+						<param name="id6" value="uuid{}" />
+						<param name="id7" value="uuid{}" />
+						<param name="id8" value="uuid{}" />
+						<param name="id9" value="uuid{}" />
+						<param name="id10" value="uuid{}" />
+						
+						</params>
+						insert into
+						zbgl_zbwxjghz_zhuangbeiweixiu(id=#{myid},@{suoshuxinghao},@{suoshuxianhao},@{weixiujieduan},@{gaishu},@{jingfei},@{beizhu},@{xiulishijian},@{xiulineirong});
+						
+						insert into
+						zbgl_zxsy_zdzs(id=uuid{},xinghao=@{suoshuxinghao},xianhao=@{suoshuxianhao},zhuangtai=@{weixiujieduan});
+						
+						insert into
+						zbgl_zxsy_zdzs(id=uuid{},xinghao=@{suoshuxinghao},xianhao=@{suoshuxianhao},zhuangtai=@{weixiujieduan});
+						<!-- 以下三条插入语句分别对应三个阶段该舷号第设备的抽象表，zbgl_zxsy_shebei表 之后将会被继承 -->
+		
+						insert into
+						zbgl_zxsy_shebei(id,suoshuxianhao,jieduan,hangsu,xianhaozhuangtai) values
+						(#{id1},@{suoshuxianhao},'taijia', #{null},@{weixiujieduan});
+						insert into
+						zbgl_zxsy_shebei(id,suoshuxianhao,jieduan,hangsu,xianhaozhuangtai) values
+						(#{id6},@{suoshuxianhao},'taijia', #{null},@{weixiujieduan});
+	
+						insert into
+						zbgl_zxsy_shebei(id,suoshuxianhao,jieduan,hangsu,xianhaozhuangtai) values
+						(#{id2},@{suoshuxianhao},'matou', #{null},@{weixiujieduan});
+						insert into
+						zbgl_zxsy_shebei(id,suoshuxianhao,jieduan,hangsu,xianhaozhuangtai) values
+						(#{id7},@{suoshuxianhao},'matou', #{null},@{weixiujieduan});
+	
+						insert into
+						zbgl_zxsy_shebei(id,suoshuxianhao,jieduan,hangsu,xianhaozhuangtai) values
+						(#{id3},@{suoshuxianhao},'hangxing', #{null},@{weixiujieduan});
+						insert into
+						zbgl_zxsy_shebei(id,suoshuxianhao,jieduan,hangsu,xianhaozhuangtai) values
+						(#{id8},@{suoshuxianhao},'hangxing', #{null},@{weixiujieduan});
+						
+						<!-- 初始化码头实验的数据，该由于是表单无法插入，所以只能在这里初始化 -->
+						insert into
+						zbgl_zxsy_mtsy(id,suoshuxianhao,xianhaozhuangtai) values
+						(#{id4},@{suoshuxianhao},@{weixiujieduan});
+						insert into
+						zbgl_zxsy_mtsy(id,suoshuxianhao,xianhaozhuangtai) values
+						(#{id9},@{suoshuxianhao},@{weixiujieduan});
+						<!-- 类似地，初始化航行实验的数据 -->
+						
+						insert into
+						zbgl_zxsy_hxsy(id,suoshuxianhao,xianhaozhuangtai) values
+						(#{id5},@{suoshuxianhao},@{weixiujieduan});
+						insert into
+						zbgl_zxsy_hxsy(id,suoshuxianhao,xianhaozhuangtai) values
+						(#{id10},@{suoshuxianhao},@{weixiujieduan});
+					</insert>
+					<update >
+					    update zbgl_zbwxjghz_zhuangbeiweixiu(@{suoshuxinghao},@{suoshuxianhao},@{jieshushijian},@{weixiujieduan},@{gaishu},@{jingfei},@{beizhu},@{xiulishijian},@{xiulineirong}) where id=@{id};
+					</update>
+					
+				</sql>	
+			</report>
+		</page>
+		
+	</applications>

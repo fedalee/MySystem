@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<applications xmlns="http://www.wabacus.com"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.wabacus.com ../xsd/wabacus.applications.xsd">
+	<page id="yanzhijieduan"
+		js="/webresources/script/validate.js,/WebRoot/js/testcallback.js">
+      	<!--	<interceptor>
+				<imports>
+					<import>javax.servlet.http.HttpServletRequest;</import>
+					<import>com.wabacus.system.ReportRequest</import>
+				
+				</imports>
+				<preaction>
+					HttpServletRequest r=rrequest.getRequest();
+					String suoshu=rrequest.getStringAttribute("suoshu","");
+					r.setAttribute("suoshu",suoshu);
+				</preaction>
+
+			</interceptor>	
+			<interceptor>
+				<imports>
+					<import>javax.servlet.http.HttpServletRequest;</import>
+					<import>com.wabacus.system.ReportRequest</import>
+					<import>java.io.*</import>
+				</imports>
+				<preaction>
+                    HttpServletRequest r=rrequest.getRequest();
+					String xinghao=r.getParameter("xinghao");
+					
+					rrequest.getRequest().setAttribute("xinghao" ,xinghao);	
+					
+				
+					String suoshu=r.getParameter("xinghaoid");
+					System.out.println("ddddddddddddd"+xinghao);
+					System.out.println("ddddddddddddd"+suoshu);
+					</preaction>
+
+			</interceptor>  -->
+		<tabpanel id="tp1" titlestyle="2" titleposition="top" titlealign="left"  margin="10px" align="left">
+				<report id="report1" extends="lixianglunzhengjieduan.lixianglunzheng" parenttitle="url{xinghao}号${lixianglunzheng}阶段" title="url{xinghao}号—${lixianglunzheng}阶段—详细信息"></report>
+	
+				<report id="report3" extends="fanganshejijieduan.fangansheji" parenttitle="${fangansheji}阶段" title="url{xinghao}号—${fangansheji}阶段—详细信息"></report>
+
+				<report id="report4" extends="jishushejijieduan.jishusheji" parenttitle="${jishushejijieduan}" title="url{xinghao}号—${jishushejijieduan}—详细信息" ></report>
+				<vpanel id="changguiB_vpanel">
+					<report id="report5" extends="jianzaojihuajieduan.jianzaojihua" parenttitle="${jianzaojihua}阶段" title="url{xinghao}号—${jianzaojihua}阶段—详细信息"></report>
+					<report id="reprot6" extends="jianzaojihuajieduan.zongtijianzaoliebiao"></report>
+				</vpanel>
+
+
+				<vpanel id="XB_vpanel">
+					<report id="report007" extends="xiboshiyanjieduan.xibo_list" parenttitle="${xiboshiyan}阶段" title="url{xinghao}号—${xiboshiyan}阶段—详细信息"></report>
+					
+					<tabpanel id="tp2" titlestyle="2" titleposition="top" titlealign="left" 
+						titlewidth="100px" margin="10px" align="center"> 
+						<report id="report8"  extends="xiboshiyanjieduan.xibo_QQzongti_report" 
+						                  depends="report007" dependsparams="txtid=@{id}"  >
+						</report> <report id="report9" 	extends="xiboshiyanjieduan.zhuyaoxitong_report" 
+						                  depends="report007" dependsparams="txtid=@{id}" ></report> </tabpanel>  
+				</vpanel>
+
+
+
+				<vpanel id="jiaochuan_vpanel">
+					
+		<report id="report10" parenttitle="${jiaochuanjieduan}" extends="jiaochuanjieduan.jiaochuanjieduan_report" title="url{xinghao}号—${jiaochuanjieduan}阶段—详细信息"  >	
+	    </report>
+					
+					<tabpanel id="tp3" titlestyle="2" titleposition="top"
+						titlealign="left"  margin="10px" align="center">
+						<tabpanel id="tp31" titlestyle="2" titleposition="top"
+							titlealign="left" parenttitle="QQ总体" titlewidth="100px" margin="10px">
+							<report id="report11" extends="jiaochuanjieduan.JC_qiantingzongti_report" depends="report10" dependsparams="txtid=@{id}" ></report>
+							<report id="report12"
+								extends="jiaochuanjieduan.qiantingzongti_kuaisuxing_report" depends="report10" dependsparams="txtid=@{id}" ></report>
+							<report id="report13"
+								extends="jiaochuanjieduan.qiantingzongti_shuimiancaozongxing_report" depends="report10" dependsparams="txtid=@{id}" ></report>
+							<report id="report14"
+								extends="jiaochuanjieduan.qiantingzongti_shuixiacaozongxing_report" depends="report10" dependsparams="txtid=@{id}" ></report>
+						</tabpanel>
+
+						<report id="report15" extends="jiaochuanjieduan.JC_zhuyaoxitong_report" depends="report10" dependsparams="txtid=@{id}" ></report>
+					</tabpanel>
+
+
+				</vpanel>
+
+		</tabpanel>
+	</page>
+</applications>

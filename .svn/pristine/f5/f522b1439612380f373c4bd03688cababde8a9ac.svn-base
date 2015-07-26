@@ -1,0 +1,16 @@
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+ 
+	<tr><td align='left' width="18%"><wx:data col="hfanyingduigonglv" showlabel="true" showdata="false"/></td><td><wx:data col="hfanyingduigonglv" showlabel="false" showdata="true"/></td></tr>
+	<tr><td colspan="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+	<tr><td align='left' width="18%"><wx:data col="hxunhuannengli" showlabel="true" showdata="false"/></td><td><wx:data col="hxunhuannengli" showlabel="false" showdata="true"/></td></tr>
+	<tr><td colspan="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+	<tr><td align='left' width="18%"><wx:data col="hshouqi" showlabel="true" showdata="false"/></td><td><wx:data col="hshouqi" showlabel="false" showdata="true"/></td></tr>
+	<tr><td colspan="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+	<tr><td align='left' width="18%"><wx:data col="hzhougonglv" showlabel="true" showdata="false"/></td><td><wx:data col="hzhougonglv" showlabel="false" showdata="true"/></td></tr>
+	<tr><td colspan="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+	<tr><td align='left' width="18%"><wx:data col="hdianjizugonglv" showlabel="true" showdata="false"/></td><td><wx:data col="hdianjizugonglv" showlabel="false" showdata="true"/></td></tr>
+	<tr><td colspan="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+	<tr><td align='left' width="18%"><wx:data col="hqita" showlabel="true" showdata="false"/></td><td><wx:data col="hqita" showlabel="false" showdata="true"/></td></tr>
+	<tr><td colspan="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+    <tr><td align='right' colspan="2"><wx:button type="save" /></td></tr>
+</table>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<applications xmlns="http://www.wabacus.com"
+			   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			   xsi:schemaLocation="http://www.wabacus.com ../xsd/wabacus.applications.xsd">
+	<page id="shuixiafushezaosheng_caozuo">	
+		<report id="xiangxi_report" type="editablelist2" title="请填写url{suoshugongkuang}的拐点频率和声压晋级">
+			<display >
+			 <col column="id" label="id" displaytype="hidden"/>
+			 <col column="suoshu" label="suoshu" displaytype="hidden"/>
+			 <col column="suoshujieduan" label="suoshujieduan" displaytype="hidden"/>
+			 <col column="suoshugongkuang" label="${gongkuang}"  displaytype="hidden"/>
+		     <col column="guaidianheziyi" label="拐点${pinlv}（Hz）" />
+			 <col column="shengyajinjiyi" label="${guaidianpinlvshengyajinji}（dB）" />
+			</display>
+			<sql>
+			<select>
+				<value>
+					<![CDATA[SELECT * FROM ZBGL_ZBJBXX_ZTTX_FIGURE where {#condition#} order by id]]>
+				</value>
+				<condition name="suoshugongkuang" label="所属${gongkuang}" hidden="true" >
+							<value>
+								<![CDATA[( suoshugongkuang = #data#)]]>
+							</value>
+				</condition>  
+				<condition name="suoshu" label="${xinghao}" hidden="true">
+										<value>
+											<![CDATA[(suoshu = #data#)]]>
+										</value>
+				</condition>
+				<condition name="suoshujieduan" label="${xinghao}" hidden="true">
+										<value>
+											<![CDATA[(suoshujieduan = #data#)]]>
+										</value>
+				</condition>			
+			</select>	
+			<insert>
+			   <params> 
+					<param name="suoshugongkuang" value="url{suoshugongkuang}"/><param name="suoshu" value="url{suoshu}"/><param name="suoshujieduan" value="url{suoshujieduan}"/>
+			   </params>
+		  		 insert into ZBGL_ZBJBXX_ZTTX_FIGURE(id=uuid{},suoshugongkuang=#{suoshugongkuang},suoshu=#{suoshu},suoshujieduan=#{suoshujieduan},@{guaidianheziyi},@{shengyajinjiyi});
+			 </insert>
+			 <update>
+			     update ZBGL_ZBJBXX_ZTTX_FIGURE(@{guaidianheziyi},@{shengyajinjiyi}) where id=@{id__old};
+			 </update>
+			   <delete>
+			  	 delete from ZBGL_ZBJBXX_ZTTX_FIGURE where id=@{id__old};		  	
+			  </delete>
+			</sql>
+			 <subdisplay>
+					    <subrow displaytype="page|report" displayposition="bottom">
+						     <subcol property="sprop1" colspan="4" valuestyleproperty="bgcolor='#eeeeee' align='center'"></subcol>
+					    </subrow> 
+					    <format>
+						     <imports>
+							      <import>com.wabacus.util.*</import>
+						     </imports>
+						     <value>
+						<![CDATA[							 		
+							sprop1="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\"  >"+
+	                       "<a href='ShowReport.wx?PAGEID=shuixiafushezaosheng_figure&suoshugongkuang="+rrequest.getStringAttribute("suoshugongkuang")+"&suoshu="+rrequest.getStringAttribute("suoshu")+"&suoshujieduan="+rrequest.getStringAttribute("suoshujieduan")+"' >"+"<big>"+"显示曲线"+"</big>"+"</a></span>";
+						]]>
+						</value>
+					    </format>
+				   </subdisplay> 
+			
+		</report>
+	</page>
+</applications>                                                    

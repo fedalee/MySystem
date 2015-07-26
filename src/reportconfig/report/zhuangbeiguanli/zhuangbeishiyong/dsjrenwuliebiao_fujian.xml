@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<applications xmlns="http://www.wabacus.com"
+			      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			      xsi:schemaLocation="http://www.wabacus.com ../xsd/wabacus.applications.xsd">
+		<page id="dsjrenwuliebiao_fujian" js="/webresources/script/validate.js,/WebRoot/js/testcallback.js,/webresources/script/wabacus_api.js" >	
+			
+			<report id="fujian_report" title="url{leibie}的附件"  template="relative{htmltemplate/zhuangbeiguanli/zhuangbeiweixiujigaihuanzhuang/zhuangbeiweixiujigaihuanzhuang_fujian.html}"
+			        width="1000px" align="center"  type="editablelist" >
+			   <interceptor>
+					<preaction>
+					<![CDATA[
+					    String leibie=rrequest.getStringAttribute("leibie","");
+					    String fujiansuoshu=rrequest.getStringAttribute("fujiansuoshu","");
+						rrequest.getRequest().getSession().setAttribute("leibie",leibie);
+						rrequest.getRequest().getSession().setAttribute("fujiansuoshu",fujiansuoshu);
+						rrequest.getRequest().getSession().setAttribute("page","dsjrenwuliebiao_fujian");
+						rrequest.getRequest().getSession().setAttribute("report","fujian_report");
+						rrequest.getRequest().getSession().setAttribute("DBTable","ZBGL_ZBWXJGHZ_FUJIAN");
+					]]>
+					</preaction>
+			    </interceptor>				
+				<display valuetdwidth="80px" labeltdwidth="80px" labelbgcolor="#f0f0f0" labelalign="left" valuealign="left">
+					<col column="{sequence}" label="序号"></col>					
+					<col column="id" label="id" displaytype="hidden"/>
+				    <col column="fujian" label="附件" ></col>
+				    <col column="time" label="上传时间" clickorderby="true"></col>
+					<col column="leibie" label="类别" ></col>
+					<col column="beizhu" label="备注" ></col>
+					<col column="fujiansuoshu" label="附件所属" ></col>
+					<col column="{non-fromdb}" property="cz" label="操作"></col>				  
+				</display>
+				
+				<sql>	
+					<select>
+						<value>
+							<![CDATA[SELECT * FROM zbgl_zbwxjghz_fujian where {#condition#} order by id]]>
+						</value>
+						<condition name="leibie" label="类别" hidden="true">
+							<value>
+								<![CDATA[( leibie = #data#)]]>
+							</value>
+						</condition> 
+						
+						<condition name="fujiansuoshu" hidden="true">
+							<value>
+								<![CDATA[ fujiansuoshu='#data#']]>
+							</value>
+						</condition>
+				    </select>  		
+					<!-- <insert pageurl="report{zbwxjghz_fujian_detail.fujian_report_detail}" urlparams="leibie=request{leibie};fujiansuoshu=request{fujiansuoshu}" popparams="{title:'添加',width:950,height:450}"></insert>
+					<update pageurl="report{zbwxjghz_fujian_detail.fujian_report_detail}" urlparams="id=@{id};leibie=@{leibie};fujiansuoshu=@{fujiansuoshu}" popparams="{title:'编辑',width:950,height:450}"></update> -->
+					<delete confirmessage="删除吗？" preparedstatement="false" originalparams="true">
+					    delete from zbgl_zbwxjghz_fujian where time=to_date('@{time__old}','mm/dd/yyyy hh24:mi:ss') and  leibie='@{leibie__old}'  and fujiansuoshu='@{fujiansuoshu__old}';
+					</delete>
+				</sql>
+				<format>
+			    	<value>
+			  			<![CDATA[
+			  			rrequest.getRequest().setAttribute("leibie" ,leibie);
+						rrequest.getRequest().setAttribute("fujiansuoshu" ,fujiansuoshu);
+			        		if(fujian!=null&&!fujian.trim().equals(""))
+									{//这里引用资源文件定义的路径
+									String fujianname=fujian.substring(fujian.lastIndexOf("/")+1);//取到文件名
+									cz="<a href=\"/MySystem/ShowReport.wx?ACTIONTYPE=download&serverfilepath=${file.path}&serverfilename="+fujianname+"\">下载附件</a>";
+									}else
+									{
+										cz="无文件";
+									}			
+			     		]]>   
+			  		</value>
+				</format>			
+			</report>
+		</page>
+		
+		
+		<page id="dsjrenwuliebiao_fujian_detail" js="/webresources/script/validate.js,/WebRoot/js/testcallback.js">	
+			<report id="fujian_report_detail" title="url{fujiansuoshu}url{leibie}的附件" 
+			        width="400px" align="center"  type="editabledetail"   template="${articlelist.report.template}">				
+				<display valuetdwidth="120px" labeltdwidth="80px" labelbgcolor="#f0f0f0" labelalign="right" valuealign="left">				
+					<col column="id" label="id" displaytype="hidden"/>
+					<col column="leibie" label="类别" displaytype="hidden" >
+						<inputbox type="textbox"  defaultvalue="url{leibie}"></inputbox>
+					</col>
+					<col column="beizhu" label="备注" br="true"></col>
+					<col column="fujiansuoshu" label="附件所属"  displaytype="hidden">
+						<inputbox type="textbox" defaultvalue="url{fujiansuoshu}"></inputbox>
+					</col>
+					<col column="fujian" label="附件" >
+						<inputbox type="file" savepath="${file.path}" rooturl="${file.path}"  						   				  
+							interceptor="com.wabacus.util.TestFileUploadInterceptor" >
+						</inputbox>  
+					</col>
+							  
+				</display>
+				<sql>	
+					<select>
+						<value>
+							<![CDATA[SELECT * FROM zbgl_zbwxjghz_fujian where {#condition#} order by id]]>
+						</value>
+						<condition name="id" hidden="true">
+							<value>
+								<![CDATA[( id = #data#)]]>
+							</value>
+						</condition> 
+				    </select>  		
+					<insert>					   
+			        	    insert into zbgl_zbwxjghz_fujian(id=uuid{},@{fujian},leibie=@{leibie},@{beizhu},fujiansuoshu=@{fujiansuoshu});				        			  
+					</insert>
+					<update >
+					    update zbgl_zbwxjghz_fujian(@{fujian},@{leibie__old},@{beizhu},@{fujiansuoshu__old}) where id=@{id};
+					</update>
+				</sql>
+				<format>
+					<value>
+					rrequest.getRequest().setAttribute("leibie" ,leibie);
+					rrequest.getRequest().setAttribute("fujiansuoshu" ,fujiansuoshu);
+					</value>
+				</format>
+			</report>
+		</page>
+	</applications>

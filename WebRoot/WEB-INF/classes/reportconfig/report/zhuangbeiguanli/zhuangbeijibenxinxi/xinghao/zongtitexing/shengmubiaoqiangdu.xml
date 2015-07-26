@@ -1,0 +1,712 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<applications xmlns="http://www.wabacus.com"
+			   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			   xsi:schemaLocation="http://www.wabacus.com ../../../../../xsd/wabacus.applications.xsd">
+	<page id="shengmubiaoqiangdu">
+	    <vpanel id="shengmubiaoqiangdu_vpanel">
+	     <jsp id="shengmubiaoqiangdu_jsp"   >
+				/jsp/DynamicCol.jsp
+			</jsp>	 
+		</vpanel>
+	</page>
+	
+	<page id="shengmubiaoqiangdu_1">
+
+	 <buttons>
+				   <button name="button1" position="top" label="修改列数" >
+					   <imports>
+					         <import>javax.servlet.http.HttpServletRequest</import>
+					    </imports>
+					        <dynevent>
+						      <![CDATA[
+								HttpServletRequest request=rrequest.getRequest();
+								
+								String suoshu=request.getParameter("suoshu");
+								if(suoshu==null)
+									suoshu=(String)request.getAttribute("suoshu");
+								String suoshujieduan=request.getParameter("suoshujieduan");
+								if(suoshujieduan==null)
+									suoshujieduan=(String)request.getAttribute("suoshujieduan");
+								System.out.println("888888"+suoshujieduan);
+								return "window.location.href='/MySystem/ShowReport.wx?PAGEID=shengmubiaoqiangdu&suoshu="+suoshu+"&suoshujieduan="+suoshujieduan+"'";
+						      ]]>
+					</dynevent>
+				</button>
+			</buttons> 
+		<report id="shengmubiaoqiangdu_report" title="${shengmubiaoqiangdu}" type="editablelist2" >
+		 <interceptor>
+				  <imports>
+		  	 		   <import>com.wabacus.util.*</import>
+		  	 		   <import>com.wabacus.system.*</import>
+		  	 	  </imports>
+		  	 	  <preaction>
+		  	 	      <![CDATA[
+							String jd = rrequest.getStringAttribute("suoshu");							
+			System.out.println("7777"+jd);
+													
+					  ]]>
+		  	 	  </preaction>
+	  	      </interceptor> 
+			<display >
+				<col column="{sequence}" label="序号"></col>		
+			 	<col column="id" label="id" displaytype="hidden"/>
+			    <col column="pinlv" label="${pinlv}"  />
+				<col column="gongkuangyi" label="${gongkuang}1"  />
+				 <col column="suoshu" label="suoshu" displaytype="hidden"/>
+			  <col column="suoshujieduan" label="suoshujieduan" displaytype="hidden"/>
+			</display>
+			<sql>
+				<select>
+					<value>
+						<![CDATA[SELECT * FROM zbgl_zbjbxx_zttx_smbqd where  {#condition#} order by id]]>
+					</value>
+					 <condition name="suoshu" label="${xinghao}" hidden="true">
+										<value>
+											<![CDATA[(suoshu = #data#)]]>
+										</value>
+				</condition>
+				 <condition name="suoshujieduan" label="${xinghao}" hidden="true">
+										<value>
+											<![CDATA[(suoshujieduan = #data#)]]>
+										</value>
+				</condition>
+				</select>
+				<insert>
+				    <params>
+							<param name="suoshu" value="url{suoshu}"/><param name="suoshujieduan" value="url{suoshujieduan}"/>
+				    </params>
+				    <value>
+		  		 		insert into zbgl_zbjbxx_zttx_smbqd(id=uuid{},@{pinlv},@{gongkuangyi},suoshu=#{suoshu},suoshujieduan=#{suoshujieduan});		  		
+			  	    </value>	  		
+			  	</insert>
+			    <update>
+			     	update zbgl_zbjbxx_zttx_smbqd(@{pinlv},@{gongkuangyi}) where id=@{id__old};   
+			    </update>
+			    <delete>
+			  	 	delete from zbgl_zbjbxx_zttx_smbqd where id=@{id__old};		  	
+			    </delete>
+			</sql>
+		</report>
+	</page>
+	<page id="shengmubiaoqiangdu_2">
+	 <buttons>
+				   <button name="button1" position="top" label="修改列数" >
+					   <imports>
+					         <import>javax.servlet.http.HttpServletRequest</import>
+					    </imports>
+					        <dynevent>
+						      <![CDATA[
+								HttpServletRequest request=rrequest.getRequest();
+								
+								String suoshu=request.getParameter("suoshu");
+								if(suoshu==null)
+									suoshu=(String)request.getAttribute("suoshu");
+								String suoshujieduan=request.getParameter("suoshujieduan");
+								if(suoshujieduan==null)
+									suoshujieduan=(String)request.getAttribute("suoshujieduan");
+								System.out.println("888888"+suoshujieduan);
+								return "window.location.href='/MySystem/ShowReport.wx?PAGEID=shengmubiaoqiangdu&suoshu="+suoshu+"&suoshujieduan="+suoshujieduan+"'";
+						      ]]>
+					</dynevent>
+				</button>
+			</buttons> 
+		<report id="shengmubiaoqiangdu_report" title="${shengmubiaoqiangdu}" type="editablelist2" >
+			<display >
+				<col column="{sequence}" label="序号"></col>		
+			 	<col column="id" label="id" displaytype="hidden"/>
+			    <col column="pinlv" label="${pinlv}"  />
+				<col column="gongkuangyi" label="${gongkuang}1"  />
+				<col column="gongkuanger" label="${gongkuang}2"  />
+				 <col column="suoshu" label="suoshu" displaytype="hidden"/>
+			  <col column="suoshujieduan" label="suoshujieduan" displaytype="hidden"/>
+			</display>
+			<sql>
+				<select>
+					<value>
+						<![CDATA[SELECT * FROM zbgl_zbjbxx_zttx_smbqd where  {#condition#} order by id]]>
+					</value>
+					 <condition name="suoshu" label="${xinghao}" hidden="true">
+										<value>
+											<![CDATA[(suoshu = #data#)]]>
+										</value>
+				</condition>
+				 <condition name="suoshujieduan" label="${xinghao}" hidden="true">
+										<value>
+											<![CDATA[(suoshujieduan = #data#)]]>
+										</value>
+				</condition>
+				</select>
+				<insert>
+				    <params>
+							<param name="suoshu" value="url{suoshu}"/><param name="suoshujieduan" value="url{suoshujieduan}"/>
+				    </params>
+				    <value>
+		  		 		insert into zbgl_zbjbxx_zttx_smbqd(id=uuid{},@{pinlv},@{gongkuangyi},@{gongkuanger},suoshu=#{suoshu},suoshujieduan=#{suoshujieduan});		  		
+			  	    </value>	  		
+			  	</insert>
+			    <update>
+			     	update zbgl_zbjbxx_zttx_smbqd(@{pinlv},@{gongkuangyi},@{gongkuanger}) where id=@{id__old};   
+			    </update>
+			    <delete>
+			  	 	delete from zbgl_zbjbxx_zttx_smbqd where id=@{id__old};		  	
+			    </delete>
+			</sql>
+		</report>
+	</page>
+	<page id="shengmubiaoqiangdu_3">
+	 <buttons>
+				   <button name="button1" position="top" label="修改列数" >
+					   <imports>
+					         <import>javax.servlet.http.HttpServletRequest</import>
+					    </imports>
+					        <dynevent>
+						      <![CDATA[
+							HttpServletRequest request=rrequest.getRequest();
+								
+								String suoshu=request.getParameter("suoshu");
+								if(suoshu==null)
+									suoshu=(String)request.getAttribute("suoshu");
+								String suoshujieduan=request.getParameter("suoshujieduan");
+								if(suoshujieduan==null)
+									suoshujieduan=(String)request.getAttribute("suoshujieduan");
+								System.out.println("888888"+suoshujieduan);
+								return "window.location.href='/MySystem/ShowReport.wx?PAGEID=shengmubiaoqiangdu&suoshu="+suoshu+"&suoshujieduan="+suoshujieduan+"'";
+						      ]]>
+					</dynevent>
+				</button>
+			</buttons> 
+		<report id="shengmubiaoqiangdu_report" title="${shengmubiaoqiangdu}" type="editablelist2" >
+			<display >
+				<col column="{sequence}" label="序号"></col>		
+			 	<col column="id" label="id" displaytype="hidden"/>
+			    <col column="pinlv" label="${pinlv}"  />
+				<col column="gongkuangyi" label="${gongkuang}1"  />
+				<col column="gongkuanger" label="${gongkuang}2"  />
+				<col column="gongkuangsan" label="${gongkuang}3"  />
+				 <col column="suoshu" label="suoshu" displaytype="hidden"/>
+			  <col column="suoshujieduan" label="suoshujieduan" displaytype="hidden"/>
+			</display>
+			<sql>
+				<select>
+					<value>
+						<![CDATA[SELECT * FROM zbgl_zbjbxx_zttx_smbqd where  {#condition#} order by id]]>
+					</value>
+					 <condition name="suoshu" label="${xinghao}" hidden="true">
+										<value>
+											<![CDATA[(suoshu = #data#)]]>
+										</value>
+				</condition>
+				 <condition name="suoshujieduan" label="${xinghao}" hidden="true">
+										<value>
+											<![CDATA[(suoshujieduan = #data#)]]>
+										</value>
+				</condition>	
+				</select>
+				<insert>
+				    <params>
+							<param name="suoshu" value="url{suoshu}"/><param name="suoshujieduan" value="url{suoshujieduan}"/>
+				    </params>
+				    <value>
+		  		 		insert into zbgl_zbjbxx_zttx_smbqd(id=uuid{},@{pinlv},@{gongkuangyi},@{gongkuanger},@{gongkuangsan},suoshu=#{suoshu},suoshujieduan=#{suoshujieduan});		  		
+			  	    </value>	  		
+			  	</insert>
+			    <update>
+			     	update zbgl_zbjbxx_zttx_smbqd(@{pinlv},@{gongkuangyi},@{gongkuanger},@{gongkuangsan}) where id=@{id__old};   
+			    </update>
+			    <delete>
+			  	 	delete from zbgl_zbjbxx_zttx_smbqd where id=@{id__old};		  	
+			    </delete>
+			</sql>
+		</report>
+	</page>
+	<page id="shengmubiaoqiangdu_4">
+	 <buttons>
+				   <button name="button1" position="top" label="修改列数" >
+					   <imports>
+					         <import>javax.servlet.http.HttpServletRequest</import>
+					    </imports>
+					        <dynevent>
+						      <![CDATA[
+								HttpServletRequest request=rrequest.getRequest();
+								
+								String suoshu=request.getParameter("suoshu");
+								if(suoshu==null)
+									suoshu=(String)request.getAttribute("suoshu");
+								String suoshujieduan=request.getParameter("suoshujieduan");
+								if(suoshujieduan==null)
+									suoshujieduan=(String)request.getAttribute("suoshujieduan");
+								System.out.println("888888"+suoshujieduan);
+								return "window.location.href='/MySystem/ShowReport.wx?PAGEID=shengmubiaoqiangdu&suoshu="+suoshu+"&suoshujieduan="+suoshujieduan+"'";
+						      ]]>
+					</dynevent>
+				</button>
+			</buttons> 
+		<report id="shengmubiaoqiangdu_report" title="${shengmubiaoqiangdu}" type="editablelist2" >
+			<display >
+				<col column="{sequence}" label="序号"></col>		
+			 	<col column="id" label="id" displaytype="hidden"/>
+			    <col column="pinlv" label="${pinlv}"  />
+				<col column="gongkuangyi" label="${gongkuang}1"  />
+				<col column="gongkuanger" label="${gongkuang}2"  />
+				<col column="gongkuangsan" label="${gongkuang}3"  />
+				<col column="gongkuangsi" label="${gongkuang}4"  />
+				<col column="suoshu" label="suoshu" displaytype="hidden"/>
+			    <col column="suoshujieduan" label="suoshujieduan" displaytype="hidden"/>
+			</display>
+			<sql>
+				<select>
+					<value>
+						<![CDATA[SELECT * FROM zbgl_zbjbxx_zttx_smbqd where  {#condition#} order by id]]>
+					</value>
+					 <condition name="suoshu" label="${xinghao}" hidden="true">
+										<value>
+											<![CDATA[(suoshu = #data#)]]>
+										</value>
+				</condition>
+				 <condition name="suoshujieduan" label="${xinghao}" hidden="true">
+										<value>
+											<![CDATA[(suoshujieduan = #data#)]]>
+										</value>
+				</condition>	
+				</select>
+				<insert>
+				    <params>
+							<param name="suoshu" value="url{suoshu}"/><param name="suoshujieduan" value="url{suoshujieduan}"/>
+				    </params>
+				    <value>
+		  		 		insert into zbgl_zbjbxx_zttx_smbqd(id=uuid{},@{pinlv},@{gongkuangyi},@{gongkuanger},@{gongkuangsan},,@{gongkuangsi},suoshu=#{suoshu},suoshujieduan=#{suoshujieduan});		  		
+			  	    </value>	  		
+			  	</insert>
+			    <update>
+			     	update zbgl_zbjbxx_zttx_smbqd(@{pinlv},@{gongkuangyi},@{gongkuanger},@{gongkuangsan},@{gongkuangsi}) where id=@{id__old};   
+			    </update>
+			    <delete>
+			  	 	delete from zbgl_zbjbxx_zttx_smbqd where id=@{id__old};		  	
+			    </delete>
+			</sql>
+		</report>
+	</page>
+	<page id="shengmubiaoqiangdu_5">
+	 <buttons>
+				   <button name="button1" position="top" label="修改列数" >
+					   <imports>
+					         <import>javax.servlet.http.HttpServletRequest</import>
+					    </imports>
+					        <dynevent>
+						      <![CDATA[
+								HttpServletRequest request=rrequest.getRequest();
+								
+								String suoshu=request.getParameter("suoshu");
+								if(suoshu==null)
+									suoshu=(String)request.getAttribute("suoshu");
+								String suoshujieduan=request.getParameter("suoshujieduan");
+								if(suoshujieduan==null)
+									suoshujieduan=(String)request.getAttribute("suoshujieduan");
+								System.out.println("888888"+suoshujieduan);
+								return "window.location.href='/MySystem/ShowReport.wx?PAGEID=shengmubiaoqiangdu&suoshu="+suoshu+"&suoshujieduan="+suoshujieduan+"'";
+						      ]]>
+					</dynevent>
+				</button>
+			</buttons> 
+		<report id="shengmubiaoqiangdu_report" title="${shengmubiaoqiangdu}" type="editablelist2" >
+			<display >
+				<col column="{sequence}" label="序号"></col>		
+			 	<col column="id" label="id" displaytype="hidden"/>
+			    <col column="pinlv" label="${pinlv}"  />
+				<col column="gongkuangyi" label="${gongkuang}1"  />
+				<col column="gongkuanger" label="${gongkuang}2"  />
+				<col column="gongkuangsan" label="${gongkuang}3"  />
+				<col column="gongkuangsi" label="${gongkuang}4"  />
+				<col column="gongkuangwu" label="${gongkuang}5"  />
+				<col column="suoshu" label="suoshu" displaytype="hidden"/>
+			    <col column="suoshujieduan" label="suoshujieduan" displaytype="hidden"/>
+			</display>
+			<sql>
+				<select>
+					<value>
+						<![CDATA[SELECT * FROM zbgl_zbjbxx_zttx_smbqd where  {#condition#} order by id]]>
+					</value>
+					 <condition name="suoshu" label="${xinghao}" hidden="true">
+										<value>
+											<![CDATA[(suoshu = #data#)]]>
+										</value>
+				</condition>
+				 <condition name="suoshujieduan" label="${xinghao}" hidden="true">
+										<value>
+											<![CDATA[(suoshujieduan = #data#)]]>
+										</value>
+				</condition>
+				</select>
+				<insert>
+				    <params>
+							<param name="suoshu" value="url{suoshu}"/><param name="suoshujieduan" value="url{suoshujieduan}"/>
+				    </params>
+				    <value>
+		  		 		insert into zbgl_zbjbxx_zttx_smbqd(id=uuid{},@{pinlv},@{gongkuangyi},@{gongkuanger},@{gongkuangsan},@{gongkuangsi},@{gongkuangwu},suoshu=#{suoshu},suoshujieduan=#{suoshujieduan});		  		
+			  	    </value>	  		
+			  	</insert>
+			    <update>
+			     	update zbgl_zbjbxx_zttx_smbqd(@{pinlv},@{gongkuangyi},@{gongkuanger},@{gongkuangsan},@{gongkuangsi},@{gongkuangwu}) where id=@{id__old};   
+			    </update>
+			    <delete>
+			  	 	delete from zbgl_zbjbxx_zttx_smbqd where id=@{id__old};		  	
+			    </delete>
+			</sql>
+		</report>
+	</page>
+	<page id="shengmubiaoqiangdu_6">
+	 <buttons>
+				   <button name="button1" position="top" label="修改列数" >
+					   <imports>
+					         <import>javax.servlet.http.HttpServletRequest</import>
+					    </imports>
+					        <dynevent>
+						      <![CDATA[
+								HttpServletRequest request=rrequest.getRequest();
+								
+								String suoshu=request.getParameter("suoshu");
+								if(suoshu==null)
+									suoshu=(String)request.getAttribute("suoshu");
+								String suoshujieduan=request.getParameter("suoshujieduan");
+								if(suoshujieduan==null)
+									suoshujieduan=(String)request.getAttribute("suoshujieduan");
+								System.out.println("888888"+suoshujieduan);
+								return "window.location.href='/MySystem/ShowReport.wx?PAGEID=shengmubiaoqiangdu&suoshu="+suoshu+"&suoshujieduan="+suoshujieduan+"'";
+						      ]]>
+					</dynevent>
+				</button>
+			</buttons> 
+		<report id="shengmubiaoqiangdu_report" title="${shengmubiaoqiangdu}" type="editablelist2" >
+			<display >
+				<col column="{sequence}" label="序号"></col>		
+			 	<col column="id" label="id" displaytype="hidden"/>
+			    <col column="pinlv" label="${pinlv}"  />
+				<col column="gongkuangyi" label="${gongkuang}1"  />
+				<col column="gongkuanger" label="${gongkuang}2"  />
+				<col column="gongkuangsan" label="${gongkuang}3"  />
+				<col column="gongkuangsi" label="${gongkuang}4"  />
+				<col column="gongkuangwu" label="${gongkuang}5"  />
+				<col column="gongkuangliu" label="${gongkuang}6"  />
+				<col column="suoshu" label="suoshu" displaytype="hidden"/>
+			    <col column="suoshujieduan" label="suoshujieduan" displaytype="hidden"/>
+			</display>
+			<sql>
+				<select>
+					<value>
+						<![CDATA[SELECT * FROM zbgl_zbjbxx_zttx_smbqd where  {#condition#} order by id]]>
+					</value>
+					 <condition name="suoshu" label="${xinghao}" hidden="true">
+										<value>
+											<![CDATA[(suoshu = #data#)]]>
+										</value>
+				</condition>
+				 <condition name="suoshujieduan" label="${xinghao}" hidden="true">
+										<value>
+											<![CDATA[(suoshujieduan = #data#)]]>
+										</value>
+				</condition>
+				</select>
+				<insert>
+				    <params>
+							<param name="suoshu" value="url{suoshu}"/><param name="suoshujieduan" value="url{suoshujieduan}"/>
+				    </params>
+				    <value>
+		  		 		insert into zbgl_zbjbxx_zttx_smbqd(id=uuid{},@{pinlv},@{gongkuangyi},@{gongkuanger},@{gongkuangsan},@{gongkuangsi},@{gongkuangwu},@{gongkuangliu},suoshu=#{suoshu},suoshujieduan=#{suoshujieduan});		  		
+			  	    </value>	  		
+			  	</insert>
+			    <update>
+			     	update zbgl_zbjbxx_zttx_smbqd(@{pinlv},@{gongkuangyi},@{gongkuanger},@{gongkuangsan},@{gongkuangsi},@{gongkuangwu},@{gongkuangliu}) where id=@{id__old};   
+			    </update>
+			    <delete>
+			  	 	delete from zbgl_zbjbxx_zttx_smbqd where id=@{id__old};		  	
+			    </delete>
+			</sql>
+		</report>
+	</page>
+	<page id="shengmubiaoqiangdu_7">
+	 <buttons>
+				   <button name="button1" position="top" label="修改列数" >
+					   <imports>
+					         <import>javax.servlet.http.HttpServletRequest</import>
+					    </imports>
+					        <dynevent>
+						      <![CDATA[
+								HttpServletRequest request=rrequest.getRequest();
+								
+								String suoshu=request.getParameter("suoshu");
+								if(suoshu==null)
+									suoshu=(String)request.getAttribute("suoshu");
+								String suoshujieduan=request.getParameter("suoshujieduan");
+								if(suoshujieduan==null)
+									suoshujieduan=(String)request.getAttribute("suoshujieduan");
+								System.out.println("888888"+suoshujieduan);
+								return "window.location.href='/MySystem/ShowReport.wx?PAGEID=shengmubiaoqiangdu&suoshu="+suoshu+"&suoshujieduan="+suoshujieduan+"'";
+						      ]]>
+					</dynevent>
+				</button>
+			</buttons> 
+		<report id="shengmubiaoqiangdu_report" title="${shengmubiaoqiangdu}" type="editablelist2" >
+			<display >
+				<col column="{sequence}" label="序号"></col>		
+			 	<col column="id" label="id" displaytype="hidden"/>
+			    <col column="pinlv" label="${pinlv}"  />
+				<col column="gongkuangyi" label="${gongkuang}1"  />
+				<col column="gongkuanger" label="${gongkuang}2"  />
+				<col column="gongkuangsan" label="${gongkuang}3"  />
+				<col column="gongkuangsi" label="${gongkuang}4"  />
+				<col column="gongkuangwu" label="${gongkuang}5"  />
+				<col column="gongkuangliu" label="${gongkuang}6"  />
+				<col column="gongkuangqi" label="${gongkuang}7"  />			
+				<col column="suoshu" label="suoshu" displaytype="hidden"/>
+			    <col column="suoshujieduan" label="suoshujieduan" displaytype="hidden"/>
+			</display>
+			<sql>
+				<select>
+					<value>
+						<![CDATA[SELECT * FROM zbgl_zbjbxx_zttx_smbqd where  {#condition#} order by id]]>
+					</value>
+					 <condition name="suoshu" label="${xinghao}" hidden="true">
+										<value>
+											<![CDATA[(suoshu = #data#)]]>
+										</value>
+				</condition>
+				 <condition name="suoshujieduan" label="${xinghao}" hidden="true">
+										<value>
+											<![CDATA[(suoshujieduan = #data#)]]>
+										</value>
+				</condition>
+				</select>
+				<insert>
+				    <params>
+							<param name="suoshu" value="url{suoshu}"/><param name="suoshujieduan" value="url{suoshujieduan}"/>
+				    </params>
+				    <value>
+		  		 		insert into zbgl_zbjbxx_zttx_smbqd(id=uuid{},@{pinlv},@{gongkuangyi},@{gongkuanger},@{gongkuangsan},@{gongkuangsi},@{gongkuangwu},@{gongkuangliu},@{gongkuangqi},suoshu=#{suoshu},suoshujieduan=#{suoshujieduan});		  		
+			  	    </value>	  		
+			  	</insert>
+			    <update>
+			     	update zbgl_zbjbxx_zttx_smbqd(@{pinlv},@{gongkuangyi},@{gongkuanger},@{gongkuangsan},@{gongkuangsi},@{gongkuangwu},@{gongkuangliu},@{gongkuangqi}) where id=@{id__old};   
+			    </update>
+			    <delete>
+			  	 	delete from zbgl_zbjbxx_zttx_smbqd where id=@{id__old};		  	
+			    </delete>
+			</sql>
+		</report>
+	</page>
+	<page id="shengmubiaoqiangdu_8">
+	 <buttons>
+				   <button name="button1" position="top" label="修改列数" >
+					   <imports>
+					         <import>javax.servlet.http.HttpServletRequest</import>
+					    </imports>
+					        <dynevent>
+						      <![CDATA[
+								HttpServletRequest request=rrequest.getRequest();
+								
+								String suoshu=request.getParameter("suoshu");
+								if(suoshu==null)
+									suoshu=(String)request.getAttribute("suoshu");
+								String suoshujieduan=request.getParameter("suoshujieduan");
+								if(suoshujieduan==null)
+									suoshujieduan=(String)request.getAttribute("suoshujieduan");
+								System.out.println("888888"+suoshujieduan);
+								return "window.location.href='/MySystem/ShowReport.wx?PAGEID=shengmubiaoqiangdu&suoshu="+suoshu+"&suoshujieduan="+suoshujieduan+"'";
+						      ]]>
+					</dynevent>
+				</button>
+			</buttons> 
+		<report id="shengmubiaoqiangdu_report" title="${shengmubiaoqiangdu}" type="editablelist2" >
+			<display >
+				<col column="{sequence}" label="序号"></col>		
+			 	<col column="id" label="id" displaytype="hidden"/>
+			    <col column="pinlv" label="${pinlv}"  />
+				<col column="gongkuangyi" label="${gongkuang}1"  />
+				<col column="gongkuanger" label="${gongkuang}2"  />
+				<col column="gongkuangsan" label="${gongkuang}3"  />
+				<col column="gongkuangsi" label="${gongkuang}4"  />
+				<col column="gongkuangwu" label="${gongkuang}5"  />
+				<col column="gongkuangliu" label="${gongkuang}6"  />
+				<col column="gongkuangqi" label="${gongkuang}7"  />
+				<col column="gongkuangba" label="${gongkuang}8"  />
+				<col column="suoshu" label="suoshu" displaytype="hidden"/>
+			    <col column="suoshujieduan" label="suoshujieduan" displaytype="hidden"/>
+			</display>
+			<sql>
+				<select>
+					<value>
+						<![CDATA[SELECT * FROM zbgl_zbjbxx_zttx_smbqd where  {#condition#} order by id]]>
+					</value>
+					 <condition name="suoshu" label="${xinghao}" hidden="true">
+										<value>
+											<![CDATA[(suoshu = #data#)]]>
+										</value>
+				</condition>
+				 <condition name="suoshujieduan" label="${xinghao}" hidden="true">
+										<value>
+											<![CDATA[(suoshujieduan = #data#)]]>
+										</value>
+				</condition>
+				</select>
+				<insert>
+				    <params>
+							<param name="suoshu" value="url{suoshu}"/><param name="suoshujieduan" value="url{suoshujieduan}"/>
+				    </params>
+				    <value>
+		  		 		insert into zbgl_zbjbxx_zttx_smbqd(id=uuid{},@{pinlv},@{gongkuangyi},@{gongkuanger},@{gongkuangsan},@{gongkuangsi},@{gongkuangwu},@{gongkuangliu},@{gongkuangqi},@{gongkuangba},suoshu=#{suoshu},suoshujieduan=#{suoshujieduan});		  		
+			  	    </value>	  		
+			  	</insert>
+			    <update>
+			     	update zbgl_zbjbxx_zttx_smbqd(@{pinlv},@{gongkuangyi},@{gongkuanger},@{gongkuangsan},@{gongkuangsi},@{gongkuangwu},@{gongkuangliu},@{gongkuangqi},@{gongkuangba}) where id=@{id__old};   
+			    </update>
+			    <delete>
+			  	 	delete from zbgl_zbjbxx_zttx_smbqd where id=@{id__old};		  	
+			    </delete>
+			</sql>
+		</report>
+	</page>
+	<page id="shengmubiaoqiangdu_9">
+	 <buttons>
+				   <button name="button1" position="top" label="修改列数" >
+					   <imports>
+					         <import>javax.servlet.http.HttpServletRequest</import>
+					    </imports>
+					        <dynevent>
+						      <![CDATA[
+							HttpServletRequest request=rrequest.getRequest();
+								
+								String suoshu=request.getParameter("suoshu");
+								if(suoshu==null)
+									suoshu=(String)request.getAttribute("suoshu");
+								String suoshujieduan=request.getParameter("suoshujieduan");
+								if(suoshujieduan==null)
+									suoshujieduan=(String)request.getAttribute("suoshujieduan");
+								System.out.println("888888"+suoshujieduan);
+								return "window.location.href='/MySystem/ShowReport.wx?PAGEID=shengmubiaoqiangdu&suoshu="+suoshu+"&suoshujieduan="+suoshujieduan+"'";
+						      ]]>
+					</dynevent>
+				</button>
+			</buttons> 
+		<report id="shengmubiaoqiangdu_report" title="${shengmubiaoqiangdu}" type="editablelist2" >
+			<display >
+				<col column="{sequence}" label="序号"></col>		
+			 	<col column="id" label="id" displaytype="hidden"/>
+			    <col column="pinlv" label="${pinlv}"  />
+				<col column="gongkuangyi" label="${gongkuang}1"  />
+				<col column="gongkuanger" label="${gongkuang}2"  />
+				<col column="gongkuangsan" label="${gongkuang}3"  />
+				<col column="gongkuangsi" label="${gongkuang}4"  />
+				<col column="gongkuangwu" label="${gongkuang}5"  />
+				<col column="gongkuangliu" label="${gongkuang}6"  />
+				<col column="gongkuangqi" label="${gongkuang}7"  />
+				<col column="gongkuangba" label="${gongkuang}8"  />
+				<col column="gongkuangjiu" label="${gongkuang}9"  />
+				<col column="suoshu" label="suoshu" displaytype="hidden"/>
+			    <col column="suoshujieduan" label="suoshujieduan" displaytype="hidden"/>
+			</display>
+			<sql>
+				<select>
+					<value>
+						<![CDATA[SELECT * FROM zbgl_zbjbxx_zttx_smbqd where  {#condition#} order by id]]>
+					</value>
+					 <condition name="suoshu" label="${xinghao}" hidden="true">
+										<value>
+											<![CDATA[(suoshu = #data#)]]>
+										</value>
+				</condition>
+				 <condition name="suoshujieduan" label="${xinghao}" hidden="true">
+										<value>
+											<![CDATA[(suoshujieduan = #data#)]]>
+										</value>
+				</condition>
+				</select>
+				<insert>
+				    <params>
+							<param name="suoshu" value="url{suoshu}"/><param name="suoshujieduan" value="url{suoshujieduan}"/>
+				    </params>
+				    <value>
+		  		 		insert into zbgl_zbjbxx_zttx_smbqd(id=uuid{},@{pinlv},@{gongkuangyi},@{gongkuanger},@{gongkuangsan},@{gongkuangsi},@{gongkuangwu},@{gongkuangliu},@{gongkuangqi},@{gongkuangba},@{gongkuangjiu},suoshu=#{suoshu},suoshujieduan=#{suoshujieduan});		  		
+			  	    </value>	  		
+			  	</insert>
+			    <update>
+			     	update zbgl_zbjbxx_zttx_smbqd(@{pinlv},@{gongkuangyi},@{gongkuanger},@{gongkuangsan},@{gongkuangsi},@{gongkuangwu},@{gongkuangliu},@{gongkuangqi},@{gongkuangba},@{gongkuangjiu}) where id=@{id__old};   
+			    </update>
+			    <delete>
+			  	 	delete from zbgl_zbjbxx_zttx_smbqd where id=@{id__old};		  	
+			    </delete>
+			</sql>
+		</report>
+	</page>
+	<page id="shengmubiaoqiangdu_10">
+	 <buttons>
+				   <button name="button1" position="top" label="修改列数" >
+					   <imports>
+					         <import>javax.servlet.http.HttpServletRequest</import>
+					    </imports>
+					        <dynevent>
+						      <![CDATA[
+							HttpServletRequest request=rrequest.getRequest();
+								
+								String suoshu=request.getParameter("suoshu");
+								if(suoshu==null)
+									suoshu=(String)request.getAttribute("suoshu");
+								String suoshujieduan=request.getParameter("suoshujieduan");
+								if(suoshujieduan==null)
+									suoshujieduan=(String)request.getAttribute("suoshujieduan");
+								System.out.println("888888"+suoshujieduan);
+								return "window.location.href='/MySystem/ShowReport.wx?PAGEID=shengmubiaoqiangdu&suoshu="+suoshu+"&suoshujieduan="+suoshujieduan+"'";
+						      ]]>
+					</dynevent>
+				</button>
+			</buttons> 
+		<report id="shengmubiaoqiangdu_report" title="${shengmubiaoqiangdu}" type="editablelist2" >
+			<display >
+				<col column="{sequence}" label="序号"></col>		
+			 	<col column="id" label="id" displaytype="hidden"/>
+			    <col column="pinlv" label="${pinlv}"  />
+				<col column="gongkuangyi" label="${gongkuang}1"  />
+				<col column="gongkuanger" label="${gongkuang}2"  />
+				<col column="gongkuangsan" label="${gongkuang}3"  />
+				<col column="gongkuangsi" label="${gongkuang}4"  />
+				<col column="gongkuangwu" label="${gongkuang}5"  />
+				<col column="gongkuangliu" label="${gongkuang}6"  />
+				<col column="gongkuangqi" label="${gongkuang}7"  />
+				<col column="gongkuangba" label="${gongkuang}8"  />
+				<col column="gongkuangjiu" label="${gongkuang}9"  />
+				<col column="gongkuangshi" label="${gongkuang}10"  />
+				<col column="suoshu" label="suoshu" displaytype="hidden"/>
+			    <col column="suoshujieduan" label="suoshujieduan" displaytype="hidden"/>
+			</display>
+			<sql>
+				<select>
+					<value>
+						<![CDATA[SELECT * FROM zbgl_zbjbxx_zttx_smbqd where  {#condition#} order by id]]>
+					</value>
+					 <condition name="suoshu" label="${xinghao}" hidden="true">
+										<value>
+											<![CDATA[(suoshu = #data#)]]>
+										</value>
+				</condition>
+				 <condition name="suoshujieduan" label="${xinghao}" hidden="true">
+										<value>
+											<![CDATA[(suoshujieduan = #data#)]]>
+										</value>
+				</condition>
+				</select>
+				<insert>
+				    <params>
+							<param name="suoshu" value="url{suoshu}"/><param name="suoshujieduan" value="url{suoshujieduan}"/>
+				    </params>
+				    <value>
+		  		 		insert into zbgl_zbjbxx_zttx_smbqd(id=uuid{},@{pinlv},@{gongkuangyi},@{gongkuanger},@{gongkuangsan},@{gongkuangsi},@{gongkuangwu},@{gongkuangliu},@{gongkuangqi},@{gongkuangba},@{gongkuangjiu},@{gongkuangshi},suoshu=#{suoshu},suoshujieduan=#{suoshujieduan});		  		
+			  	    </value>	  		
+			  	</insert>
+			    <update>
+			     	update zbgl_zbjbxx_zttx_smbqd(@{pinlv},@{gongkuangyi},@{gongkuanger},@{gongkuangsan},@{gongkuangsi},@{gongkuangwu},@{gongkuangliu},@{gongkuangqi},@{gongkuangba},@{gongkuangjiu},@{gongkuangshi}) where id=@{id__old};   
+			    </update>
+			    <delete>
+			  	 	delete from zbgl_zbjbxx_zttx_smbqd where id=@{id__old};		  	
+			    </delete>
+			</sql>
+		</report>
+	</page>
+</applications>            

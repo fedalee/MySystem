@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<applications xmlns="http://www.wabacus.com"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.wabacus.com ../../../xsd/wabacus.applications.xsd"
+	>
+	
+	<page id="dianjichakanniandujihua" 
+	js="/webresources/script/validate.js,/wabacusdemo/js/testcallback.js">
+		<report id="report2" title="年度计划" align="center" type="editablelist" 
+		template="${articlelist.report.template}" >
+			<interceptor>
+				  <imports>
+		  	 		   <import>com.wabacus.util.*</import>
+		  	 		   <import>com.wabacus.system.*</import>
+		  	 	  </imports>
+		  	 	  <preaction>
+		  	 	      <![CDATA[
+							String xiangmu_id = rrequest.getStringAttribute("xiangmu_id");							
+							rrequest.getRequest().setAttribute("xiangmu_id" ,xiangmu_id);	
+							System.out.println("################################"+xiangmu_id);						
+					  ]]>
+		  	 	  </preaction>
+	  	      </interceptor> 
+	  	  
+			<display > 
+			
+			 <col column="id" label="id" displaytype="hidden" />
+			 
+			 <col column="{sequence:1}" label="项目期号"></col>
+			 	
+				 <col column="kaishiniandu"  label="开始年度/年"  />
+				 <col column="jieshuniandu"  label="结束年度/年"  />
+				 <col column="{non-fromdb}" property="zhouqi" label="周期/年">
+				 </col>
+				<col column="xiangmu_id" label="xiangmu_id" displaytype="hidden">
+				   		<inputbox type="textbox"  defaultvalue="url{xiangmu_id}"></inputbox>
+				   </col>     
+			</display>
+			
+			<sql>
+			<select>
+				<value>
+					<![CDATA[SELECT * FROM zbgl_kygl_niandu where  {#condition#} order by kaishiniandu]]>
+				</value>
+				<condition name="xiangmu_id" label="xiangmu_id" hidden="true">
+					  		<value>
+								<![CDATA[(xiangmu_id like  '%#data#%' )]]>
+							</value>
+				</condition>
+			</select>
+			<!-- 
+			  <insert>
+			  <params>
+			  <param name="id" value="uuid{}"/>
+			  <param name="aaa" value="AAAA"/>
+			  </params>
+		  		 insert into zbgl_kygl_niandu(id=#{id},@{kaishiniandu},@{jieshuniandu},XIANGMU_ID=url{xiangmu_id} );
+			  </insert>
+			 -->   
+			 <insert pageurl="report{dianjichakanniandujihua_detail.dianjichakanniandujihua_report_detail}"
+				urlparams="xiangmu_id=request{xiangmu_id}" popupparams="{title:'添加',width:750,height:400}"></insert>  
+			   <delete>
+			  	 delete from zbgl_kygl_niandu where id=@{id__old};
+			  	 delete from zbgl_kygl_niandujihua where suoshuid=@{id__old}
+			  </delete>
+			
+			</sql>
+			
+			<format>
+				<value>
+					  <![CDATA[
+						int start= Integer.parseInt(kaishiniandu);
+						int end= Integer.parseInt(jieshuniandu);
+						Integer result = new Integer(end-start+1);
+						zhouqi = result.toString();
+				     ]]>  
+				</value>
+			</format>
+			
+			
+		</report>
+		
+         <report id="report3" title="url{kaishiniandu}到url{jieshuniandu}年年度计划 " dependsparams="suoshuid=@{id};kaishiniandu=@{kaishiniandu};jieshuniandu=@{jieshuniandu}" depends="report2" align="center" type="editablelist2" ><!--
+			
+			
+			<interceptor>
+						<imports>
+							<import>javax.servlet.http.HttpServletRequest</import>
+							<import>com.wabacus.system.ReportRequest</import>
+						</imports>
+						<preaction>
+					HttpServletRequest r=rrequest.getRequest();
+					r.setAttribute("zhouqi",r.getParameter("zhouqi"));
+					System.out.println("^^^^^^^^^^^zhouqi："+r.getAttribute("zhouqi"));
+					
+					
+					HttpServletRequest q=rrequest.getRequest();
+					r.setAttribute("kaishiniandu",q.getParameter("kaishiniandu"));
+					System.out.println("^^^^^^^^^^^kaishiniandu："+q.getAttribute("kaishiniandu"));
+					</preaction>
+					</interceptor>
+			
+			
+			-->
+			
+			<display > 
+			
+			 <col column="id" label="id" displaytype="hidden" />
+				 
+				 <col column="kaishiniandu" label="年度"></col>
+				 <col column="jieshuniandu" label="结束年度" displaytype="hidden"></col>
+				 <col column="suoshuid"  label="suoshuid" displaytype="hidden" ></col>
+				<col column="{non-fromdb}" property="cz" label="年度计划"></col>      
+			</display>
+			
+			<sql>
+				<value>
+					<![CDATA[SELECT * FROM zbgl_kygl_niandujihua where  {#condition#} order by kaishiniandu]]>
+				</value>
+				<condition name="suoshuid" label="suoshuid" hidden="true">
+						     <value>
+								<![CDATA[(suoshuid = #data#  )]]>
+							</value>
+				</condition>
+			</sql>
+			
+			<format>
+					
+			  <value>
+			   <![CDATA[
+
+			        cz="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">"
+			        +"<a href=\"ShowReport.wx?PAGEID=nianjihua&kaishiniandu="+kaishiniandu +"&niandujihua_id="+id +"\" target=\"_blank\">"
+			        +"详细信息"+"</a></span>";
+			     ]]>  
+
+			     
+			  </value>
+			</format>
+			
+		</report>
+	</page>
+</applications>

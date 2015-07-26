@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<applications xmlns="http://www.wabacus.com"
+			      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			      xsi:schemaLocation="http://www.wabacus.com ../xsd/wabacus.applications.xsd">
+		<page id="zhuangbeigaihuanzhuang_detail">
+ 			<report id="zhuangbeigaihuanzhuang_report_detail" title="装备改换装项目编辑" width="650px" align="center" type="editabledetail"  >
+		    	<display labelalign="right"  valuealign="left"  labeltdwidth="80px" valuetdwidth="200px">		 
+					<col column="id" label="id" displaytype="hidden"/>
+					<col column="gaihuanzhuangxiangmu" label="${gaihuanzhuangxiangmu}" clickorderby="true" ></col>
+					  <col column="zhuguanjiguan" label="主管机关" clickorderby="true" br="true">
+				    	<inputbox type="selectbox" >
+				    		<option label="主管机关1" value="主管机关1"/>
+				    		<option label="主管机关2" value="主管机关2"/>
+				    	</inputbox>
+				    </col>
+					
+					<col column="kaishishijian" label="开始时间" clickorderby="true" datatype="date{yyyy-MM-dd}" >
+						<inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)"></inputbox>
+					</col>
+					<col column="jieshushijian" label="结束时间" clickorderby="true" datatype="date{yyyy-MM-dd}" br="true">
+						<inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)"></inputbox>
+					</col>
+				    <col column="jingfei" label="${jingfei}" clickorderby="true" datatype="float" br="true"></col>
+				    
+					<col column="zhuyaoneirong" label="${zhuyaoneirong}" datatype="clob" valuestyleproperty="colspan='3'" clickorderby="true" br="true">
+						<inputbox type="textareabox" styleproperty="rows='4'"></inputbox>
+					</col>
+					<col column="gaizhuangjieguo" label="${gaizhuangjieguo}" datatype="clob" valuestyleproperty="colspan='3'" clickorderby="true" br="true">
+						<inputbox type="textareabox" styleproperty="rows='4'"></inputbox>
+					</col>
+					
+				</display>
+				<sql>
+					<select>
+						<value>
+							<![CDATA[SELECT * FROM zbgl_zbwxjghz_gaihuanzhuang where  {#condition#} order by id]]>
+						</value>
+						<condition name="id" hidden="true">
+							<value>
+								<![CDATA[ id='#data#']]>
+							</value>
+						</condition>    
+					</select>
+					<insert>
+						<params>
+				  	 	      <param name="myid" value="uuid{}"></param>
+				  	 	</params>
+				  		insert into zbgl_zbwxjghz_gaihuanzhuang(id=#{myid},@{gaihuanzhuangxiangmu},@{kaishishijian},@{jieshushijian},@{zhuguanjiguan},@{jingfei},@{zhuyaoneirong},@{gaizhuangjieguo});
+				    	insert into zbgl_zbyz_shitingxingneng(id=uuid{},suoshu=#{myid},xinghao=@{gaihuanzhuangxiangmu},suoshujieduan='改装前');
+				    	insert into zbgl_zbyz_shitingxingneng(id=uuid{},suoshu=#{myid},xinghao=@{gaihuanzhuangxiangmu},suoshujieduan='改装后');		 
+				    </insert>
+					<update>
+					    update zbgl_zbwxjghz_gaihuanzhuang(@{id},@{gaihuanzhuangxiangmu},@{kaishishijian},@{jieshushijian},@{zhuguanjiguan},@{jingfei},@{zhuyaoneirong},@{gaizhuangjieguo}) where id=@{id};					    
+					</update>
+				</sql>	
+			</report>
+        </page>
+   </applications>

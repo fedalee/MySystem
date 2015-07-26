@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<applications xmlns="http://www.wabacus.com"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.wabacus.com ../../../xsd/wabacus.applications.xsd">
+	<page id="zhuanxiangshiyan_homePage">
+		<tabpanel id="tb1">
+			
+			<report id="zhendongzaoshengshiyan_report" extends="zhendongzaosheng_list.zhendongzaosheng_report" />
+			
+				<report id="shenqianshiyan" title="${shenqian}实验" type="editablelist2" >
+				<display>
+
+					<col column="{sequence}" label="序号" />
+					<col column="id" label="id" displaytype="hidden" />
+
+					<col column="ship_type" label="${xinghao}">
+						<inputbox type="selectbox" servervalidate="isNotEmpty(${invalid.isnotempty})">
+							<option dataset="@{select xinghao from zbgl_zbjbxx_xinghao}"
+								label="xinghao" value="xinghao"></option>
+						</inputbox>
+					</col>
+					<col column="side_num" label="${xianhao}">
+						<inputbox type="selectbox" depends="ship_type">
+							<option
+								dataset="@{select xianhao from zbgl_zbjbxx_xianhao where suoshuxinghao like '%#[ship_type]#%'}"
+								label="xianhao" value="xianhao"></option>
+						</inputbox>
+					</col>
+					<col column="time" label="实验时间">
+						<inputbox type="datepicker"
+							inputboxparams="dateFmt:'MM/dd/yyyy HH:mm:ss ',lang:'en',skin:'whyGreen'"></inputbox>
+					</col>
+					<col column="location" label="实验地点" />
+					<col column="participant" label="参加单位" />
+					<col column="content" label="实验内容及要求">
+						<inputbox type="richtextbox"
+							inputboxparams="width:'100%',height:'300px',language:'en' " />
+					</col>
+					<col column="para" label="测量参数" />
+					<col column="procedure" label="实验过程" />
+					<col column="outcome" label="实验结果" />
+					<col column="referance" label="相关资料" />
+
+				</display>
+				<sql>
+					<select>
+						<value>
+						<![CDATA[SELECT * FROM zbgl_zxsy_sqsy]]>
+						</value>
+					</select>
+					<insert>
+						insert into zbgl_zxsy_sqsy;
+					</insert>
+
+					<update>
+						update zbgl_zxsy_sqsy(@{id}) where id =@{id__old};
+					</update>
+
+					<delete>
+						delete zbgl_zxsy_sqsy where id = @{id__old};
+					</delete>
+
+
+
+
+				</sql>
+
+			</report>
+				
+		
+		</tabpanel>
+			
+	
+	</page>
+	
+	
+	
+	
+	</applications>

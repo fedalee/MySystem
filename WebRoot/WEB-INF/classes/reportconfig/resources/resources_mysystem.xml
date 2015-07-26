@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns="http://www.wabacus.com"
+			  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			  xsi:schemaLocation="http://www.wabacus.com ../../../src/defaultconfig/xsd/wabacus.resources.xsd">
+			  
+			  
+	<!-- 定义上传文件的保存路径 -->
+	<resource key="file.path">
+		relative{/upload/files}
+	</resource>
+	
+	<!-- 定义上传图片的保存路径 -->
+	<resource key="image.path">
+		relative{/upload/images}
+	</resource>
+	
+	
+	  <!-- 项目自定义资源 -->
+	  <!-- 以A开头的变量名称 -->
+	  
+	  <!-- 以B开头的变量名称 --> 
+	  <!-- 科研管理 -->
+	  <resource key="beijingxinghao">beijingxinghao</resource>	   
+	  <!-- shebeiguanli -》课题名称 -->
+	  <resource key="bosongbi">bosongbi</resource>
+	  <!-- zhuangbeiguanli -》课题名称 -->
+      <resource key="bianzhiwenjian">bianzhiwenjian</resource> 
+	  <!-- 以C开头的变量名称 -->
+	    <resource key="changgui">changgui</resource>
+	     <resource key="chuantijiegou">chuantijiegou</resource>
+	     <resource key="ci">ci</resource>
+	     <resource key="caotingxitong">caotingxitong</resource>
+       <!-- shebeiguanli -》课题名称 -->
+	  <resource key="cheduanshenchang">cheduanshenchang</resource>
+	  <!-- 以D开头的变量名称 -->
+	  <resource key="dianchang">dianchang</resource>
+	  <resource key="diancijianrong">diancijianrong</resource>
+	  <resource key="donglixitong">donglixitong</resource>
+	  <resource key="dianxingzhanshuzhibiao">dianxingzhanshuzhibiao</resource>
+	  <!-- 以E开头的变量名称 -->
+	  
+	  <!-- 以F开头的变量名称 -->
+	  <resource key="fuyishuliang">fuyishuliang</resource>
+	  <resource key="fuyinianxian">fuyinianxian</resource>
+	  <resource key="fuxing">fuxing</resource>
+	  <resource key="fanganjihuashijian">fanganjihuashijian</resource>
+	  <resource key="fanganshijishijian">fanganshijishijian</resource>
+	  <!-- zhuangbeiguanli -》课题名称 -->
+      <resource key="fangansheji">fangansheji</resource>
+	  <resource key="fangxiangduoduojiao">fangxiangduoduojiao</resource>
+	  <!-- 以G开头的变量名称 -->
+	  <resource key="guikoujiguan">guikoujiguan</resource>
+	  <resource key="guakaodanwei">guakaodanwei</resource>
+	  <resource key="gongkuang">gongkuang</resource>
+	  <resource key="gongnengtexing">gongnengtexing</resource>
+	  <resource key="guanjiangongyi">guanjiangongyi</resource>
+	  <resource key="gaizhuangfangan">gaizhuangfangan</resource>
+	  <resource key="gaihuanzhuangxiangmu">gaihuangzhuangxiangmu</resource>		  
+	  <resource key="gaizhuangjieguo">gaizhuangjieguo</resource>
+	  <resource key="gaizhuangqianxingneng">gaizhuangqianxingneng</resource>
+	  <resource key="gaizhuanghouxingneng">gaizhuanghouxingneng</resource>
+	  <resource key="gaihuanzhuanggaishu">gaihuanzhuanggaishu</resource>
+	  <resource key="gaizhuangguocheng">gaizhuangguocheng</resource>	
+	   	  
+	  <!-- 以H开头的变量名称 -->
+	  <resource key="hangxing">hangxing</resource>
+	  <resource key="hongwai">hongwai</resource>
+	  <resource key="hangsu">hangsu</resource>
+	  <resource key="huizhuannisu">huizhuannisu</resource>
+	  <!-- 以I开头的变量名称 -->
+	  
+	  <!-- 以J开头的变量名称 -->
+	  <resource key="jiaochuanshijian">jiaochuanshijian</resource>
+	  <resource key="jiaochuanjihuashijian">jiaochuanjihuashijian</resource>
+	  <resource key="jiaochuanshijishijian">jiaochuanshijishijian</resource>
+	  <resource key="jiaochuanfujian">jiaochuanfujian</resource>
+	  <resource key="jishushejijihuashijian">jishushejijihuashijian</resource>
+	  <resource key="jishushejishijishijian">jishushejishijishijian</resource>
+	  <resource key="jishushejijieduan">jishushejijieduan</resource>
+	  <resource key="jishushejifujian">jishushejifujian</resource>
+	  <resource key="jianzaojihuashijian">jianzaojihuashijian</resource>
+	  <resource key="jianzaoshijishijian">jianzaoshijijijian</resource>
+	  <resource key="jianzaofangshi">jianzaofangshi</resource>
+	  <resource key="jianzaotedian">jianzaotedian</resource>
+	  <resource key="jianzaoshuliang">jianzaoshuliang</resource>
+	  <resource key="jianzaozhouqi">jianzaozhouqi</resource>
+	  <resource key="jianzaojihua">jianzaojihua</resource>
+	  <resource key="jianzaodanwei">jianzaodanwei</resource>
+	  <resource key="jiaochuanjieduan">jiaochuanjieduan</resource>
+	  <resource key="jiangzhuansu">jiangzhuansu</resource>
+	  <resource key="jianzaofujian">jianzaofujian</resource>
+	  <!-- shebeiguanli -》课题名称 -->
+	  <resource key="jishuzhibiao">jishuzhibiao</resource>
+	  <resource key="jishuzerendanwei">jishuzerendanwei</resource>
+	  <resource key="jishuxiezuodanwei">jishuxiezuodanwei</resource>
+	  <resource key="jinshucailiaoshuxing">jinshucailiaoshuxing</resource>
+	  <resource key="jingfei">jingfei</resource>	
+	  <!-- 以K开头的变量名称 -->
+	  
+	  <!-- 以L开头的变量名称 -->
+	  <resource key="leidabo">leidabo</resource>
+	  <resource key="lixianglunzheng">lixianglunzheng</resource>	  
+	  <resource key="lixianglunzhengfujian">lixianglunzhengfujian</resource>
+      <resource key="lixiangjihuashijian">lixiangjihuashijian</resource>
+	  <resource key="lixiangshijishijian">lixiangshijishijian</resource>
+      <resource key="lixianglunzhengjihuahao">lixianglunzhengjihuahao</resource>
+	  <resource key="lunzhengdanwei">lunzhengdanwei</resource>
+	  <!-- shebeiguanli -》课题名称 -->
+	  <resource key="lashenqiangdu">lashenqiangdu</resource> 
+	  <!-- 以M开头的变量名称 -->
+	  <resource key="matou">matou</resource>
+	  <!-- 以N开头的变量名称 -->
+	  <resource key="naiyajiegou">naiyajiegou</resource> 
+	  <!-- 以O开头的变量名称 -->
+	  <!-- 以p开头的变量名称 -->
+	  <resource key="paishuiliang">paishuiliang</resource> 	  
+	  <!-- 以Q开头的变量名称 -->
+	  <resource key="quanchuanxingjiancha">quanchuanxingjiancha</resource> 
+	  <resource key="quanchuanbaozhangxitong">quanchuanbaozhangxitong</resource> 
+	  <resource key="qianfujidongxing">qianfujidongxing</resource>	  
+	  <!-- shebeiguanli -》课题名称 -->
+	  <resource key="qufuqiangdu">qufuqiangdu</resource>
+	  <!-- 以R开头的变量名称 -->
+	  
+	  <!-- 以S开头的变量名称 -->
+	  <resource key="shimingrenwu">shimingrenwu</resource> 
+      <!-- shebeiguanli -》课题名称 -->	  
+	  <resource key="shebeimingcheng">shebeimingcheng</resource> 
+	  <resource key="shebeileibie">shebeileibie</resource>
+      <resource key="shebei">shebei</resource> 	  
+	   <resource key="shebeiguanli">shebeiguanli</resource> 
+	  <resource key="shitingyingyongqingkuang">shitingyingyongqingkuang</resource>
+	  <resource key="shaoayingdu">shaoayingdu</resource> 
+	  <resource key="silieqiangdu">silieqiangdu</resource>
+	  <!-- zhuangbeiguanli -》课题名称 -->
+      <resource key="suoshuxinghao">suoshuxinghao</resource>
+	  <resource key="shejidanwei">shejidanwei</resource>
+	  <resource key="shuimiancaozongxing">shuimiancaozongxing</resource>	
+      <resource key="shouxiangjiao">shouxiangjiao</resource>	
+      <resource key="shuimianhuizhuanzhijing">shuimianhuizhuanzhijing</resource>	
+      <resource key="shuimianzxingcaoduo">shuimianzxingcaoduo</resource>
+      <resource key="shuimiandaoche">shuimiandaoche</resource>	
+      <resource key="shuimianzhidong">shuimianzhidong</resource>	
+      <resource key="shuixiacaozongxing">shuixiacaozongxing</resource>	
+      <resource key="shuixiahuizhuanzhijing">shuixiahuizhuanzhijing</resource>
+      <resource key="shuidonglixishu">shuidonglixishu</resource> 	
+      <resource key="shuiweishengjiangduonisu">shuiweishengjiangduonisu</resource> 	 
+	  <resource key="sushenglv">sushenglv</resource>	  
+	  <resource key="shuixiazxingcaoduo">shuixiazxingcaoduo</resource>
+	  <resource key="shuixiahuiduo">shuixiahuiduo</resource>
+	  <resource key="shuipingwendingyundong">shuipingwendingyundong</resource>
+	  <resource key="shitingshiyongqingkuang">shitingshiyongqingkuang</resource>
+	  <!-- 科研管理 -》课题名称 -->
+	  <resource key="suoshuketi">suoshuketi</resource> 
+	  <resource key="suoshuzhuanti">suoshuzhuanti</resource> 	  
+	  <!-- 以T开头的变量名称 -->
+	   <resource key="tuijinzhuangtai">tuijinzhuangtai</resource>
+	  <!-- shebeiguanli -》课题名称 -->
+	  <resource key="tanxingmoliang">tanxingmoliang</resource>
+	  
+	  <!-- 以U开头的变量名称 -->
+	  
+	  <!-- 以V开头的变量名称 -->
+	  
+	  <!-- 以W开头的变量名称 -->
+	   <resource key="wenxing">wenxing</resource>
+	  <!-- 以X开头的变量名称 -->
+	  <resource key="xuhao">xuhao</resource>
+	  <resource key="xianhao">xianhao</resource>  
+	  <resource key="xitongzucheng">xitongzucheng</resource>
+      <resource key="xinghaoguige">xinghaoguige</resource>
+	  <resource key="xibofujian">xibofujian</resource>
+	  <resource key="xiugaiqiantingzhuangtaijibeizhu">xiugaiqiantingzhuangtaijibeizhu</resource>
+	  <resource key="xibo">xibo</resource>
+	  <resource key="xiboshiyan">xiboshiyan</resource>
+	  <resource key="xiboshijishijian">xiboshijishijian</resource>
+	  <resource key="xibojihuashijian">xibojihuashijian</resource>
+	  <resource key="xiaqianshendu">xiaqianshendu</resource>
+	  
+	  <!-- 科研管理 -->
+	  <resource key="xinghao">xinghao</resource>
+	  <resource key="xiangmumingcheng">xiangmuyijifenlei</resource> 
+	  <resource key="xiangmufenlei">xiangmuerjifenlei</resource> 
+	  
+	  <!-- 以Y开头的变量名称 -->
+	  <resource key="yinshen">yinshen</resource>
+	  <!-- shebeiguanli -》课题名称 -->
+	  <resource key="yanzhidanwei">yanzhidanwei</resource> 
+	  <!-- 以Z开头的变量名称 -->
+	  <!-- zhuangbeishiyong-》概述 -->
+	  <resource key="zhuyaoshiyongbudui">zhuyaoshiyongbudui</resource> 
+	  <resource key="zongtitexing">zongtitexing</resource>
+	  <resource key="zongtibuzhi">zongtibuzhi</resource>
+	  <resource key="zhendongzaosheng">zhendongzaosheng</resource><!--震动噪声  -->
+	  <resource key="zhendong">zhendong</resource>
+	  <!-- shebeiguanli -》课题名称 -->
+	  <resource key="zunisunhaoyinzi">zunisunhaoyinzi</resource>
+	   <!-- zhuangbeiguanli -》课题名称 -->
+      <resource key="zhuangbeiguanli">zhuangbeiguanli</resource>
+	  <resource key="zhuangbeiyanzhi">zhuangbeiyanzhi</resource>
+	  <resource key="zongzhuangchang">zongzhuangchang</resource>
+	  <resource key="zhuyaoxitong">zhuyaoxitong</resource>
+	  <resource key="zuozhanxitong">zuozhanxitong</resource>
+	  <resource key="zongqingjiao">zongqingjiao</resource>
+	  <resource key="zhuyaoneirong">zhuyaoneirong</resource>
+	  <resource key="zhuguanjiguan">zhuguanjiguan</resource>
+	  
+
+
+      
+</resources>

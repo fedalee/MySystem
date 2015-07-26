@@ -1,0 +1,26 @@
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tr><td><b><font color='blue'><h1>分析报告</h1></font></b></td></tr>
+	<tr><td></td></tr>
+	
+	<tr><td><wx:title componentid="jiancemudi_report"/></td></tr><!--标题栏-->
+	<tr><td><wx:data componentid="jiancemudi_report"/></td></tr><!--数据-->
+  	<tr><td></td></tr>
+  	
+  	<tr><td><wx:title componentid="jianceshuoming_report"/></td></tr><!--标题栏-->
+	<tr><td><wx:data componentid="jianceshuoming_report"/></td></tr><!--数据-->
+  	<tr><td></td></tr>
+  	
+  	
+  	<tr><td><b>三、检测内容</b></td></tr>
+  	<tr><td><wx:title componentid="jianceneirong_report1"/></td></tr><!--标题栏-->
+	<tr><td><wx:data componentid="jianceneirong_report1"/></td></tr><!--数据-->
+  	
+  	<tr><td><wx:title componentid="jianceneirong_report2"/></td></tr><!--标题栏-->
+	<tr><td><wx:data componentid="jianceneirong_report2"/></td></tr><!--数据-->
+  	<tr><td></td></tr>
+  	
+  	
+  	<tr><td><wx:title componentid="jiancejieguo_report"/></td></tr><!--标题栏-->
+	<tr><td><wx:data componentid="jiancejieguo_report"/></td></tr><!--数据-->
+  	<tr><td></td></tr>
+</table>

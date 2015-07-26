@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<applications xmlns="http://www.wabacus.com"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.wabacus.com ../xsd/wabacus.applications.xsd">
+	<page id="xiboshiyanjieduan"
+		js="/webresources/script/validate.js,/WebRoot/js/testcallback.js">
+
+
+		<report id="xibo_list" type="editablelist" title="url{xinghao}号的${xianhao}列表" rowselect="single" celldrag="0">
+
+			<interceptor>
+				<imports>
+					<import>javax.servlet.http.HttpServletRequest;</import>
+					<import>com.wabacus.system.ReportRequest</import>
+				</imports>
+				<preaction>
+					HttpServletRequest r=rrequest.getRequest();
+					r.setAttribute("suoshuxinghao",r.getParameter("xinghao"));
+
+				</preaction>
+
+			</interceptor>
+
+			<display>
+				<col column="id" label="id" displaytype="hidden" />
+				<col column="{sequence}" label="序号" ></col>
+				<col column="xianhao" label="${xianhao}"></col>
+				<col column="xinghao" label="${xinghao}" displaytype="hidden" />
+				<col column="jihuashijian" datatype="date{yyyy-MM-dd}" label="${xibojihuashijian}"
+					clickorderby="true"></col>
+				<col column="shijishijian" datatype="date{yyyy-MM-dd}" label="${xiboshijishijian}"
+					clickorderby="true"></col>
+				<col column="xibozhuangtai" label="${xibo}状态"></col>
+				<col column="{non-fromdb}" property="cd" label="附件"></col>
+
+			</display>
+			<sql>
+				<select>
+					<value>
+					<![CDATA[SELECT * FROM zbgl_zbyz_xibo where  {#condition#} ]]>
+					</value>
+					<condition name="xinghao" label="${xinghao}" hidden="true">
+						<value> 
+								<![CDATA[(xinghao = #data# )]]>
+						</value>					
+					</condition>
+                    <condition name="xianhao" label="${xianhao}">
+						<value> <![CDATA[(xianhao = #data# )]]>
+						</value>
+						<inputbox>
+					       <typeprompt count="15">
+						      <promptcol label="xianhao" title="${xianhao}" matchmode="anywhere"></promptcol>
+						       <datasource>
+							       <option dataset="@{select xianhao from zbgl_zbyz_xibo where {#matchcondition#} and {#condition#}}">
+								        <datasetconditions>
+									         <condition name="xiala">
+										          <value> <![CDATA[( xianhao like '#data#%')]]></value>
+									         </condition>
+								        </datasetconditions>
+							       </option>
+						      </datasource>
+					       </typeprompt>
+					    </inputbox>
+					</condition>
+
+				</select>
+				<insert pageurl="report{xiboshiyanPopupPage.xiboshiyanPopup}"
+					urlparams="xinghao=request{suoshuxinghao}" popupparams="{title:'新增${xianhao}',width:780,height:350}">
+				</insert>
+
+				<update pageurl="report{xiboshiyanPopupPage.xiboshiyanPopup}"
+					urlparams="suoshuxianhao=@{xianhao};suoshuxinghao=@{xinghao}" popupparams="{title:'修改',width:780,height:350}"></update>
+				<delete>
+				<![CDATA[
+					delete from zbgl_zbyz_xibo  where id=@{id__old};
+					update zbgl_zbjbxx_xianhao set jieduan='建造计划阶段-已完成' where xianhao=@{xianhao} and suoshuxinghao=@{xinghao};
+				]]>
+				</delete>
+			</sql>
+			<format>
+				<value>
+			  <![CDATA[
+			        cd="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">"
+							 + "<a href=\"#\" onclick=\"wx_winpage('ShowReport.wx?PAGEID=zbyz_fujian&leibie="+xinghao+xianhao+"&fujiansuoshu=xibo实验阶段',{width:1100,height:400})\" target=\"sampleframe\">"
+							 + "点击查看" + "</a></span>";
+			        
+
+			        
+			        
+			     ]]>
+				</value>
+			</format>
+
+
+
+		</report>
+
+<!-- 
+                   	xianhao="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">"
+			        +"<a href=\"ShowReport.wx?PAGEID=xiboDetails&xianhao="+xianhao+"\" target=\"sampleframe\">"
+			        +xianhao+"</a></span>";
+
+ -->
+<report id="xibo_QQzongti_report" parenttitle="QQ总体" type="editabledetail" 
+			template="relative{htmltemplate/zhuangbeiguanli/zhuangbeiyanzhi/QQzongti_xibo_template.html}">
+			<display>
+				<col column="id" displaytype="hidden" />
+				<col column="xinghao" displaytype="hidden" />
+				<col column="xianhao" displaytype="hidden" />
+				<col column="q_diancijianrong" label="${diancijianrong}" datatype="clob" >
+					<inputbox type="textareabox" styleproperty="rows='4' cols='140%' "></inputbox>
+				</col>
+				<col column="q_quanchuanxingjiancha" label="${quanchuanxingjiancha}" datatype="clob">
+					<inputbox type="textareabox" styleproperty="rows='4' cols='140%' "></inputbox>
+				</col>
+				<col column="{non-fromdb}" property="ca" label="试验大纲"></col>
+                <col column="{non-fromdb}" property="cb" label="试验资料"></col>
+			</display>
+			<sql>
+				<select>
+					<value>
+									<![CDATA[SELECT * FROM zbgl_zbyz_xibo where {#condition#}]]>
+					</value>
+					<condition name="txtid" label="id" hidden="true">
+						<value>
+										<![CDATA[(id = #data#)]]>
+						</value>
+					</condition>
+				</select>
+				<update>
+					update
+					zbgl_zbyz_xibo(@{q_diancijianrong},@{q_quanchuanxingjiancha})
+					where id=@{id__old};
+				</update>
+			</sql>
+			<format>
+				<imports>
+					<import>com.wabacus.util.*</import>
+					<import>com.wabacus.config.*</import>
+				</imports>
+				<value>
+					 <![CDATA[
+					     ca="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">"
+							 + "<a href=\"#\" onclick=\"wx_winpage('ShowReport.wx?PAGEID=zbyz_fujian&leibie="+xinghao+xianhao+"&fujiansuoshu=系泊试验阶段-试验大纲',{width:1100,height:400})\" target=\"sampleframe\">"
+							 + "点击查看" + "</a></span>";
+						 cb="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">"
+							 + "<a href=\"#\" onclick=\"wx_winpage('ShowReport.wx?PAGEID=zbyz_fujian&leibie="+xinghao+"&fujiansuoshu=系泊试验阶段-试验资料',{width:1100,height:400})\" target=\"sampleframe\">"
+							 + "点击查看" + "</a></span>";
+
+					 ]]>
+				</value>
+			</format>
+		</report>
+
+
+		<!-- ${zhuyaoxitong} -->
+
+		<report id="zhuyaoxitong_report" type="editabledetail" parenttitle="${zhuyaoxitong}"
+			template="relative{htmltemplate/zhuangbeiguanli/zhuangbeiyanzhi/zhuyaoxitong_template.html}">
+			<display>
+				<col column="id" label="id" displaytype="hidden" />
+				<col column="donglixitong" label="${donglixitong}">
+					<inputbox type="textareabox" styleproperty="rows='4' cols='140%' "></inputbox>
+				</col>
+				<col column="caotingxitong" label="${caotingxitong}" >
+					<inputbox type="textareabox" styleproperty="rows='4' cols='140%' "></inputbox>
+				</col>
+				<col column="quanchuanbaozhangxitong" label="${quanchuanbaozhangxitong}" >
+					<inputbox type="textareabox" styleproperty="rows='4' cols='140%' "></inputbox>
+				</col>
+				<col column="zuozhanxitong" label="${zuozhanxitong}" >
+					<inputbox type="textareabox" styleproperty="rows='4' cols='140%' "></inputbox>
+				</col>
+			</display>
+			<sql>
+				<select>
+					<value>
+						<![CDATA[SELECT * FROM zbgl_zbyz_xibo where {#condition#}]]>
+					</value>
+					<condition name="txtid" label="id" hidden="true">
+						<value>
+										<![CDATA[(id = #data#)]]>
+						</value>
+					</condition>
+				</select>
+				<update>
+					update
+					zbgl_zbyz_xibo(@{donglixitong},@{caotingxitong},@{quanchuanbaozhangxitong},@{zuozhanxitong})
+					where id=@{id__old};
+				</update>
+			</sql>
+		</report>
+	</page>
+</applications>
+

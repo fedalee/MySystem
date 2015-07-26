@@ -1,0 +1,76 @@
+*{
+	font-size:14px; font-family:Tahoma, Verdana, Arial, Helvetica, sans-serif;
+}
+body{
+	margin:0; padding:0; background:white;
+}
+img{
+	border:0;
+}
+a:link,a:visited,a:active{
+	text-decoration:none;
+}
+a:hover{
+	text-decoration:underline;
+}
+/********** header **********/
+.header{
+	width:100%; background:url(../images/nav/header_bg.gif) #ffffff repeat-x 0 0; text-align:center;
+}
+.header .padder{
+	width:910px; margin:0 auto; background:url(../images/nav/header_bg.gif) #ffffff repeat-x 0 0; padding-bottom:4px; text-align:left;
+}
+.header .padder .systemname{
+	font-size:24px; text-align:center; background-color:rgba(0,​ 0,​ 0,​ 0);
+}
+.header .padder .nav{
+	background:url(../images/nav/vertical.gif) repeat-x 0 -36px; height:36px;
+}
+.header .padder .navLeftBg{
+	background:url(../images/nav/vertical.gif) no-repeat 0 0; height:36px;
+}
+.header .padder .navRightBg{
+	background:url(../images/nav/icons.gif) no-repeat right -146px; height:36px;
+}
+.header .padder .nav .mainNav{
+	padding-left:24px; position:absolute;
+}
+.header .padder .nav .mainNav a:link,.header .padder .nav .mainNav a:visited,.header .padder .nav .mainNav a:active{
+	width:90px; height:36px; display:inline-block; text-align:center; color:#ffffff; font-weight:bold; font-size:16px; line-height:36px; margin-left:11px;
+}
+.header .padder .nav .mainNav a:hover{
+	text-decoration:none;
+}
+.header .padder .nav .mainNav a.actived:link,.header .padder .nav .mainNav a.actived:visited,.header .padder .nav .mainNav a.actived:hover,.header .padder .nav .mainNav a.actived:active{
+	background:url(../images/nav/icons.gif) no-repeat 0 -27px; color:#000000;
+}
+.header .padder .secondNav{
+	line-height:21px; text-align:left;
+}
+.header .padder .secondNav a{
+	color:#266392; display:inline-block; padding:0 8px; margin-right:19px;
+}
+.header .padder .secondNav a.actived{
+	font-weight:bold;
+}
+.header .padder .secondNav .subNav1{
+	padding-left:40px;display:block;
+}
+.header .padder .secondNav .subNav2{
+	padding-left:150px;display:none;
+}
+.header .padder .secondNav .subNav3{
+	padding-left:250px;display:none;
+}
+.header .padder .secondNav .subNav4{
+	padding-left:350px;display:none;
+}
+.header .padder .secondNav .subNav5{
+	padding-left:450px;display:none;
+}
+.header .padder .secondNav .subNav6{
+	padding-left:450px;display:none;
+}
+.header .padder .secondNav .subNav7{
+	padding-left:650px;display:none;
+}

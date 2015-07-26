@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<applications xmlns="http://www.wabacus.com"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.wabacus.com ../../../xsd/wabacus.applications.xsd">
+	<page id="dianjichakanniandujihua_detail"
+		js="/webresources/script/validate.js,/webresources/script/wabacus_util.js">
+		<report id="dianjichakanniandujihua_report_detail" title="编辑" 
+			width="700px" align="center" type="editabledetail" interceptor="interceptor.InsertColInterceptor" >
+			<interceptor>
+				  <imports>
+		  	 		   <import>com.wabacus.util.*</import>
+		  	 		   <import>com.wabacus.system.*</import>
+		  	 	  </imports>
+		  	 	  <preaction>
+		  	 	      <![CDATA[
+							String xiangmu_id = rrequest.getStringAttribute("xiangmu_id");							
+							rrequest.getRequest().setAttribute("xiangmu_id" ,xiangmu_id);	
+							System.out.println("################################"+xiangmu_id);						
+					  ]]>
+		  	 	  </preaction>
+	  	      </interceptor>
+			<display>
+
+				<col column="id" label="id" displaytype="hidden" />
+<!-- 
+				<col column="kaishiniandu" label="开始年度/年" valuestyleproperty="colspan='2'"  ongetvalue="getPerformanceValue" onsetvalue="setPerformanceValue">
+					    <inputbox type="customized"></inputbox>
+				   </col>
+ -->
+ 				<col column="kaishiniandu" label="开始年度/年" clickorderby="true" width="100px" filter="true" filterwidth="120px">
+					<inputbox jsvalidate="isLihuafengNian(#data#不是合法数字)" ></inputbox>		
+				</col>
+				   
+				<col column="jieshuniandu" label="结束年度/年" clickorderby="true" width="100px" filter="true" filterwidth="120px">
+					<inputbox jsvalidate="isLihuafengNian(#data#不是合法数字)" ></inputbox>
+				</col>
+ 
+ <!-- 
+				<col column="kaishiniandu" label="开始年度/年" clickorderby="true" width="100px" filter="true" filterwidth="120px">
+						<inputbox jsvalidate="isLihuafengNian(#data#不是合法数字)" jsvalidatetype="both"></inputbox>
+				</col>
+				   
+				<col column="jieshuniandu" label="结束年度/年" clickorderby="true" width="100px" filter="true" filterwidth="120px">
+					<inputbox jsvalidate="isLihuafengNian(#data#不是合法数字)" jsvalidatetype="both"></inputbox>
+				</col>
+ -->
+			</display>
+
+			<sql>
+
+				<insert>
+					<params>
+						<param name="id" value="uuid{}" />
+						<param name="aaa" value="AAAA" />
+					</params>
+					insert into
+					zbgl_kygl_niandu(id=#{id},@{kaishiniandu},@{jieshuniandu},xiangmu_id=url{xiangmu_id});
+				</insert>
+			</sql>
+			
+
+		</report>
+	</page>
+</applications>
+

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<applications xmlns="http://www.wabacus.com"
+			   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			   xsi:schemaLocation="http://www.wabacus.com ../xsd/wabacus.applications.xsd">
+ 	<page id="jishushejijieduan" js="/webresources/script/validate.js,/WebRoot/js/testcallback.js">
+     <report id="jishusheji" title=" "  type="editabledetail"   interceptor="com.wabacus.util.IdentifierGenerator_Interceptor" template="relative{htmltemplate/zhuangbeiguanli/zhuangbeiyanzhi/jishusheji_template.html}">
+			<display > 
+			<col column="id" label="id" displaytype="hidden" />
+			<col column="xinghao" label="${xinghao}" displaytype="hidden" />
+			<col column="jishushejijihuashijian" label="${jishushejijihuashijian}"  clickorderby="true" datatype="date{yyyy-MM-dd}"><inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)"></inputbox></col>
+			<col column="jishushejishijishijian"  label="${jishushejishijishijian}" clickorderby="true" datatype="date{yyyy-MM-dd}" br="true"><inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)"></inputbox></col>
+			<col column="jishusheji_beizhu" label="备注"  valuestyleproperty="colspan='5'">
+			<inputbox type="textareabox" styleproperty="rows='10'"></inputbox>
+			</col>  
+			<col column="{non-fromdb}" property="cz" label="附件"></col>
+			<col column="{non-fromdb}" property="zongtitexing" label="实艇性能"></col>  
+			</display>
+			<sql>
+				<select>
+				<value>
+					<![CDATA[SELECT * FROM zbgl_zbyz_xinghaoxinxi where  {#condition#}]]>
+				</value>
+				  <condition name="xinghao" hidden="true">
+							       <value>
+								<![CDATA[(xinghao =  #data# )]]>
+							</value>
+						      </condition>
+				</select>
+			     <update>
+			     update zbgl_zbyz_xinghaoxinxi(@{id},@{jishushejijihuashijian},@{jishushejishijishijian},@{jishusheji_beizhu}) where id=@{id__old};
+			  </update>
+			</sql>
+			<format>
+			   <value>
+			  <![CDATA[
+			        cz="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">"
+							 + "<a href=\"#\" onclick=\"wx_winpage('ShowReport.wx?PAGEID=zbyz_fujian&leibie="+xinghao+"&fujiansuoshu=技术设计阶段',{width:1100,height:400})\" target=\"sampleframe\">"
+							 + "点击查看" + "</a></span>";
+				    zongtitexing="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">"
+							 + "<a href=\"ShowReport.wx?PAGEID=shitingxingneng_button&suoshu="+id+"&suoshujieduan=技术设计阶段&yuanjieduan=方案设计阶段 \" target=\"blank\">"
+							 + "点击查看" + "</a></span>";		 
+			     ]]> 
+				 
+			  </value>
+			</format>
+		</report>
+		</page>
+	</applications>
+

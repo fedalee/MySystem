@@ -1,0 +1,63 @@
+<applications xmlns="http://www.wabacus.com"
+			   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			   xsi:schemaLocation="http://www.wabacus.com ../xsd/wabacus.applications.xsd">
+	<page id="zongtibuzhi_detail">
+		<report id="zongtibuzhidetail_report" title="总体布置"  align="center" type="editabledetail" >
+			 <display>
+				<col column="id" label="id" displaytype="hidden"></col>
+			    <col column="suoshuxinghao" displaytype="hidden"/>								
+				<col column="shebeiming" label="设备名" clickorderby="true"  >
+					<inputbox type="selectbox" servervalidate="isNotEmpty(${invalid.isnotempty})">
+						<option dataset="@{select shebeimingcheng from sbgl_shebei_xiangxixinxi}" label="shebeimingcheng" value="shebeimingcheng"></option>
+					</inputbox>
+				</col>
+				<col column="cangduan" label="舱段" valuestyleproperty="colspan='3'" br="true">
+					<inputbox type="selectbox">						  
+						<option value="I" label="I"></option>
+						<option value="II" label="II"></option>
+						<option value="III" label="III"></option>
+						<option value="IV" label="IV"></option>
+						<option value="V" label="V"></option>
+						<option value="VI" label="VI"></option>
+						<option value="VII" label="VII"></option>
+					</inputbox>
+				</col>
+				<col column="beizhu" label="备注" datatype="clob" valuestyleproperty="colspan='5'">
+						<inputbox type="textareabox" styleproperty="rows='5'"></inputbox>
+				</col>	
+			 </display>
+			<sql>
+				 <select>
+					<value>
+						<![CDATA[SELECT * FROM zbgl_zbjbxx_xinghao_ztbz where  {#condition#} order by id]]>
+				    </value>
+				    <condition name="suoshuxinghao" hidden="true">
+						<value>
+							<![CDATA[(suoshuxinghao =  #data# )]]>
+						</value>
+					</condition>     
+				    <condition name="suoshushebeiming" label="设备名" hidden="true">
+					     <value>
+					       <![CDATA[(shebeiming like '%#data#%' )]]>
+					     </value>
+					</condition>
+				</select>
+				<insert>
+					<params> 
+					   <param name="suoshuxinghao" value="url{suoshuxinghao}"/>
+					</params>
+				  		 insert into zbgl_zbjbxx_xinghao_ztbz(id=uuid{},suoshuxinghao=#{suoshuxinghao},@{cangduan},@{shebeiming},@{beizhu});
+				  		
+				  		 
+				</insert>
+				<update>
+					     update zbgl_zbjbxx_xinghao_ztbz(@{cangduan},@{shebeiming},@{beizhu}) where id=@{id__old};
+				</update>
+				<delete>
+					  	 delete from zbgl_zbjbxx_xinghao_ztbz where id=@{id__old};
+				</delete>
+			</sql>						  
+		</report>
+	</page>
+</applications>
+			   

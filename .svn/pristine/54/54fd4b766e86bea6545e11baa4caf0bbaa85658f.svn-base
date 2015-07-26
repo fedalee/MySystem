@@ -1,0 +1,576 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<applications xmlns="http://www.wabacus.com"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.wabacus.com ../../../xsd/wabacus.applications.xsd">
+
+
+	<page id="zhuangbeishiyong"
+		js="/webresources/script/validate.js,/WebRoot/js/testcallback.js">
+
+		<tabpanel id="tabpanel" titlestyle="2" margin="10px" border="0">
+			<vpanel id="xiangmumingcheng_vpanel">
+
+				<report id="report1" title="${zhuangbeiwenti}" align="center"
+					type="editablelist" template="${articlelist.report.template}">
+
+
+					<display>
+						<col column="{sequence:1}" label="序号"></col>
+
+						<col column="id" label="id" displaytype="hidden" />
+						<!--  	<col column="Id" label="序号" /> -->
+
+						<col column="xinghao" label="${xinghao}">
+							<inputbox type="selectbox" servervalidate="isNotEmpty(${invalid.isnotempty})">
+								<option dataset="@{select xinghao from zbgl_zbjbxx_xinghao}"
+									label="xinghao" value="xinghao"></option>
+							</inputbox>
+						</col>
+
+
+						<col column="xianhao" label="${xianhao}" br="true">
+							<inputbox type="selectbox" servervalidate="isNotEmpty(${invalid.isnotempty})"
+								depends="xinghao">
+								<option
+									dataset="@{select xianhao from zbgl_zbjbxx_xianhao where suoshuxinghao='#xinghao#'}"
+									label="xianhao" value="xianhao" />
+							</inputbox>
+						</col>
+
+						<col column="zhuyaoshiyongbudui" label="${zhuyaoshiyongbudui}" />
+
+						<col column="{non-fromdb}" property="wentishuliang" label="问题数量" />
+
+					</display>
+
+
+					<sql>
+					
+						<value>
+								<![CDATA[SELECT * FROM ZBGL_ZBSY_ZHUANGBEIWENTI where  {#condition#} order by xinghao]]>
+						</value>
+
+					<condition name="chaxun" label="${xinghao}">
+					
+					
+						<value>
+							<![CDATA[(xinghao like  '%#data#%' )]]>
+						</value>
+						<inputbox>
+					       <typeprompt count="15">
+						      <promptcol label="xinghao" title="${xinghao}" matchmode="anywhere"></promptcol>
+						       <datasource>
+							       <option dataset="@{select xinghao from zbgl_zbyz_xinghaoxinxi where {#matchcondition#} and {#condition#}}">
+								        <datasetconditions>
+									         <condition name="xiala">
+										          <value> <![CDATA[( xianhao like '#data#%')]]></value>
+									         </condition>
+								        </datasetconditions>
+							       </option>
+						      </datasource>
+					       </typeprompt>
+					    </inputbox>
+					    </condition>
+					    
+					    
+					 	<condition name="xianhao" label="${xianhao}">
+						     <value>
+								<![CDATA[(xianhao like  '%#data#%' )]]>
+							</value>
+					    </condition>
+						
+						<condition name="zhuyaoshiyongbudui" label="${zhuyaoshiyongbudui}">
+						     <value>
+								<![CDATA[(zhuyaoshiyongbudui like  '%#data#%' )]]>
+							</value>
+					    </condition>
+						<!--  
+							<insert> insert into
+							ZBGL_ZBSY_ZHUANGBEIWENTI(@{xianhao},@{xinghao},id=uuid{});
+							</insert> 
+						 -->	
+						<!--	
+							<update> update
+							ZBGL_ZBSY_ZHUANGBEIWENTI(@{id},@{xianhao},@{xinghao}) where
+							id=@{id__old}; 
+							</update>
+						 -->
+						
+						
+						<insert
+							pageurl="report{zhuangbeiwenti_detail.zhuangbeiwenti_report_detail}"
+							popupparams="{title:'添加',width:750,height:400}">
+						</insert>
+						<!-- 	
+						<update
+							pageurl="report{zhuangbeiwenti_detail.zhuangbeiwenti_report_detail}"
+							urlparams=" id=@{id}" popupparams="{title:'编辑',width:750,height:400}"></update>
+ 						-->
+						<delete>
+							delete from ZBGL_ZBSY_ZHUANGBEIWENTI where
+							xianhao=@{xianhao__old};
+							delete from ZBGL_ZBSY_ZBWT_GEZHONGWENTI
+							where
+							xianhao=@{xianhao__old}	  		
+			 	</delete>
+
+					</sql>
+					<format>
+						<imports>
+							<import>com.wabacus.util.*</import>
+							<import>com.wabacus.config.*</import>
+							<import>com.wabacus.system.*</import>
+							<import>com.wabacus.config.component.application.report.*</import>
+
+						</imports>
+						<value>
+					<![CDATA[
+					
+					String querySql_wentishuliang = null;
+					
+						querySql_wentishuliang = "select distinct id from ZBGL_ZBSY_ZBWT_GEZHONGWENTI where id_zbwt='"+id+"'";
+						wentishuliang = UserDefinedDatabaseOperations.syshxinghaoshuliang(querySql_wentishuliang) + ""; 
+						System.out.println("querySql_wentishuliang :" + querySql_wentishuliang);
+						System.out.println("wentishuliang :" + wentishuliang);
+					
+						
+					
+					]]>
+					
+					<![CDATA[
+					xianhao=xianhao==null?"":xianhao.trim();
+						if(!xianhao.equals(""))
+						{
+							String wenhao = "??";	
+							//xianhao="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\"  >"+"<a href=\"ShowReport.wx?PAGEID=zbwenti_xiangxi&xianhao="+xianhao+"&type="+type_wentishuliang+"\" target=\"sampleframe\">"+xianhao+"</a></span>";
+						}
+					]]>
+					
+					
+						</value>
+					</format>
+				</report>
+
+				<!-- 从报表 -->
+				<!-- 装备问题  问题列表 -->
+				<report id="report11" title="url{xianhao}的问题列表" depends="report1"
+					dependsparams="xianhao=@{xianhao};id=@{id}" align="center" type="editablelist">
+
+
+					<interceptor>
+						<imports>
+							<import>javax.servlet.http.HttpServletRequest</import>
+							<import>com.wabacus.system.ReportRequest</import>
+						</imports>
+						<preaction>
+					HttpServletRequest r=rrequest.getRequest();
+					r.setAttribute("xianhao",r.getParameter("xianhao"));
+					System.out.println("^^^^^^^^^^^xianhao："+r.getAttribute("xianhao"));
+					
+					
+					HttpServletRequest q=rrequest.getRequest();
+					r.setAttribute("id",q.getParameter("id"));
+					System.out.println("^^^^^^^^^^^id："+q.getAttribute("id"));
+					</preaction>
+					</interceptor>
+
+
+					<display>
+
+						<!-- 后加的 -->
+
+
+						<col column="xianhao" label="${xianhao}" clickorderby="true"
+							displaytype="hidden" />
+
+						<col column="{sequence:1}" label="序号"></col>
+
+						<col column="id" label="id" displaytype="hidden" />
+
+						<col column="type" displaytype="optional" />
+						<!-- 
+						<col column="xianhao" displaytype="optional" />
+						 -->
+						<col column="name" label="问题名" filter="true" filterwidth="120px" />
+						<col column="gaishu" label="问题概述" datatype="clob">
+							<inputbox type="textareabox"></inputbox>
+						</col>
+
+						<col column="origin" label="问题来源" datatype="clob"/>  
+
+						<col column="wentileibie" label="问题类别" clickorderby="true">
+							<inputbox type="selectbox">
+								<option value="总体问题" label="总体问题"></option>
+								<option value="系统问题" label="系统问题"></option>
+								<option value="设备问题" label="设备问题"></option>
+								<option value="其他问题" label="其他问题"></option>
+							</inputbox>
+						</col>
+
+
+						<col column="createtime" label="问题产生时间" datatype="date{yyyy-MM-dd}"
+							clickorderby="true">
+							<inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)"></inputbox>
+						</col>
+
+						<col column="handletime" label="问题处理时间" datatype="date{yyyy-MM-dd}">
+							<inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)"></inputbox>
+						</col>
+
+						<col column="chulifangshi" label="处理方式" />
+
+						<!-- 
+						<col column="result" label="处理结果" /> 
+						 -->  <!-- 这货是附件 -->
+						<col column="{non-fromdb}" property="chulijieguo" label="处理结果"></col>
+
+					</display>
+					<sql>
+
+						
+
+							<value>
+								<!-- 此处应该加like 模糊查询含有“问题”字符串的代码 -->
+								<![CDATA[SELECT * FROM ZBGL_ZBSY_ZBWT_GEZHONGWENTI where {#condition#}]]>
+							</value>
+
+							<condition name="id" label="id" hidden="true">
+
+								<value>
+									<![CDATA[(id_zbwt = #data#)]]>
+								</value>
+							</condition>
+
+							<condition name="name" label="问题名" >
+
+								<value>
+									<![CDATA[(name = #data#)]]>
+								</value>
+							</condition>
+						
+							<condition name="chulifangshi" label="处理方式" >
+
+								<value>
+									<![CDATA[(chulifangshi = #data#)]]>
+								</value>
+							</condition>
+							
+							<condition name="wentileibie" label="问题类别" >
+
+								<value>
+									<![CDATA[(wentileibie = #data#)]]>
+								</value>
+							</condition>
+
+						<!--
+							<insert> <params> <param name="param1" value="url{type}"/> <param
+							name="param2" value="url{xianhao}"/> </params> insert into
+							ZBGL_ZBSY_ZBWT_GEZHONGWENTI(id=uuid{},@{name},@{gaishu},xianhao=#{param2},@{createtime},@{origin},@{handletime},@{wentileibie},@{result},type=#{param1}
+							,@{chulifangshi}); </insert> <update> update
+							ZBGL_ZBSY_ZBWT_GEZHONGWENTI(@{name},@{gaishu},@{createtime},@{origin},@{handletime},@{result},@{wentileibie},@{chulifangshi})
+							where id=@{id__old}; </update>
+						-->
+						<insert
+							pageurl="report{zbwtwentiliebiao_detail.zbwtwentiliebiao_report_detail}"
+							urlparams="xianhao=request{xianhao};id=request{id}" popupparams="{title:'添加',width:750,height:400}"></insert>
+						<update
+							pageurl="report{zbwtwentiliebiao_detail.zbwtwentiliebiao_report_detail}"
+							urlparams=" id=@{id}" popupparams="{title:'编辑',width:750,height:400}"></update>
+
+						<delete>
+							delete from ZBGL_ZBSY_ZBWT_GEZHONGWENTI where
+							id=@{id__old};
+			 	   		</delete>
+
+					</sql>
+					<format>
+						<imports>
+							<import>com.wabacus.util.*</import>
+							<import>com.wabacus.config.*</import>
+							<import>com.wabacus.system.*</import>
+							<import>com.wabacus.config.component.application.report.*</import>
+						</imports>
+						<value>
+					<![CDATA[
+					
+
+					   chulijieguo="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">"
+			        	+"<a href=\"#\" onclick=\"wx_winpage('ShowReport.wx?PAGEID=zbwtwentiliebiao_fujian&leibie="+name+"&fujiansuoshu="+xianhao+"',{width:1100,height:400})\" >"
+			        	+"报告"+"</a></span>";
+					]]>
+						</value>
+					</format>
+				</report>
+			</vpanel>
+
+
+
+
+
+			<!--
+				==================================================================================================
+			-->
+
+			<!-- 大事记 -->
+			<vpanel id="xiangmumingcheng_vpanel2">
+				<report id="report2" title="${biaotichuan}" align="center"
+					type="editablelist" template="${articlelist.report.template}">
+					<display>
+
+						<col column="{sequence:1}" label="序号"></col>
+
+						<col column="id" label="id" displaytype="hidden" />
+
+
+						<col column="xinghao" label="${xinghao}">
+							<inputbox type="selectbox" servervalidate="isNotEmpty(${invalid.isnotempty})">
+								<option dataset="@{select xinghao from zbgl_zbjbxx_xinghao}"
+									label="xinghao" value="xinghao"></option>
+							</inputbox>
+						</col>
+						<col column="xianhao" label="${xianhao}" br="true">
+							<inputbox type="selectbox" servervalidate="isNotEmpty(${invalid.isnotempty})"
+								depends="xinghao">
+								<option
+									dataset="@{select xianhao from zbgl_zbjbxx_xianhao where suoshuxinghao='#xinghao#'}"
+									label="xianhao" value="xianhao" />
+							</inputbox>
+						</col>
+
+
+
+						<col column="description" label="概述" datatype="clob"
+							valuestyleproperty="align='left'" displaytype="hidden" />
+						<!--  <col column="{non-fromdb}" property="cz" label="操作" />  -->
+
+						<col column="{non-fromdb}" property="wentishuliang" label="问题数量" />
+
+					</display>
+					<sql>
+						<value>
+						<![CDATA[SELECT * FROM ZBGL_ZBSY_DSJ where  {#condition#} order by xinghao]]>
+						</value>
+						
+						<condition name="xinghao" label="${xinghao}">
+						     <value>
+							<![CDATA[(xinghao like  '%#data#%' )]]>
+						</value>
+						<inputbox>
+					       <typeprompt count="15">
+						      <promptcol label="xinghao" title="${xinghao}" matchmode="anywhere"></promptcol>
+						       <datasource>
+							       <option dataset="@{select xinghao from zbgl_zbyz_xinghaoxinxi where {#matchcondition#} and {#condition#}}">
+								        <datasetconditions>
+									         <condition name="xiala">
+										          <value> <![CDATA[( xianhao like '#data#%')]]></value>
+									         </condition>
+								        </datasetconditions>
+							       </option>
+						      </datasource>
+					       </typeprompt>
+					    </inputbox>
+						
+						
+					    </condition>
+						 
+						<condition name="xianhao" label="${xianhao}">
+							<value>
+								<![CDATA[(xianhao like  '%#data#%' )]]>
+							</value>
+						</condition> 
+						
+						<!-- 
+						<insert> insert into
+							ZBGL_ZBSY_DSJ(id=uuid{},@{xianhao},@{xinghao},@{description});
+						</insert>
+						 -->
+						<!--
+						<update> update
+							ZBGL_ZBSY_DSJ(@{id},@{xianhao},@{xinghao},@{description}) where
+							id=@{id__old}; </update>
+						-->
+						
+							<insert pageurl="report{dsj_detail.dsj_report_detail}"
+							popupparams="{title:'添加',width:750,height:400}"></insert> 
+							
+						<!-- 	
+							<update
+							pageurl="report{dsj_detail.dsj_report_detail}" urlparams="
+							id=@{id}"
+							popupparams="{title:'编辑',width:750,height:400}"></update>
+						 -->
+						<delete>
+
+							delete from ZBGL_ZBSY_DSJ where xianhao=@{xianhao__old};
+							delete from ZBGL_ZBSY_DSJ_RENWUXINGZHI where sxianhao=@{xianhao__old}
+			  			</delete>
+					</sql>
+					<format>
+						<value>
+					<![CDATA[
+					xianhao=xianhao==null?"":xianhao.trim();
+						if(!xianhao.equals(""))
+						{
+							String wenhao = "??";
+							//cz="<span onmouseover=\"this.style.cursor='pointer'\"  >"+"<a href=\"ShowReport.wx?PAGEID=dsj_xianhao&xianhao="+xianhao+"\" target=\"sampleframe\">"+"详细信息"+"</a></span>";
+						}
+						description=description==null?"":description.trim();
+						if(!description.equals(""))
+						{
+							String fulldesc=description;
+							if(description.length()>40) description=description.substring(0,40)+"...";
+							description=description.replaceAll("<p>","");
+							description=description.replaceAll("</p>","");
+							description="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\"  onclick=\"wx_win('"+fulldesc+"',{width:400,height:200})\">"+description+"</span>";
+							description=description+"&nbsp;&nbsp;<font color='#505050'></font>";
+						}
+					]]>
+					
+					
+					<![CDATA[
+					String querySql_wentishuliang = null;
+						
+						querySql_wentishuliang = "select * from ZBGL_ZBSY_DSJ_RENWUXINGZHI where id_dsj='"+id+"'";
+						wentishuliang = UserDefinedDatabaseOperations.syshxinghaoshuliang(querySql_wentishuliang) + ""; 
+						System.out.println("querySql_wentishuliang :" + querySql_wentishuliang);
+						System.out.println("wentishuliang :" + wentishuliang);
+					
+					]]>
+						</value>
+					</format>
+				</report>
+
+				<!-- 从报表 -->
+				<report id="report22" title="url{xianhao}的任务列表" depends="report2"
+					dependsparams="xianhao=@{xianhao};id=@{id}" align="center" type="editablelist" >
+
+
+
+					<interceptor>
+						<imports>
+							<import>javax.servlet.http.HttpServletRequest</import>
+							<import>com.wabacus.system.ReportRequest</import>
+						</imports>
+						<preaction>
+					HttpServletRequest r=rrequest.getRequest();
+					r.setAttribute("xianhao",r.getParameter("xianhao"));
+					System.out.println("^^^^^^^^^^^xianhao："+r.getAttribute("xianhao"));
+					
+					
+					HttpServletRequest q=rrequest.getRequest();
+					q.setAttribute("id",q.getParameter("id"));
+					System.out.println("^^^^^^^^^^^id："+q.getAttribute("id"));
+					</preaction>
+					</interceptor>
+					<display>
+						<!--   20140806改   资料来源于demo数据编辑篇-》编辑分组显示报表-》编辑行分组报表-->
+						<col column="{sequence:1}" label="序号"></col>
+
+						<col column="id" label="id" displaytype="hidden" />
+						<col column="xinghao" label="${xinghao}" clickorderby="true"
+							displaytype="hidden">
+
+						</col>
+						<col column="xianhao" label="${xianhao}" filter="true"
+							displaytype="hidden" />
+
+
+						<col column="name" label="任务名" clickorderby="true" />
+
+
+						<col column="stime" label="开始时间" datatype="date{yyyy-MM-dd}"
+							clickorderby="true">
+							<inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)"></inputbox>
+						</col>
+						<col column="etime" label="结束时间" datatype="date{yyyy-MM-dd}">
+							<inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)"></inputbox>
+						</col>
+
+
+
+						<col column="renwulaiyuan" label="任务来源" clickorderby="true">
+							
+						</col>
+						<col column="chengdandanwei" label="承担单位" clickorderby="true">
+							
+						</col>
+
+
+						<col column="description" label="概述" datatype="clob" />
+						<col column="yiyi" label="意义" datatype="clob" />
+
+						<col column="{non-fromdb}" property="fujian" label="附件" />
+					</display>
+
+					<sql>
+
+						
+							<value>
+         		
+								<![CDATA[SELECT * FROM ZBGL_ZBSY_DSJ_RENWUXINGZHI where {#condition#}]]>
+							</value>
+
+
+							<condition name="id" label="id" hidden="true">
+								<value>
+									<![CDATA[(id_dsj = #data#)]]>
+								</value>
+							</condition>
+							
+							<condition name="name" label="任务名" >
+
+								<value>
+									<![CDATA[(name = #data#)]]>
+								</value>
+							</condition>
+							<condition name="renwulaiyuan" label="任务来源" >
+
+								<value>
+									<![CDATA[(renwulaiyuan = #data#)]]>
+								</value>
+							</condition>
+							<condition name="chengdandanwei" label="承担单位" >
+
+								<value>
+									<![CDATA[(chengdandanwei = #data#)]]>
+								</value>
+							</condition>
+
+						<!--
+							<insert> <params> <param name="param1" value="url{xianhao}"/>
+							</params> insert into
+							ZBGL_ZBSY_DSJ_RENWUXINGZHI(@{xinghao},@{name},xianhao=#{param1},@{renwulaiyuan},@{chengdandanwei},@{stime},@{etime},@{description},@{yiyi});
+							</insert> <update> update ZBGL_ZBSY_DSJ_RENWUXINGZHI
+							(@{xinghao},@{name},@{xianhao},@{renwulaiyuan},@{chengdandanwei},@{stime},@{etime},@{description},@{yiyi})
+							where xianhao=@{xianhao__old};; </update>
+						-->
+						<insert
+							pageurl="report{dsjrenwuliebiao_detail.dsjrenwuliebiao_report_detail}"
+							urlparams="xianhao=request{xianhao};id=request{id}" popupparams="{title:'添加',width:750,height:400}"></insert>
+						<update
+							pageurl="report{dsjrenwuliebiao_detail.dsjrenwuliebiao_report_detail}"
+							urlparams=" id=@{id}" popupparams="{title:'编辑',width:750,height:400}"></update>
+
+						<delete>
+							delete from ZBGL_ZBSY_DSJ_RENWUXINGZHI where
+							id=@{id__old};
+						</delete>
+
+					</sql>
+
+					<format>
+						<value>
+			  			<![CDATA[
+
+					   	   fujian="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">"
+			        			+"<a href=\"#\" onclick=\"wx_winpage('ShowReport.wx?PAGEID=dsjrenwuliebiao_fujian&leibie="+name+"&fujiansuoshu="+xianhao+"',{width:1100,height:400})\" >"
+			        			+"附件"+"</a></span>";
+			     		]]>
+						</value>
+					</format>
+				</report>
+			</vpanel>
+
+		</tabpanel>
+	</page>
+</applications>

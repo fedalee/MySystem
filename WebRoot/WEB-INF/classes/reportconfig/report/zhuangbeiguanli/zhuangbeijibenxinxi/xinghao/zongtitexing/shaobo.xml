@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<applications xmlns="http://www.wabacus.com"
+			   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			   xsi:schemaLocation="http://www.wabacus.com ../xsd/wabacus.applications.xsd">
+	<page id="shuixiafushezaosheng_figure" >
+		<report id="report1" title="${shuixiafushezaosheng}折线图" type="fusioncharts" chartheight="250" chartwidth="600" chartype="MSLine.swf " 
+		        chartstyleproperty="xAxisName='拐点频率（Hz）' yAxisName='拐点频率声压晋级（dB）'  showValues='0'" align="center">
+				<display>		   
+					<col  column="suoshugongkuang" ></col>
+					<col column="suoshu" label="suoshu" displaytype="hidden"/>
+			        <col column="suoshujieduan" label="suoshujieduan" displaytype="hidden"/>
+					<col  column="guaidianheziyi" ></col>
+					<col  column="shengyajinjiyi"></col>				     
+				</display>
+				<sql>
+					<select titlelabelcolumn="guaidianheziyi">
+						<value>
+							<![CDATA[SELECT suoshugongkuang,suoshu,suoshujieduan,guaidianheziyi,shengyajinjiyi FROM zbgl_zbjbxx_zttx_figure where {#condition#}  ]]>
+						</value>
+						<condition name="suoshugongkuang" label="所属${gongkuang}" hidden="true">
+							<value>
+								<![CDATA[( suoshugongkuang = #data#)]]>
+							</value>
+						</condition> 
+						<condition name="suoshu" label="" hidden="true">
+										<value>
+											<![CDATA[(suoshu = #data#)]]>
+										</value>
+						</condition>
+						 <condition name="suoshujieduan" label="" hidden="true">
+												<value>
+													<![CDATA[(suoshujieduan = #data#)]]>
+												</value>
+						</condition>	
+					</select>
+				</sql>	    
+		</report>
+	</page>
+</applications>

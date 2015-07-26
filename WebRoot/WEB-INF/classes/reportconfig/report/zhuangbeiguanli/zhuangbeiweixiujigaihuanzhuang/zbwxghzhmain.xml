@@ -1,0 +1,597 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<applications xmlns="http://www.wabacus.com"
+			      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			      xsi:schemaLocation="http://www.wabacus.com ../xsd/wabacus.applications.xsd">
+		<page id="zbwxjghzh_main" js="/webresources/script/validate.js,/js/callback.js">	
+			  <tabpanel id="tabpanel11" titlestyle="2" margin="10px" border="0">
+				  <vpanel id="vp1111">
+			<report id="zhuangbeiweixiu_report" title="${zhuangbeiweixiu}"  type="editablelist" rowselect="single" align="center"   template="${articlelist.report.template}">
+				<display valuetdwidth="80px" labeltdwidth="80px" labelbgcolor="#f0f0f0" labelalign="left" valuealign="left" >
+					<col column="{sequence}" label="序号"></col>					
+					<col column="id" label="id" displaytype="hidden"/>
+				    <col column="suoshuxinghao" label="${xinghao}" >
+					    <inputbox type="selectbox" servervalidate="isNotEmpty(${invalid.isnotempty})">
+						     <option dataset="@{select xinghao from zbgl_zbjbxx_xinghao}" label="xinghao" value="xinghao"></option>
+					    </inputbox>
+				   </col>
+				   <col column="suoshuxianhao" label="${xianhao}"  />
+					<col column="gaishu" label="概述" datatype="clob"></col>
+					<col column="jingfei" label="${jingfei}" />
+				    	<col column="beizhu" label="备注" datatype="clob" >
+						<inputbox type="textareabox" styleproperty="rows='4'"></inputbox>
+				   	</col>
+					
+				</display>
+				<sql>
+				<select>
+					<value>
+						<![CDATA[SELECT * FROM zbgl_zbwxjghz_zhuangbeiweixiu order by id]]>
+					</value>	
+				</select>		
+				<insert pageurl="report{zhuangbeiweixiu_detail.zhuangbeiweixiu_report_detail}" popparams="{title:'添加',width:750,height:400}"></insert>
+				<update pageurl="report{zhuangbeiweixiu_detail.zhuangbeiweixiu_report_detail}" urlparams="id=@{id};suoshuxinghao=@{suoshuxinghao};suoshuxianhao=@{suoshuxianhao}" popparams="{title:'编辑',width:750,height:400}"></update>
+				<delete confirmessage="删除吗？">
+					  delete from zbgl_zbwxjghz_zhuangbeiweixiu where id=@{id__old};
+				</delete>
+				</sql>
+				<format>
+			    	<value>
+			  			<![CDATA[
+			  				String str="";
+			  				
+			  				gaishu=gaishu==null?"":gaishu.trim();
+			  				if(!gaishu.equals(""))
+			  				{
+			  					str=gaishu;
+			  					if(str.length()>7)
+			  						str=str.substring(0,7)+"……";
+			  					gaishu="<span onclick=\"wx_tip('"+gaishu+"',this,{color:'#666666',width:'350px'})\">"+str+"</span>";
+			  				}
+			  				
+			  				beizhu=beizhu==null?"":beizhu.trim();
+			  				if(!beizhu.equals(""))
+			  				{
+			  					str=beizhu;
+			  					if(str.length()>7)
+			  						str=str.substring(0,7)+"……";
+			  					beizhu="<span onclick=\"wx_tip('"+beizhu+"',this,{color:'#666666',width:'350px'})\">"+str+"</span>";
+			  				}
+			  				
+			  				//<!-- xiulineirong=xiulineirong==null?"":xiulineirong.trim();
+			  				//if(!xiulineirong.equals(""))
+			  				//{
+			  				//	str=xiulineirong;
+			  				//	if(str.length()>7)
+			  				//		str=str.substring(0,7)+"……";
+			  				//	xiulineirong="<span onclick=\"wx_tip('"+xiulineirong+"',this,{color:'#666666',width:'350px'})\">"+str+"</span>";
+			  				//} -->
+			  				
+			  				
+			     		]]>
+			  		</value>
+				</format>
+			</report>
+			<report id="report2222"  title="详细资料" type="detail" depends="zhuangbeiweixiu_report" dependsparams="id=@{id}">
+				<display>
+					<col column="id" label="id" displaytype="hidden"/>
+					<col column="xiulishijian" label="${xiulishijian}"  datatype="date{yyyy-MM-dd}">
+						<inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)"></inputbox>  
+					</col>
+					<col column="jieshushijian" label="结束时间"  datatype="date{yyyy-MM-dd}" br="true">
+						<inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)"></inputbox>  
+					</col>
+					<col column="suoshuxianhao" label="${xianhao}"  displaytype="hidden"/>
+					<col column="weixiujieduan" label="${weixiujieduan}" />
+					<col column="{non-fromdb}" property="xiulifangan" label="${xiulifangan}" br="true"/>
+					<col column="{non-fromdb}" property="xiulijieguo" label="${xiulijieguo}"  />
+					<col column="{non-fromdb}" property=" weixiuqianxingneng" label="维修前性能" br="true"/>
+					<col column="{non-fromdb}" property="weixiuqianzhuangxiangshiyan" label="维修前专项实验"  />
+					<col column="{non-fromdb}" property=" weixiuhouxingneng" label="${weixiuhouxingneng}" br="true"/>
+					<col column="{non-fromdb}" property="weixiuhouzhuangxiangshiyan" label="维修后专项实验"  br="true"/>
+					<col label="修理内容" column="{non-value}" labelstyleproperty="colspan='6' bgcolor='#f0f0f0' align='left'" br="true"></col>
+				   <col column="xiulineirong"  valuestyleproperty="colspan='6' align='left'"></col>
+				</display>
+				<sql>
+				<select>
+					<value>
+						<![CDATA[SELECT * FROM zbgl_zbwxjghz_zhuangbeiweixiu where {#condition#}]]>
+					</value>
+					<condition name="id" hidden="true" >
+						 <value>
+								<![CDATA[(id = '#data#' )]]>
+						</value>
+					</condition>	
+				</select>	
+				</sql>
+				<format>
+				<value>
+			  			<![CDATA[
+			  				String str="";
+					weixiujieduan=weixiujieduan==null?"":weixiujieduan.trim();
+			  				String weixiuqian = "";
+			  				String weixiuhou = "";
+			  				if(!weixiujieduan.equals(""))
+			  				{
+			  					str=weixiujieduan;
+			  					weixiuqian = str+"前";
+			  					weixiuhou = str+"后";
+			  				}
+			        		
+			        		xiulifangan="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">"
+			        		+"<a href=\"#\" onclick=\"wx_winpage('ShowReport.wx?PAGEID=zbwxjghz_fujian&leibie=修理方案&fujiansuoshu="+suoshuxianhao+"',{width:1100,height:400})\" >"
+			        		+"报告"+"</a></span>";
+			        		xiulijieguo="<span onmouseover=\"this.style.cursor='pointer'\"  >"
+							 + "<a href=\"#\" onclick=\"wx_winpage('ShowReport.wx?PAGEID=zbwxjghz_fujian&leibie=修理结果&fujiansuoshu="+suoshuxianhao+"',{width:1100,height:400})\" target=\"sampleframe\">"
+							 + "报告" + "</a></span>";
+							 
+							 
+							weixiuhouzhuangxiangshiyan="<span onmouseover=\"this.style.cursor='pointer'\">"+"<a href=\"#\" onclick=\"wx_winpage('ShowReport.wx?PAGEID=zhendongzaosheng_tabs&suoshuxianhao="+suoshuxianhao+"&zhuangtai="+weixiuhou+"',{width:1100,height:400})\" target=\"sampleframe\">"
+								+"维修后专项实验</a></span>";
+							weixiuqianzhuangxiangshiyan="<span onmouseover=\"this.style.cursor='pointer'\">"+"<a href=\"#\" onclick=\"wx_winpage('ShowReport.wx?PAGEID=zhendongzaosheng_tabs&suoshuxianhao="+suoshuxianhao+"&zhuangtai="+weixiuqian+"',{width:1100,height:400})\" target=\"sampleframe\">"
+								+"维修前专项实验</a></span>";
+								
+							weixiuqianxingneng="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">"
+							 + "<a href=\"ShowReport.wx?PAGEID=jiaochuan_shitingxingneng_button&suoshu="+suoshuxianhao+"&suoshujieduan="+weixiuqian+" \" target=\"blank\">"
+							 + "点击查看" + "</a></span>";
+							weixiuhouxingneng="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">"
+							 + "<a href=\"ShowReport.wx?PAGEID=jiaochuan_shitingxingneng_button&suoshu="+suoshuxianhao+"&suoshujieduan="+weixiuhou+" \" target=\"blank\">"
+							 + "点击查看" + "</a></span>";]]>
+							 </value>
+				</format>
+			</report>
+			</vpanel>
+				   
+				<vpanel id="hpanel1" parenttitle="${gaizhuangfangan}" > 
+				<report id="zhuangbeigaihuanzhuang_report" title="" align="center" type="editablelist"   template="${articlelist.report.template}"   rowselect="single">
+		    	<display>
+					<col column="{sequence}" label="序号"></col>						 
+					<col column="id" label="id" displaytype="hidden"/>						
+					<col column="gaihuanzhuangxiangmu" label="${gaihuanzhuangxiangmu}" clickorderby="true"></col>
+					<col column="kaishishijian" label="开始时间" clickorderby="true" datatype="date{yyyy-MM-dd}">
+						<inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)"></inputbox>
+					</col>
+					<col column="jieshushijian" label="结束时间" clickorderby="true" datatype="date{yyyy-MM-dd}">
+						<inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)"></inputbox>
+					</col>
+					<col column="jingfei" label="${jingfei}" clickorderby="true"></col>
+					<col column="zhuyaoneirong" label="${zhuyaoneirong}" datatype="clob" clickorderby="true"></col>
+					<col column="gaizhuangjieguo" label="${gaizhuangjieguo}" datatype="clob" clickorderby="true"></col>
+				    <col column="zhuguanjiguan" label="${zhuguanjiguan}" clickorderby="true"></col>
+				    <col column="{non-fromdb}" property="gaizhuangqianxingneng" label="${gaizhuangqianxingneng}"></col>
+				    <col column="{non-fromdb}" property="gaizhuanghouxingneng" label="${gaizhuanghouxingneng}"></col>
+				</display>
+				<sql>
+					<select>
+						<value>
+							<![CDATA[SELECT * FROM zbgl_zbwxjghz_gaihuanzhuang where  {#condition#} order by id]]>
+						</value>
+						     
+					</select>
+<!-- 					<insert>
+				  		insert into zbgl_zbwxjghz_gaihuanzhuang(id=uuid{},@{gaihuanzhuangxiangmu},@{kaishishijian},@{jieshushijian},@{zhuguanjiguan});
+				    </insert>
+					<update>
+					    update zbgl_zbwxjghz_gaihuanzhuang(@{id},@{gaihuanzhuangxiangmu},@{kaishishijian},@{jieshushijian},@{zhuguanjiguan}) where id=@{id};					    
+					</update> -->
+					<insert pageurl="report{zhuangbeigaihuanzhuang_detail.zhuangbeigaihuanzhuang_report_detail}" popupparams="{title:'新增项目',width:750,height:500}"></insert>
+					<update pageurl="report{zhuangbeigaihuanzhuang_detail.zhuangbeigaihuanzhuang_report_detail}" urlparams=" id=@{id}" popupparams="{title:'编辑项目资料',width:750,height:500}"></update>
+					<delete>
+					    delete from zbgl_zbwxjghz_gaihuanzhuang where id=@{id__old};
+					</delete>
+				</sql>
+			    <format>
+			    	<value>
+			  			<![CDATA[
+			  				gaizhuangqianxingneng="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">"
+							 + "<a href=\"ShowReport.wx?PAGEID=jiaochuanjieduan_shitingxingneng_button&suoshu="+id+"&suoshujieduan=改装前 \" target=\"blank\">"
+							 + "点击查看" + "</a></span>";;
+			  				gaizhuanghouxingneng="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">"
+							 + "<a href=\"ShowReport.wx?PAGEID=jiaochuanjieduan_shitingxingneng_button&suoshu="+id+"&suoshujieduan=改装后 \" target=\"blank\">"
+							 + "点击查看" + "</a></span>";;		  
+			     			String str="";
+			  				
+							rrequest.getRequest().setAttribute("gaihuanzhuangxiangmu" ,gaihuanzhuangxiangmu);
+							System.out.println(gaihuanzhuangxiangmu);
+			  				zhuyaoneirong=zhuyaoneirong==null?"":zhuyaoneirong.trim();
+			  				if(!zhuyaoneirong.equals(""))
+			  				{
+			  					str=zhuyaoneirong;
+			  					if(str.length()>7)
+			  						str=str.substring(0,7)+"……";
+			  					zhuyaoneirong="<span onclick=\"wx_tip('"+zhuyaoneirong+"',this,{color:'#666666',width:'350px'})\">"+str+"</span>";
+			  				}
+			  				
+			  			
+			  				gaizhuangjieguo=gaizhuangjieguo==null?"":gaizhuangjieguo.trim();
+			  				if(!gaizhuangjieguo.equals(""))
+			  				{
+			  					str=gaizhuangjieguo;
+			  					if(str.length()>7)
+			  						str=str.substring(0,7)+"……";
+			  					gaizhuangjieguo="<span onclick=\"wx_tip('"+gaizhuangjieguo+"',this,{color:'#666666',width:'350px'})\">"+str+"</span>";
+			  				}
+			     			
+			     		]]>   
+			  		</value>
+				</format>			
+			</report>
+		 	<tabpanel id="tp1" titlestyle="2" margin="4px" titlewidth="120px"  titlealign="top"  align="center" height="300px">
+			     	<vpanel id="hpanel5" parenttitle="基本信息" >
+	                  	<report  id="jibenxinxi1_report"  title="request{gaihuanzhuangxiangmu}" type="form"  depends="zhuangbeigaihuanzhuang_report" dependsparams="gaihuanzhuangxiangmu=@{gaihuanzhuangxiangmu}" 
+	                  		template="relative{htmltemplate/zhuangbeiguanli/zhuangbeiweixiujigaihuanzhuang/jibenxinxi1_template.html}" servervalidateclass="com.ShujuJiaoyan">
+			               	<display valuetdwidth="80px" labeltdwidth="10px" labelbgcolor="#f0f0f0" labelalign="left" valuealign="left">
+			                    <col column="id" label="id" clickorderby="true" displaytype="hidden" valuestyleproperty="style='mso-number-format:\@'"/>
+			                    <col column="gaihuanzhuangxiangmu" label="${gaihuanzhuangxiangmu}" clickorderby="true"></col>
+			                     <col column="gaishu" label="${gaihuanzhuanggaishu}" datatype="clob"  valuestyleproperty="colspan='1'">
+							        	<inputbox type="textareabox" styleproperty="rows='10'"></inputbox>
+							     </col>
+				                 	<col column="kaishishijian2" label="开始时间" clickorderby="true" datatype="date{yyyy-MM-dd}">
+								        <inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)"></inputbox>
+							     	</col>	
+							     	<col column="zhuguanjiguan" label="${zhuguanjiguan}" br="true" >
+							       		<inputbox type="selectbox" >
+							                <option value="${zhuguanjiguan}" label="${zhuguanjiguan}"></option> 
+							                <option value="${zhuguanjiguan}" label="${zhuguanjiguan}"></option>			
+						           		</inputbox>
+						         	</col>		
+						         	<col column="zerendanwei" label="${jishuzerendanwei}" br="true">
+							       		 <inputbox servervalidate="isNotEmpty(#label#列须从查询结果中选取)" servervalidatetype="both">
+								        	<typeprompt count="15" timeout="0" selectbox="true">
+									       		<promptcol label="DANWEIMINGCHENG" title="挂靠单位" matchmode="anywhere"></promptcol>
+									       		<datasource>        <option dataset="@{select DANWEIMINGCHENG from XTSZ_JBXXWH_DANWEI where {#matchcondition#}}"></option>       </datasource>
+								        	</typeprompt>
+								     	</inputbox>
+						          	</col>		
+						          	<col column="xiezuodanwei" label="${jishuxiezuodanwei}" br="true">
+							        	<inputbox type="selectbox">
+							            	<option value="${jishuxiezuodanwei}" label="${jishuxiezuodanwei}"></option> 
+							            	<option value="${jishuxiezuodanwei}" label="${jishuxiezuodanwei}"></option>						    
+						           		</inputbox>
+						          	</col>		   
+			 					</display>
+			  					<sql>
+					     			<select>
+										<value>
+											<![CDATA[SELECT * FROM zbgl_zbwxjghz_gaihuanzhuang where  {#condition#} order by id]]>
+										</value>
+						 				<condition name="gaihuanzhuangxiangmu" label="${gaihuanzhuangxiangmu}" hidden="true">
+											<value>
+												<![CDATA[(gaihuanzhuangxiangmu = #data#)]]>
+											</value>
+										</condition>
+									</select>					  		 	
+					  				<update>
+					     				update zbgl_zbwxjghz_gaihuanzhuang(@{gaishu},@{kaishishijian2},@{zhuguanjiguan},@{zerendanwei},@{xiezuodanwei}) where id=@{id__old};			    
+					  				</update>
+					      			<delete>
+					      				delete from zbgl_zbwxjghz_gaihuanzhuang where id=@{id__old};			    
+					  				</delete>				     
+					   			</sql>
+	                      	<format>
+						    	<value>
+									rrequest.getRequest().setAttribute("gaihuanzhuangxiangmu",zhuguanjiguan);//存放request，以便显示标题时能取到
+								</value>
+					   		</format>	  
+						</report>
+						<report id="jibenxinxi2_report" type="form" depends="zhuangbeigaihuanzhuang_report" dependsparams="gaihuanzhuangxiangmu=@{gaihuanzhuangxiangmu}" template="relative{htmltemplate/zhuangbeiguanli/zhuangbeiweixiujigaihuanzhuang/jibenxinxi2_template.html}">
+			 				<display valuetdwidth="80px" labeltdwidth="10px" labelbgcolor="#f0f0f0" labelalign="left" valuealign="left">
+			                	<col column="id" label="id" clickorderby="true" displaytype="hidden" valuestyleproperty="style='mso-number-format:\@'"/>
+	                         	<col column="gaihuanzhuangxiangmu" label="${gaihuanzhuangxiangmu}" clickorderby="true"></col>
+			                 	<col column="zhanjizhibiao" label="${dianxingzhanshuzhibiao}：" datatype="clob" valuestyleproperty="colspan='1'">
+							    	<inputbox type="textareabox" styleproperty="rows='10'"></inputbox>
+						    	</col>		
+			 				</display>
+			  				<sql savebinding="jibenxinxi1_report">				     
+						  		<select>
+									<value>
+										<![CDATA[SELECT * FROM zbgl_zbwxjghz_gaihuanzhuang where  {#condition#} order by id]]>
+									</value>
+						 			<condition name="gaihuanzhuangxiangmu" label="${gaihuanzhuangxiangmu}" hidden="true">
+										<value>
+											<![CDATA[(gaihuanzhuangxiangmu = #data#)]]>
+										</value>
+									</condition>
+								</select>
+						     	<insert>
+					  		 		insert into zbgl_zbwxjghz_gaihuanzhuang(@{id},@{zhanjizhibiao});
+						  		</insert>  
+					  			<update>
+					     			update zbgl_zbwxjghz_gaihuanzhuang(@{zhanjizhibiao}) where id=@{id__old};			    
+					  			</update>
+					      		<delete>
+					      			delete from zbgl_zbwxjghz_gaihuanzhuang where id=@{id__old};			    
+					 		    </delete>   
+					   		</sql>
+	                   		<format>
+						    	<value>
+									rrequest.getRequest().setAttribute("gaihuanzhuangxiangmu",gaihuanzhuangxiangmu);//存放request，以便显示标题时能取到
+								</value>
+					   		</format>			  
+						</report>
+					</vpanel> 
+						<hpanel id="hpanel2" parenttitle="${gaizhuangfangan}" > 
+							<report id="report3" width="700px"  right="50px" type="form" depends="zhuangbeigaihuanzhuang_report" dependsparams="gaihuanzhuangxiangmu=@{gaihuanzhuangxiangmu}" template="relative{htmltemplate/zhuangbeiguanli/zhuangbeiweixiujigaihuanzhuang/gaizhuangfangan_template.html}">
+				       			<display valuetdwidth="80px" labeltdwidth="10px" labelbgcolor="#f0f0f0" labelalign="left" valuealign="left">
+				  					<col column="id" label="id"  displaytype="hidden"/>
+				  					<col column="gaihuanzhuangxiangmu" label="${gaihuanzhuangxiangmu}" clickorderby="true"></col>
+				 					<col column="gaihuanfangangaishu" label="${gaihuanzhuanggaishu}" datatype="clob" valuestyleproperty="colspan='1'">
+								    	<inputbox type="textareabox" styleproperty="rows='15'"></inputbox>
+							    	</col>
+							     	<col column="fujian" label="改装方案附件" width="200px">
+					    					 <inputbox type="file" allowedtypes="doc;txt;html;pdf" displaytype="textbox" deletetype="1" interceptor="interceptor.FileUpLoad_Interceptor" savepath="${file.path}"></inputbox> <!-- />-->
+				   					 </col>	
+				   					 <col column="{non-fromdb}" property="cz" label="操作"></col>		
+				 				</display>
+				  				<sql savebinding="gaihuanfangantupian_report">	
+						       		<select>
+										<value>
+											<![CDATA[SELECT * FROM zbgl_zbwxjghz_gaihuanzhuang where  {#condition#} order by id]]>
+										</value>
+										<condition name="gaihuanzhuangxiangmu" label="${gaihuanzhuangxiangmu}" hidden="true">
+										<value>
+											<![CDATA[(gaihuanzhuangxiangmu = #data#)]]>
+										</value>
+										</condition>
+									</select>
+							   		<insert>
+						  		 		insert into zbgl_zbwxjghz_gaihuanzhuang(@{id},@{gaihuanfangangaishu},@{fujian});
+							  		</insert>    					
+						  			<update>
+						     			update zbgl_zbwxjghz_gaihuanzhuang(@{gaihuanfangangaishu},@{fujian}) where id=@{id__old};			    
+						  			</update>
+						      		<delete>
+						      			delete from zbgl_zbwxjghz_gaihuanzhuang where id=@{id__old};			    
+						  			</delete> 
+						   		</sql>
+						  	<format>
+								<value>
+									<![CDATA[
+					        			if(fujian!=null&&!fujian.trim().equals(""))
+										{//这里引用资源文件定义的路径
+										String fujianname=fujian.substring(fujian.lastIndexOf("\\")+1);//取到文件名
+										cz="<a href=\"/MySystem/ShowReport.wx?ACTIONTYPE=download&serverfilepath=${file.path}&serverfilename="+fujianname+"\">下载附件</a>";
+										}
+										else
+										{
+											cz="无文件";
+										}	
+				     				]]>  
+								</value>
+						   </format>
+						</report>			
+						<report id="gaihuanfangantupian_report"   pagesize="2"  type="form"  title="改换方案图片：" interceptor="com.wabacus.util.IdentifierGenerator_Interceptor"  
+							depends="zhuangbeigaihuanzhuang_report"
+							dependsparams="gaihuanzhuangxiangmu=@{gaihuanzhuangxiangmu}" selectcallback="testcallback">
+							<display dataheader="" >
+		                    	<col column="id" label="id" displaytype="hidden"/>
+		                    	<col column="tupiansuoshu" label="" displaytype="hidden"/>
+		                    	<col column="tupianzhonglei" label="" displaytype="hidden"/>
+							  	<col column="photo" label="" valuestyleproperty="align='center' width='10px' height='10px'">							  	
+							    	<!-- <inputbox type="file"   displaytype="image" deletetype="2" savepath="${image.path}" rooturl="/uploadfile/"></inputbox> -->
+						    	</col>  
+						    </display>
+						   <sql>
+							    <select>
+									<value>
+											<![CDATA[SELECT * FROM zbgl_zbwxjghz_pic  where tupianzhonglei='改装方案' and {#condition#} ]]>
+									</value>
+									<condition name="gaihuanzhuangxiangmu" label="${gaihuanzhuangxiangmu}" hidden="true">
+										<value>
+												<![CDATA[(tupiansuoshu = #data#)]]>
+										</value>
+									</condition>
+								</select>
+						      	<delete>
+						      		delete from zbgl_zbwxjghz_pic where id=@{id__old}; 			    
+						  		</delete>     
+						    </sql >
+		  					<format>
+					      		<imports>
+							    	<import>com.wabacus.util.*</import>
+					      		</imports>
+					      		<value>
+					  				<![CDATA[
+					  				if(photo!=null&&!photo.trim().equals(""))
+									{
+									  photo="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">"+"<a href=\"#\" onclick=\"wx_winpage('jsp/showPic.jsp?src="+photo+"',{initsize:'max'})\" >"+"<img src=\""+photo+"\"  width='100' height='100'>"+"</a></span>";
+									}else
+									{
+										photo="无照片";
+									}
+					  				
+					  				]]>
+					  			</value>
+					   		</format>  
+					   		<buttons buttonspacing="5" align="right">
+						  			<button name="upload" position="title" label="上传图片">
+									 <imports>
+							   			   <import>com.wabacus.system.*</import><!-- 用到了这个包下面的CacheDataBean类 -->
+						    		 </imports>
+										  <dynevent>
+											<![CDATA[
+												String str = rrequest.getStringAttribute("gaihuanzhuangxiangmu","");
+												System.out.println("***********************"+str);
+												StringBuffer sbuffer=new StringBuffer();
+												sbuffer.append("wx_winpage('upLoadImage.jsp?table=zbgl_zbwxjghz_pic&amp;tupianzhonglei=改装方案&amp;tupiansuoshu=");
+												sbuffer.append(str);
+												sbuffer.append("&amp;page=zbwxjghzh_main&amp;report=gaihuanfangantupian_report');");
+												return sbuffer.toString();//返回拼凑好的事件
+											]]>
+										</dynevent>
+									</button>
+					  		</buttons>
+					  	</report>
+					  					 
+				  	</hpanel>
+				  	<vpanel id="vp">
+				  	
+					   <report id="gaizhuangqian_report"   title="${gaizhuangqian}"  type="editablelist2" depends="zhuangbeigaihuanzhuang_report" dependsparams="gaihuanzhuangxiangmu=@{gaihuanzhuangxiangmu}"  
+					   				template="relative{htmltemplate/zhuangbeiguanli/zhuangbeiweixiujigaihuanzhuang/gaizhuangguocheng_template.html}">
+						 	<interceptor>
+								<preaction>
+								<![CDATA[
+									String gaihuanzhuangxiangmu=rrequest.getStringAttribute("gaihuanzhuangxiangmu","");
+									rrequest.getRequest().getSession().setAttribute("fujiansuoshu",gaihuanzhuangxiangmu);
+								]]>
+								</preaction>
+						    </interceptor>				
+							<display valuetdwidth="80px" labeltdwidth="80px" labelbgcolor="#f0f0f0" labelalign="left" valuealign="left">
+								<col column="{sequence}" label="序号"></col>					
+								<col column="id" label="id" displaytype="hidden"/>
+							    <col column="fujian" label="附件" ></col>
+							    <col column="time" label="上传时间" clickorderby="true"></col>
+								<col column="leibie" label="类别"  defaultvalue="改装前"></col>
+								<col column="beizhu" label="备注" ></col>
+								<col column="fujiansuoshu" label="附件所属" ></col>
+								<col column="{non-fromdb}" property="cz" label="操作"></col>				  
+							</display>
+							
+							<sql>	
+								<select>
+									<value>
+										<![CDATA[SELECT * FROM zbgl_zbwxjghz_fujian where leibie='改装前' and {#condition#} order by id]]>
+									</value>
+									
+									<condition name="gaihuanzhuangxiangmu" hidden="true">
+										<value>
+											<![CDATA[ fujiansuoshu='#data#']]>
+										</value>
+									</condition>
+							    </select> 
+								<delete confirmessage="删除吗？" preparedstatement="false" originalparams="true">
+					    				delete from zbgl_zbwxjghz_fujian where time=to_date('@{time__old}','mm/dd/yyyy hh24:mi:ss') and  leibie='@{leibie__old}'  and fujiansuoshu='@{fujiansuoshu__old}';
+								</delete>
+							</sql>
+							<format>
+						    	<value>
+						  			<![CDATA[
+						  			rrequest.getRequest().setAttribute("leibie" ,leibie);
+									rrequest.getRequest().setAttribute("fujiansuoshu" ,fujiansuoshu);
+						        		if(fujian!=null&&!fujian.trim().equals(""))
+												{//这里引用资源文件定义的路径
+												String fujianname=fujian.substring(fujian.lastIndexOf("/")+1);//取到文件名
+												cz="<a href=\"/MySystem/ShowReport.wx?ACTIONTYPE=download&serverfilepath=${file.path}&serverfilename="+fujianname+"\">下载附件</a>";
+												}else
+												{
+													cz="无文件";
+												}			
+						     		]]>   
+						  		</value>
+							</format>				
+					   </report>
+					   <report id="guochengjiancha_report"   title="${guochengjiancha}"  type="editablelist" depends="zhuangbeigaihuanzhuang_report" dependsparams="gaihuanzhuangxiangmu=@{gaihuanzhuangxiangmu}"  
+					   					template="relative{htmltemplate/zhuangbeiguanli/zhuangbeiweixiujigaihuanzhuang/guochengjiancha_template.html}">
+						 	<interceptor>
+								<preaction>
+								<![CDATA[
+									String gaihuanzhuangxiangmu=rrequest.getStringAttribute("gaihuanzhuangxiangmu","");
+									rrequest.getRequest().getSession().setAttribute("fujiansuoshu",gaihuanzhuangxiangmu);
+								]]>
+								</preaction>
+						    </interceptor>				
+							<display valuetdwidth="80px" labeltdwidth="80px" labelbgcolor="#f0f0f0" labelalign="left" valuealign="left">
+								<col column="{sequence}" label="序号"></col>					
+								<col column="id" label="id" displaytype="hidden"/>
+							    <col column="fujian" label="附件" ></col>
+							    <col column="time" label="上传时间" clickorderby="true"></col>
+								<col column="leibie" label="类别"  defaultvalue="改装前"></col>
+								<col column="beizhu" label="备注" ></col>
+								<col column="fujiansuoshu" label="附件所属" ></col>
+								<col column="{non-fromdb}" property="cz" label="操作"></col>				  
+							</display>
+							
+							<sql>	
+								<select>
+									<value>
+										<![CDATA[SELECT * FROM zbgl_zbwxjghz_fujian where leibie='过程检查' and {#condition#} order by id]]>
+									</value>
+									
+									<condition name="gaihuanzhuangxiangmu" hidden="true">
+										<value>
+											<![CDATA[ fujiansuoshu='#data#']]>
+										</value>
+									</condition>
+							    </select> 
+								<delete confirmessage="删除吗？" preparedstatement="false" originalparams="true">
+					  				  delete from zbgl_zbwxjghz_fujian where time=to_date('@{time__old}','mm/dd/yyyy hh24:mi:ss') and  leibie='@{leibie__old}'  and fujiansuoshu='@{fujiansuoshu__old}';
+								</delete>
+							</sql>
+							<format>
+						    	<value>
+						  			<![CDATA[
+						  			rrequest.getRequest().setAttribute("leibie" ,leibie);
+									rrequest.getRequest().setAttribute("fujiansuoshu" ,fujiansuoshu);
+						        		if(fujian!=null&&!fujian.trim().equals(""))
+												{//这里引用资源文件定义的路径
+												String fujianname=fujian.substring(fujian.lastIndexOf("/")+1);//取到文件名
+												cz="<a href=\"/MySystem/ShowReport.wx?ACTIONTYPE=download&serverfilepath=${file.path}&serverfilename="+fujianname+"\">下载附件</a>";
+												}else
+												{
+													cz="无文件";
+												}			
+						     		]]>   
+						  		</value>
+							</format>				
+					   </report>
+					   <report id="guochengyanshou_report"   title="${guochengyanshou}"  type="editablelist" depends="zhuangbeigaihuanzhuang_report" dependsparams="gaihuanzhuangxiangmu=@{gaihuanzhuangxiangmu}"  
+					   					template="relative{htmltemplate/zhuangbeiguanli/zhuangbeiweixiujigaihuanzhuang/guochengyanshou_template.html}">
+						 	<interceptor>
+								<preaction>
+								<![CDATA[
+									String gaihuanzhuangxiangmu=rrequest.getStringAttribute("gaihuanzhuangxiangmu","");
+									rrequest.getRequest().setAttribute("fujiansuoshu",gaihuanzhuangxiangmu);
+									rrequest.getRequest().getSession().setAttribute("fujiansuoshu",gaihuanzhuangxiangmu);
+								]]>
+								</preaction>
+						    </interceptor>				
+							<display valuetdwidth="80px" labeltdwidth="80px" labelbgcolor="#f0f0f0" labelalign="left" valuealign="left">
+								<col column="{sequence}" label="序号"></col>					
+								<col column="id" label="id" displaytype="hidden"/>
+							    <col column="fujian" label="附件" ></col>
+							    <col column="time" label="上传时间" clickorderby="true"></col>
+								<col column="leibie" label="类别"  defaultvalue="改装前"></col>
+								<col column="beizhu" label="备注" ></col>
+								<col column="fujiansuoshu" label="附件所属" ></col>
+								<col column="{non-fromdb}" property="cz" label="操作"></col>				  
+							</display>
+							
+							<sql >	
+								<select>
+									<value>
+										<![CDATA[SELECT * FROM zbgl_zbwxjghz_fujian where leibie='过程验收' and {#condition#} order by id]]>
+									</value>
+									
+									<condition name="gaihuanzhuangxiangmu" hidden="true">
+										<value>
+											<![CDATA[ fujiansuoshu='#data#']]>
+										</value>
+									</condition>
+							    </select> 
+								<delete confirmessage="删除吗？" preparedstatement="false" originalparams="true">
+					   					 delete from zbgl_zbwxjghz_fujian where time=to_date('@{time__old}','mm/dd/yyyy hh24:mi:ss') and  leibie='@{leibie__old}'  and fujiansuoshu='@{fujiansuoshu__old}';
+								</delete>
+							</sql>
+							<format>
+						    	<value>
+						  			<![CDATA[
+						  			rrequest.getRequest().setAttribute("leibie" ,leibie);
+									rrequest.getRequest().setAttribute("fujiansuoshu" ,fujiansuoshu);
+						        		if(fujian!=null&&!fujian.trim().equals(""))
+												{//这里引用资源文件定义的路径
+												String fujianname=fujian.substring(fujian.lastIndexOf("/")+1);//取到文件名
+												cz="<a href=\"/MySystem/ShowReport.wx?ACTIONTYPE=download&serverfilepath=${file.path}&serverfilename="+fujianname+"\">下载附件</a>";
+												}else
+												{
+													cz="无文件";
+												}			
+						     		]]>   
+						  		</value>
+							</format>				
+					   </report>
+					   	  	
+				  	</vpanel>      
+			   		</tabpanel>
+			    </vpanel> 
+			 </tabpanel>
+		</page>
+	</applications>

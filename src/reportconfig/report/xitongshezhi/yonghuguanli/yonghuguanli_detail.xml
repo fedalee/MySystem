@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<applications xmlns="http://www.wabacus.com"
+			   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			   xsi:schemaLocation="http://www.wabacus.com ../xsd/wabacus.applications.xsd">
+	<page id="yonghuguanli_detail">
+		<report id="yonghuguanli_report_detail" title="用户管理" width="700px" align="center" type="editabledetail">
+			<display>
+				<col column="id" label="id" displaytype="hidden" />
+				<col column="username" label="用户名称" />
+				<col column="password"  label="密码"  br="true"/>
+				<col column="realname"  label="真实姓名"  />
+				<col column="role"  label="角色">
+					<inputbox type="selectbox">
+						<option value="普通用户" label="普通用户"></option> 
+						<option value="管理员" label="管理员"></option>
+						<option value="其他用户" label="其他用户"></option>
+					</inputbox>
+				</col>
+			</display>
+			<sql>
+				<select>
+					<value>
+						<![CDATA[SELECT * FROM xtsz_yhgl_user where {#condition#} order by id]]>
+					</value>
+					<condition name="id" label="id" hidden="true">
+						<value>
+							<![CDATA[(id like '%#data#%')]]>
+						</value>
+					</condition>
+				</select>
+				<insert>
+			  		insert into xtsz_yhgl_user(id=uuid{},@{username},@{password},@{realname},@{role});
+				</insert>
+			    <update>
+			    	update xtsz_yhgl_user(@{id},@{username},@{password},@{realname},@{role}) where id=@{id__old};
+			  	</update>
+			    <delete>
+			  		delete from xtsz_yhgl_user where id=@{id__old};
+			  	</delete>
+			</sql>
+		</report>
+	</page>
+</applications>

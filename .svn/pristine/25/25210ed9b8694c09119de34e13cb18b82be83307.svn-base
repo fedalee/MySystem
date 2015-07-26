@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<applications xmlns="http://www.wabacus.com"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.wabacus.com ../xsd/wabacus.applications.xsd">
+	<page id="dsjrenwuliebiao_detail"
+		js="/webresources/script/validate.js,/webresources/script/wabacus_util.js">
+		<report id="dsjrenwuliebiao_report_detail" title="编辑" width="700px"
+			align="center" type="editabledetail" servervalidateclass="com.ShujuJiaoyan">
+			<display>
+
+				<col column="xinghao" label="${xinghao}" clickorderby="true"
+					displaytype="hidden">
+					<inputbox type="selectbox">
+						<option value="A型" label="A型"></option>
+						<option value="B型" label="B型"></option>
+						<option value="C型" label="C型"></option>
+					</inputbox>
+				</col>
+				<col column="xianhao" label="${xianhao}" filter="true"
+					displaytype="hidden" />
+
+
+				<col column="name" label="任务名" clickorderby="true" br="true"/>
+
+
+				<col column="stime" label="开始时间" datatype="date{yyyy-MM-dd}"
+					clickorderby="true" >
+					<inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)"></inputbox>
+				</col>
+				<col column="etime" label="结束时间" datatype="date{yyyy-MM-dd}" br="true">
+					<inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)"></inputbox>
+				</col>
+
+
+
+				<col column="renwulaiyuan" label="任务来源" clickorderby="true">
+					<inputbox servervalidate="isNotEmpty(#label#列须从查询结果中选取)" servervalidatetype="both">
+								<typeprompt count="15" timeout="0" selectbox="true">
+									<promptcol label="DANWEIMINGCHENG" title="挂靠单位" matchmode="anywhere"></promptcol>
+									<datasource>
+										<option dataset="@{select DANWEIMINGCHENG from XTSZ_JBXXWH_DANWEI where {#matchcondition#}}"></option> 
+									</datasource>
+								</typeprompt>
+					</inputbox>
+				</col>
+				<col column="chengdandanwei" label="承担单位" clickorderby="true" br="true">
+					<inputbox servervalidate="isNotEmpty(#label#列须从查询结果中选取)" servervalidatetype="both">
+								<typeprompt count="15" timeout="0" selectbox="true">
+									<promptcol label="DANWEIMINGCHENG" title="挂靠单位" matchmode="anywhere"></promptcol>
+									<datasource>
+										<option dataset="@{select DANWEIMINGCHENG from XTSZ_JBXXWH_DANWEI where {#matchcondition#}}"></option> 
+									</datasource>
+								</typeprompt>
+					</inputbox>
+				</col>
+
+
+				<col column="description" label="概述" datatype="clob" valuestyleproperty="colspan='3'" br="true">
+					<inputbox type="textareabox" styleproperty="rows='4'"></inputbox>
+				</col>
+				<col column="yiyi" label="意义" datatype="clob" valuestyleproperty="colspan='3'">
+					<inputbox type="textareabox" styleproperty="rows='4'"></inputbox>
+				</col>
+
+
+			</display>
+
+			<sql aftersave="RefreshLihuafeng2">
+
+				<value>
+					<![CDATA[SELECT * from ZBGL_ZBSY_DSJ_RENWUXINGZHI where  {#condition#} ]]>
+				</value>
+				<condition name="id" hidden="true">
+
+					<value>
+							<![CDATA[id=#data#]]>
+					</value>
+				</condition>
+				<insert>
+					<params>
+						<param name="param1" value="url{xianhao}" />
+						<param name="param2" value="url{id}" />
+					</params>
+					insert into
+					ZBGL_ZBSY_DSJ_RENWUXINGZHI(id=uuid{},@{xinghao},@{name},xianhao=#{param1},@{renwulaiyuan},@{chengdandanwei},@{stime},@{etime},@{description},@{yiyi},id_dsj=#{param2});
+				</insert>
+				<update>
+					update ZBGL_ZBSY_DSJ_RENWUXINGZHI
+					(@{xinghao},@{name},@{xianhao},@{renwulaiyuan},@{chengdandanwei},@{stime},@{etime},@{description},@{yiyi})
+					where xianhao=@{xianhao__old};;
+			  </update>
+			</sql>
+		</report>
+	</page>
+</applications>
+

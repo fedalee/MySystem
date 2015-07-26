@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<applications xmlns="http://www.wabacus.com"
+			   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			   xsi:schemaLocation="http://www.wabacus.com ../xsd/wabacus.applications.xsd">
+	<page id="yonghuguanli">
+		<report id="yonghuguanli_report" title="用户管理" rowselect="single" type="editablelist">
+			<display>
+				<col column="{sequence}" label="序号"></col>
+				<col column="id" label="id" displaytype="hidden" />
+				<col column="username" label="用户名称" />
+				<col column="password"  label="密码"  />
+				<col column="realname"  label="真实姓名"  />
+				<col column="role"  label="角色" >
+					<inputbox type="selectbox">
+						<option value="普通用户" label="普通用户"></option> 
+						<option value="管理员" label="管理员"></option>
+						<option value="其他用户" label="其他用户"></option>
+					</inputbox>
+				</col>
+			</display>
+			<sql>
+				<select>
+					<value>
+						<![CDATA[SELECT * FROM xtsz_yhgl_user]]>
+					</value>
+				</select>
+				<!-- <insert>
+			  		insert into xtsz_yhgl_user(id=uuid{},@{username},@{password},@{realname},@{role});
+				</insert>
+			    <update>
+			    	update xtsz_yhgl_user(@{id},@{username},@{password},@{realname},@{role}) where id=@{id__old};
+			  	</update> -->
+			  	<insert pageurl="report{yonghuguanli_detail.yonghuguanli_report_detail}" popupparams="{title:'添加',width:750,height:400}"></insert>
+				<update pageurl="report{yonghuguanli_detail.yonghuguanli_report_detail}" urlparams="id=@{id}" popupparams="{title:'编辑',width:750,height:400}"></update>
+			    <delete>
+			  		delete from xtsz_yhgl_user where id=@{id__old};
+			  	</delete>
+			</sql>
+		</report>
+	</page>
+</applications>

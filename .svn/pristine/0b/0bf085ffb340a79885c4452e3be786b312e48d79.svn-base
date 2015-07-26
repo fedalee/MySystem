@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<applications xmlns="http://www.wabacus.com"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.wabacus.com ../../../xsd/wabacus.applications.xsd">
+
+	<page id="CopyOfxiangmuliebiao">
+		
+			<vpanel id="xiangmumingcheng_vpanel">
+			
+				<report id="report1"  align="center"
+					type="editablelist" title = "项目列表">
+					<interceptor>
+					<imports>
+					<import>javax.servlet.http.HttpServletRequest</import>
+					<import>com.wabacus.system.ReportRequest</import>
+					</imports>
+					<preaction>
+					HttpServletRequest r=rrequest.getRequest();
+					r.setAttribute("xiangmuerjifenlei",r.getParameter("xiangmuerjifenlei"));
+					System.out.println("^^^^^^^^^^^项目二级分类 ：："+r.getAttribute("xiangmuerjifenlei"));
+					
+					</preaction>
+					</interceptor>
+					<display >
+						<col column="{sequence:1}" label="序号"></col>
+						<col column="id" label="id" displaytype="hidden" />
+						
+						<col column="xiangmuerjifenlei" label="项目二级名称" clickorderby="true" displaytype="hidden"/>
+
+						<col column="xiangmumingcheng" label="项目名称" clickorderby="true" />
+						<col column="xiangmubianhao" label="项目编号" clickorderby="true" />
+						<col column="suoshuzhuanti" label="${suoshuzhuanti}"></col>
+						<col column="suoshuketi" label="所属课题"></col>
+						
+						<col column="beijingxinghao" label="${beijingxinghao}" clickorderby="true" displaytype="hidden">
+							
+						</col>
+						
+						<col column="leibie" label="类别" clickorderby="true">
+							
+						</col>
+						
+						
+						<col column="{non-fromdb}" property="cc" label="专家组"></col>
+					</display>
+					<sql>
+					
+					<!-- 2014/12/11选择列表 -->
+					<value>
+						<![CDATA[SELECT * FROM zbgl_kygl_keti where {#condition#} order by id]]>
+					</value>
+					    <condition name="xiangmuerjifenlei" label="项目二级分类" hidden = "true">
+								<value>
+						        	<![CDATA[(xiangmuerjifenlei like '%#data#%' )]]>
+								</value>
+						</condition>
+					    <condition name="xiangmumingcheng" label="项目名称">
+						     <value>
+							<![CDATA[(xiangmumingcheng like  '%#data#%' )]]>
+						</value>
+					    </condition>
+					<!-- 
+						<select>
+							<value>
+								<![CDATA[SELECT * FROM zbgl_kygl_keti where {#condition#} order by id]]>
+							</value>
+							<condition name="xiangmuerjifenlei" label="项目二级分类" hidden = "true">
+								<value>
+						        	<![CDATA[(xiangmuerjifenlei like '%#data#%' )]]>
+								</value>
+							</condition>
+						</select>
+					 -->
+						<!-- 
+						<insert>
+							<params>
+								<param name="param1" value="url{xiangmuerjifenlei}" />
+							</params>
+							insert into
+							zbgl_kygl_keti(id=uuid{},@{suoshuketi},@{suoshuzhuanti},@{leibie},xiangmuerjifenlei=#{param1},@{beijingxinghao},@{xiangmumingcheng},@{xiangmubianhao});
+						</insert>
+						<update>
+							update
+							zbgl_kygl_keti(@{id},@{suoshuketi},@{suoshuzhuanti},@{leibie},@{xiangmuerjifenlei},@{beijingxinghao},@{xiangmumingcheng},@{xiangmubianhao})
+							where id=@{id__old};
+			 			</update>
+			 			 -->
+			 		
+			 			 
+			 			<insert pageurl="report{CopyOfxiangmuliebiao_detail.xiangmuliebiao_report_detail}" urlparams=" xiangmuerjifenlei=request{xiangmuerjifenlei}"  popupparams="{title:'添加',width:750,height:400}"></insert>
+						<update pageurl="report{CopyOfxiangmuliebiao_detail.xiangmuliebiao_report_detail}" urlparams=" id=@{id}" popupparams="{title:'编辑',width:750,height:400}"></update>
+			 			
+						<delete>
+							delete from zbgl_kygl_keti where id=@{id__old};
+			 		 	</delete>
+					</sql>
+			<format>
+				<value>	
+			 	<!--  
+			      <![CDATA[
+			        cc="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">"
+			        +"<a href=\"ShowReport.wx?PAGEID=zhuanjiaku\" target=\"sampleframe\">"
+			        +"专家库"+"</a></span>";
+			     ]]> 
+			    -->
+			    <![CDATA[ 
+			     cc="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">"
+			        +"<a href=\"ShowReport.wx?PAGEID=zhuanjiaku&xiangmu_id="+id +"'\" target=\"sampleframe\">"
+			        +"专家库"+"</a></span>";
+			    ]]> 
+				</value>
+			</format>
+				</report>
+
+				<!-- 从报表 -->
+				
+				<report id="report2"  title="url{xiangmumingcheng}的详细信息" depends="report1"
+					dependsparams="xiangmumingcheng=@{xiangmumingcheng};xiangmuerjifenlei=@{xiangmuerjifenlei}"
+					 align="center" type="editabledetail">
+					<interceptor>
+						<imports>
+							<import>com.wabacus.util.*</import>
+							<import>com.wabacus.system.*</import>
+						</imports>
+					</interceptor>
+					<display>
+					<!-- 
+						<col column="{sequence:1}" label="序号"></col>
+					 -->
+						<col column="id" label="id" displaytype="hidden" />
+
+						
+						<col column="xiangmuerjifenlei" label="项目二级分类" clickorderby="true" displaytype="hidden"/>
+						
+						
+						
+						<col column="xiangmumingcheng" label="项目名称" clickorderby="true" displaytype="hidden"/>
+						
+						
+						<col column="suoshuketi" label="所属课题 " clickorderby="true" displaytype="hidden"/>
+						<col column="xiangmubianhao" label="项目编号" clickorderby="true" displaytype="hidden"/>
+						
+						<col column="zhuguandanwei" label="主管单位" clickorderby="true">
+							
+						</col>
+						<col column="chengdandanwei" label="承担单位" clickorderby="true" br="true">
+							
+						</col>
+						
+						<col column="xiangmujishushijian" label="项目技术时间" clickorderby="true"
+							datatype="date{yyyy-MM-dd}" >
+							<inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)"></inputbox>
+						</col>
+
+						<col column="yanshouriqi" label="验收日期" clickorderby="true" br="true"/>
+
+						<col column="wanchengdu" label="完成度" clickorderby="true">
+							<inputbox type="selectbox">
+								<option value="10%" label="10%"></option>
+								<option value="20%" label="20%"></option>
+								<option value="30%" label="30%"></option>
+								<option value="40%" label="40%"></option>
+								<option value="50%" label="50%"></option>
+								<option value="60%" label="60%"></option>
+								<option value="70%" label="70%"></option>
+								<option value="80%" label="80%"></option>
+								<option value="90%" label="90%"></option>
+								<option value="100%" label="100%"></option>
+							</inputbox>
+						</col>
+
+						
+						<col column="yanjiumubiao" label="研究目标" datatype="clob" clickorderby="true" br="true">
+							<inputbox TYPE="textareabox"></inputbox>
+						</col>
+						
+						<col column="jishuzhibiao" label="技术指标" clickorderby="true" />
+						<col column="jingfei" label="经费" clickorderby="true" br="true"/>
+						<col column="yanjiuneirong" label="研究内容" datatype="clob"  clickorderby="true">
+							<inputbox type="textareabox"></inputbox>
+						</col>
+
+						<col column="zhuyaochengguo" label="主要成果" clickorderby="true"  br="true"/>
+						<col column="chengguoxingshi" label="成果形式" clickorderby="true">
+							<inputbox type="checkbox">
+								<option value="程序" label="程序"></option>
+								<option value="报告" label="报告"></option>
+								<option value="仿真模型" label="仿真模型"></option>
+								<option value="试验模型" label="试验模型"></option>
+								<option value="软件" label="软件"></option>
+							</inputbox>
+						</col>
+						<col column="beizhu" label="备注" datatype="clob" clickorderby="true"  br="true">
+							<inputbox type="textareabox"></inputbox>
+						</col>
+						<col column="niandujihua" label="年度计划" clickorderby="true" displaytype="hidden"/>
+
+						<col column="{non-fromdb}" property="cz" label="年度计划"></col>
+					</display>
+					<sql>
+						<select>
+							<value>
+									<![CDATA[SELECT * from zbgl_kygl_keti where  {#condition#} order by id]]>
+							</value>
+							<condition name="xiangmumingcheng"  hidden="true">
+								<value>
+										<![CDATA[(xiangmumingcheng like  '%#data#%' )]]>
+								</value>
+								<value>
+										<![CDATA[(xiangmuerjifenlei like  '%#data#%' )]]>
+								</value>
+							</condition>
+						</select>
+						<!-- 
+						<insert>
+							<params>
+								<param name="param1" value="xiangmumingcheng" />
+							</params>
+							insert into
+							zbgl_kygl_keti(id=uuid{},xiangmumingcheng=#{param1},@{suoshuketi},@{xiangmubianhao},@{chengguoxingshi},@{zhuguandanwei},@{chengdandanwei},@{xiangmujishushijian},@{yanshouriqi},@{wanchengdu},@{xiangmumingcheng});
+						</insert>
+						 -->
+						<!-- 
+						<update>
+							update
+							zbgl_kygl_keti(@{id},@{xiangmumingcheng},@{suoshuketi},@{xiangmubianhao},@{chengguoxingshi},@{zhuguandanwei},@{chengdandanwei},@{xiangmujishushijian},@{yanshouriqi},@{wanchengdu},@{xiangmumingcheng})
+							where id=@{id__old};
+			 			</update>
+			 			 -->
+			 			<!-- 
+						<delete>
+							delete from zbgl_kygl_keti where id=@{id__old};
+			   			</delete>
+			   			 -->
+					</sql>
+					<format>
+						<value>
+						<![CDATA[
+						   cz="<span onmouseover=\"this.style.cursor='pointer'\">"
+			        		+"<a href=\"ShowReport.wx?PAGEID=dianjichakanniandujihua&xiangmu_id="+id +"\" >"
+			        		+"点击查看年度计划"+"</a></span>";
+						]]>
+						
+						
+						</value>
+					</format>
+				</report>
+				
+			</vpanel>
+		
+	</page>
+</applications>
+			   

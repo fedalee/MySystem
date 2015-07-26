@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<applications xmlns="http://www.wabacus.com"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.wabacus.com ../../../../xsd/wabacus.applications.xsd">
+	<page id="cedian_qita">
+		<vpanel id="cedian_vpanel" width="1000px" align="center">
+		
+<!-- 频率表 -->
+			<report id="cedianpinlv_report" scrollwidth="1000px" title="测点"  type="editablelist2">
+				<display>
+					<col column="id" displaytype="hidden" />
+					<col column="{non-fromdb}" property="pinlv" label="频率（HZ）" width="100px"/>
+					<col column="shihz" label="10HZ" width="60px"  />
+					<col column="shierdianwuhz" label="12.5HZ" width="60px"  />
+					<col column="shiliuhz" label="16HZ" width="60px" />
+					<col column="ershihz" label="20HZ" width="60px" />
+					<col column="ershiwuhz" label="25HZ" width="60px" />
+					<col column="sanshiyidianwuhz" label="31.5HZ" width="60px" />
+					<col column="sishihz" label="40HZ" width="60px" />
+					<col column="wushihz" label="50HZ" width="60px" />
+					<col column="liushisanhz" label="63HZ" width="60px" />
+					<col column="bashihz" label="80HZ" width="60px" />
+					<col column="yibaihz" label="100HZ" width="60px"/>
+					<col column="yibaiershiwuhz" label="125HZ" width="60px"/>
+					<col column="yibailiushihz" label="160HZ" width="60px"/>
+					<col column="erbaihz" label="200HZ" width="60px"/>
+					<col column="erbaiwushihz" label="250HZ" width="60px"/>
+					<col column="sanbaiyishiwuhz" label="315HZ" width="60px"/>
+					<col column="sibaihz" label="400HZ" width="60px"/>
+					<col column="wubaihz" label="500HZ" width="60px"/>
+					<col column="liubaisanshihz" label="630HZ" width="60px"/>
+					<col column="babaihz" label="800HZ" width="60px"/>
+					<col column="yiqianhz" label="1000HZ" width="60px"/>
+					<col column="yiqianerbaiwushihz" label="1250HZ" width="60px"/>
+					<col column="yiqianliubaihz" label="1600HZ" width="60px"/>
+					<col column="erqianhz" label="2000HZ" width="60px" />
+					<col column="erqianwubaihz" label="2500HZ" width="60px"/>
+					<col column="sanqianyibaiwushihz" label="3150HZ" width="60px"/>
+					<col column="siqianhz" label="4000HZ" width="60px"/>
+					<col column="wuqianhz" label="5000HZ" width="60px"/>
+					<col column="liuqiansanbaihz" label="6300HZ" width="60px"/>
+					<col column="baqianhz" label="8000HZ" width="60px"/>
+					<col column="yiwanhz" label="10000HZ" width="100px"/>
+				</display>
+				<subdisplay>
+					<subrow  displayposition="bottom">
+						<subcol property="oci0"  valuestyleproperty="bgcolor='#eeeeee' align='center'"></subcol>
+						<subcol property="oci1"  valuestyleproperty="bgcolor='#eeeeee' align='center'"></subcol>
+						<subcol property="oci2"  valuestyleproperty="bgcolor='#eeeeee' align='center'"></subcol>
+						<subcol property="oci3"  valuestyleproperty="bgcolor='#eeeeee' align='center'"></subcol>
+						<subcol property="oci4"  valuestyleproperty="bgcolor='#eeeeee' align='center'"></subcol>
+						<subcol property="oci5"  valuestyleproperty="bgcolor='#eeeeee' align='center'"></subcol>
+						<subcol property="oci6"  valuestyleproperty="bgcolor='#eeeeee' align='center'"></subcol>
+						<subcol property="oci7"  valuestyleproperty="bgcolor='#eeeeee' align='center'"></subcol>
+						<subcol property="oci8"  valuestyleproperty="bgcolor='#eeeeee' align='center'"></subcol>
+						<subcol property="oci9"  valuestyleproperty="bgcolor='#eeeeee' align='center'"></subcol>
+						<subcol property="oci10"  valuestyleproperty="bgcolor='#eeeeee' align='center'"></subcol>
+						<subcol property="oci11"  valuestyleproperty="bgcolor='#eeeeee' align='center'"></subcol>
+						<subcol property="oci12"  valuestyleproperty="bgcolor='#eeeeee' align='center'"></subcol>
+						<subcol property="oci13"  valuestyleproperty="bgcolor='#eeeeee' align='center'"></subcol>
+						<subcol property="oci14"  valuestyleproperty="bgcolor='#eeeeee' align='center'"></subcol>
+						<subcol property="oci15"  valuestyleproperty="bgcolor='#eeeeee' align='center'"></subcol>
+						<subcol property="oci16"  valuestyleproperty="bgcolor='#eeeeee' align='center'"></subcol>
+						<subcol property="oci17"  valuestyleproperty="bgcolor='#eeeeee' align='center'"></subcol>
+						<subcol property="oci18"  valuestyleproperty="bgcolor='#eeeeee' align='center'"></subcol>
+						<subcol property="oci19"  valuestyleproperty="bgcolor='#eeeeee' align='center'"></subcol>
+						<subcol property="oci20"  valuestyleproperty="bgcolor='#eeeeee' align='center'"></subcol>
+						<subcol property="oci21"  valuestyleproperty="bgcolor='#eeeeee' align='center'"></subcol>
+						<subcol property="oci22"  valuestyleproperty="bgcolor='#eeeeee' align='center'"></subcol>
+						<subcol property="oci23"  valuestyleproperty="bgcolor='#eeeeee' align='center'"></subcol>
+						<subcol property="oci24"  valuestyleproperty="bgcolor='#eeeeee' align='center'"></subcol>
+						<subcol property="oci25"  valuestyleproperty="bgcolor='#eeeeee' align='center'"></subcol>
+						<subcol property="oci26"  valuestyleproperty="bgcolor='#eeeeee' align='center'"></subcol>
+						<subcol property="oci27"  valuestyleproperty="bgcolor='#eeeeee' align='center'"></subcol>
+						<subcol property="oci28"  valuestyleproperty="bgcolor='#eeeeee' align='center'"></subcol>
+						<subcol property="oci29"  valuestyleproperty="bgcolor='#eeeeee' align='center'"></subcol>
+						<subcol property="oci30"  valuestyleproperty="bgcolor='#eeeeee' align='center'"></subcol>
+						<subcol property="oci31"  valuestyleproperty="bgcolor='#eeeeee' align='center'"></subcol>
+					</subrow>
+					<format>
+						<imports>
+							<import>com.wabacus.util.*</import>
+							<import>com.wabacus.config.*</import>
+							<import>com.wabacus.system.*</import>
+							<import>com.wabacus.config.component.application.report.*</import>
+						</imports>
+						<value>
+							<![CDATA[
+								oci0 = "谱级";
+								String  oci_shihz = rrequest.getColDisplayValue("cedianpinlv_report","shihz",0);
+								if( oci_shihz!= null){
+									oci1 = Tools.formatDouble(new Double(Double.valueOf(oci_shihz).doubleValue() - 3.6).toString(),"###0.0");	
+								}
+								String  oci_shierdianwuhz = rrequest.getColDisplayValue("cedianpinlv_report","shierdianwuhz",0);
+								if( oci_shierdianwuhz!= null){
+									oci2 = Tools.formatDouble(new Double(Double.valueOf(oci_shierdianwuhz).doubleValue() - 4.6).toString(),"###0.0");	
+								}
+								String  oci_shiliuhz = rrequest.getColDisplayValue("cedianpinlv_report","shiliuhz",0);
+								if( oci_shiliuhz!= null){
+									oci3 = Tools.formatDouble(new Double(Double.valueOf(oci_shiliuhz).doubleValue() - 5.7).toString(),"###0.0");	
+								}
+								String  oci_ershihz = rrequest.getColDisplayValue("cedianpinlv_report","ershihz",0);
+								if( oci_ershihz!= null){
+									oci4 = Tools.formatDouble(new Double(Double.valueOf(oci_ershihz).doubleValue() - 6.6).toString(),"###0.0");	
+								}
+								String  oci_ershiwuhz = rrequest.getColDisplayValue("cedianpinlv_report","ershiwuhz",0);
+								if( oci_ershiwuhz!= null){
+									oci5 = Tools.formatDouble(new Double(Double.valueOf(oci_ershiwuhz).doubleValue() - 7.6).toString(),"###0.0");	
+								}
+								String  oci_sanshiyidianwuhz = rrequest.getColDisplayValue("cedianpinlv_report","sanshiyidianwuhz",0);
+								if( oci_sanshiyidianwuhz!= null){
+									oci6 = Tools.formatDouble(new Double(Double.valueOf(oci_sanshiyidianwuhz).doubleValue() - 8.6).toString(),"###0.0");	
+								}
+								String  oci_sishihz = rrequest.getColDisplayValue("cedianpinlv_report","sishihz",0);
+								if( oci_sishihz!= null){
+									oci7 = Tools.formatDouble(new Double(Double.valueOf(oci_sishihz).doubleValue() - 9.6).toString(),"###0.0");	
+								}
+								String  oci_wushihz = rrequest.getColDisplayValue("cedianpinlv_report","wushihz",0);
+								if( oci_wushihz!= null){
+									oci8 = Tools.formatDouble(new Double(Double.valueOf(oci_wushihz).doubleValue() - 10.6).toString(),"###0.0");	
+								}
+								String  oci_liushisanhz = rrequest.getColDisplayValue("cedianpinlv_report","liushisanhz",0);
+								if( oci_liushisanhz!= null){
+									oci9 = Tools.formatDouble(new Double(Double.valueOf(oci_liushisanhz).doubleValue() - 11.6).toString(),"###0.0");
+								}
+								String  oci_bashihz = rrequest.getColDisplayValue("cedianpinlv_report","bashihz",0);
+								if( oci_bashihz!= null){
+									oci10 = Tools.formatDouble(new Double(Double.valueOf(oci_bashihz).doubleValue() - 12.6).toString(),"###0.0");
+								}
+								String  oci_yibaihz = rrequest.getColDisplayValue("cedianpinlv_report","yibaihz",0);
+								if( oci_yibaihz!= null){
+									oci11 = Tools.formatDouble(new Double(Double.valueOf(oci_yibaihz).doubleValue() - 13.6).toString(),"###0.0");
+								}
+								String  oci_yibaiershiwuhz = rrequest.getColDisplayValue("cedianpinlv_report","yibaiershiwuhz",0);
+								if( oci_yibaiershiwuhz!= null){
+									oci12 = Tools.formatDouble(new Double(Double.valueOf(oci_yibaiershiwuhz).doubleValue() - 14.6).toString(),"###0.0");
+								}
+								String  oci_yibailiushihz = rrequest.getColDisplayValue("cedianpinlv_report","yibailiushihz",0);
+								if( oci_yibailiushihz!= null){
+									oci13 = Tools.formatDouble(new Double(Double.valueOf(oci_yibailiushihz).doubleValue() - 15.7).toString(),"###0.0");
+								}
+								String  oci_erbaihz = rrequest.getColDisplayValue("cedianpinlv_report","erbaihz",0);
+								if( oci_erbaihz!= null){
+									oci14 = Tools.formatDouble(new Double(Double.valueOf(oci_erbaihz).doubleValue() - 16.6).toString(),"###0.0");
+								}
+								String  oci_erbaiwushihz = rrequest.getColDisplayValue("cedianpinlv_report","erbaiwushihz",0);
+								if( oci_erbaiwushihz!= null){
+									oci15 = Tools.formatDouble(new Double(Double.valueOf(oci_erbaiwushihz).doubleValue() - 17.6).toString(),"###0.0");
+								}
+								String  oci_sanbaiyishiwuhz = rrequest.getColDisplayValue("cedianpinlv_report","sanbaiyishiwuhz",0);
+								if( oci_sanbaiyishiwuhz!= null){
+									oci16 = Tools.formatDouble(new Double(Double.valueOf(oci_sanbaiyishiwuhz).doubleValue() - 18.6).toString(),"###0.0");
+								}
+								String  oci_sibaihz = rrequest.getColDisplayValue("cedianpinlv_report","sibaihz",0);
+								if( oci_sibaihz!= null){
+									oci17 = Tools.formatDouble(new Double(Double.valueOf(oci_sibaihz).doubleValue() - 19.6).toString(),"###0.0");
+								}
+								String  oci_wubaihz = rrequest.getColDisplayValue("cedianpinlv_report","wubaihz",0);
+								if( oci_wubaihz!= null){
+									oci18 = Tools.formatDouble(new Double(Double.valueOf(oci_wubaihz).doubleValue() - 20.6).toString(),"###0.0");
+								}
+								String  oci_liubaisanshihz = rrequest.getColDisplayValue("cedianpinlv_report","liubaisanshihz",0);
+								if( oci_liubaisanshihz!= null){
+									oci19 = Tools.formatDouble(new Double(Double.valueOf(oci_liubaisanshihz).doubleValue() - 21.6).toString(),"###0.0");
+								}
+								String  oci_babaihz = rrequest.getColDisplayValue("cedianpinlv_report","babaihz",0);
+								if( oci_babaihz!= null){
+									oci20 = Tools.formatDouble(new Double(Double.valueOf(oci_babaihz).doubleValue() - 22.6).toString(),"###0.0");
+								}
+								String  oci_yiqianhz = rrequest.getColDisplayValue("cedianpinlv_report","yiqianhz",0);
+								if( oci_yiqianhz!= null){
+									oci21 = Tools.formatDouble(new Double(Double.valueOf(oci_yiqianhz).doubleValue() - 23.6).toString(),"###0.0");
+								}
+								String  oci_yiqianerbaiwushihz = rrequest.getColDisplayValue("cedianpinlv_report","yiqianerbaiwushihz",0);
+								if( oci_yiqianerbaiwushihz!= null){
+									oci22 = Tools.formatDouble(new Double(Double.valueOf(oci_yiqianerbaiwushihz).doubleValue() - 24.6).toString(),"###0.0");
+								}
+								String  oci_yiqianliubaihz = rrequest.getColDisplayValue("cedianpinlv_report","yiqianliubaihz",0);
+								if( oci_yiqianliubaihz!= null){
+									oci23 = Tools.formatDouble(new Double(Double.valueOf(oci_yiqianliubaihz).doubleValue() - 25.7).toString(),"###0.0");
+								}
+								String  oci_erqianhz = rrequest.getColDisplayValue("cedianpinlv_report","erqianhz",0);
+								if( oci_erqianhz!= null){
+									oci24 = Tools.formatDouble(new Double(Double.valueOf(oci_erqianhz).doubleValue() - 26.6).toString(),"###0.0");
+								}
+								String  oci_erqianwubaihz = rrequest.getColDisplayValue("cedianpinlv_report","erqianwubaihz",0);
+								if( oci_erqianwubaihz!= null){
+									oci25 = Tools.formatDouble(new Double(Double.valueOf(oci_erqianwubaihz).doubleValue() - 27.6).toString(),"###0.0");
+								}
+								String  oci_sanqianyibaiwushihz = rrequest.getColDisplayValue("cedianpinlv_report","sanqianyibaiwushihz",0);
+								if( oci_sanqianyibaiwushihz!= null){
+									oci26 = Tools.formatDouble(new Double(Double.valueOf(oci_sanqianyibaiwushihz).doubleValue() - 28.6).toString(),"###0.0");
+								}
+								String  oci_siqianhz = rrequest.getColDisplayValue("cedianpinlv_report","siqianhz",0);
+								if( oci_siqianhz!= null){
+									oci27 = Tools.formatDouble(new Double(Double.valueOf(oci_siqianhz).doubleValue() - 29.6).toString(),"###0.0");
+								}
+								String  oci_wuqianhz = rrequest.getColDisplayValue("cedianpinlv_report","wuqianhz",0);
+								if( oci_wuqianhz!= null){
+									oci28 = Tools.formatDouble(new Double(Double.valueOf(oci_wuqianhz).doubleValue() - 30.6).toString(),"###0.0");
+								}
+								String  oci_liuqiansanbaihz = rrequest.getColDisplayValue("cedianpinlv_report","liuqiansanbaihz",0);
+								if( oci_liuqiansanbaihz!= null){
+									oci29 = Tools.formatDouble(new Double(Double.valueOf(oci_liuqiansanbaihz).doubleValue() - 31.6).toString(),"###0.0");
+								}
+								String  oci_baqianhz = rrequest.getColDisplayValue("cedianpinlv_report","baqianhz",0);
+								if( oci_baqianhz!= null){
+									oci30 = Tools.formatDouble(new Double(Double.valueOf(oci_baqianhz).doubleValue() - 32.6).toString(),"###0.0");									
+								}
+								String  oci_yiwanhz = rrequest.getColDisplayValue("cedianpinlv_report","yiwanhz",0);
+								if( oci_yiwanhz!= null){
+									oci31 = Tools.formatDouble(new Double(Double.valueOf(oci_yiwanhz).doubleValue() - 33.6).toString(),"###0.0");
+								}
+							]]>
+						</value>
+					</format>
+				</subdisplay> 
+				<sql>
+					<select>
+						<value>
+							<![CDATA[SELECT * FROM zbgl_zxsy_cedian where {#condition#}]]>
+						</value>
+						<condition name="id" label="id" hidden="true">
+							<value>
+								<![CDATA[( id = #data#)]]>
+							</value>
+					    </condition>
+					</select>
+					
+					<update>
+						update zbgl_zxsy_cedian(@{shihz},@{shierdianwuhz},@{shiliuhz},@{ershihz},@{ershiwuhz},@{sanshiyidianwuhz},
+						@{sishihz},@{wushihz},@{liushisanhz},@{bashihz},@{yibaihz},@{yibaiershiwuhz},@{yibailiushihz},@{erbaihz},@{erbaiwushihz},
+						@{sanbaiyishiwuhz},@{sibaihz},@{wubaihz},@{liubaisanshihz},@{babaihz},@{yiqianhz},@{yiqianerbaiwushihz},@{yiqianliubaihz},
+						@{erqianhz},@{erqianwubaihz},@{sanqianyibaiwushihz},@{siqianhz},@{wuqianhz},@{liuqiansanbaihz},@{baqianhz},@{yiwanhz}) where id=@{id__old};
+					</update>
+					
+				</sql>
+				<format>
+					<value>
+						<![CDATA[						
+							pinlv="频率值";
+						]]>
+					</value>
+				</format>
+			</report>
+			
+			
+			
+			<!--测点值计算 -->	
+	<framepanel id="fp" margin="10px" height="200px" title="测点计算">
+	<!--   belongto="cedianpinlv_report" -->
+	<jsp id="calculate" belongto="cedianpinlv_report" height="200px" iframestyleproperty="frameborder='1' width='100%' height='100%'" >
+	/jsp/ceDian.jsp
+	</jsp>
+	</framepanel>
+	
+	
+	
+<!-- 折线图 -->
+			<report id="zhexiantu_report" title="测点频率折线图" type="fusioncharts" chartheight="500" chartwidth="1000" 
+					chartype="ZoomLine.swf" chartstyleproperty="xAxisName='频率' yAxisName='频率值' showValues='1' ">
+				<display>
+					<col column="shihz" label="10HZ" />
+					<col column="shierdianwuhz" label="12.5HZ" />
+					<col column="shiliuhz" label="16HZ" />
+					<col column="ershihz" label="20HZ" />
+					<col column="ershiwuhz" label="25HZ" />
+					<col column="sanshiyidianwuhz" label="31.5HZ" />
+					<col column="sishihz" label="40HZ" />
+					<col column="wushihz" label="50HZ" />
+					<col column="liushisanhz" label="63HZ" />
+					<col column="bashihz" label="80HZ" />
+					<col column="yibaihz" label="100HZ"/>
+					<col column="yibaiershiwuhz" label="125HZ" />
+					<col column="yibailiushihz" label="160HZ" />
+					<col column="erbaihz" label="200HZ" />
+					<col column="erbaiwushihz" label="250HZ" />
+					<col column="sanbaiyishiwuhz" label="315HZ" />
+					<col column="sibaihz" label="400HZ" />
+					<col column="wubaihz" label="500HZ" />
+					<col column="liubaisanshihz" label="630HZ" />
+					<col column="babaihz" label="800HZ" />
+					<col column="yiqianhz" label="1000HZ" />
+					<col column="yiqianerbaiwushihz" label="1250HZ" />
+					<col column="yiqianliubaihz" label="1600HZ" />
+					<col column="erqianhz" label="2000HZ" />
+					<col column="erqianwubaihz" label="2500HZ" />
+					<col column="sanqianyibaiwushihz" label="3150HZ" />
+					<col column="siqianhz" label="4000HZ" />
+					<col column="wuqianhz" label="5000HZ" />
+					<col column="liuqiansanbaihz" label="6300HZ" />
+					<col column="baqianhz" label="8000HZ" />
+					<col column="yiwanhz" label="10000HZ" />
+				</display>
+				<sql>
+					<select>
+						<value>
+							<![CDATA[SELECT 
+								shihz as shihz,
+								shierdianwuhz as shierdianwuhz,
+								shiliuhz as shiliuhz,
+								ershihz as ershihz,
+								ershiwuhz as ershiwuhz,
+								sanshiyidianwuhz as sanshiyidianwuhz,
+								sishihz as sishihz,
+								wushihz as wushihz,
+								liushisanhz as liushisanhz,
+								bashihz as bashihz,
+								yibaihz as yibaihz,
+								yibaiershiwuhz as yibaiershiwuhz,
+								yibailiushihz as yibailiushihz,
+								erbaihz as erbaihz,
+								erbaiwushihz as erbaiwushihz,
+								sanbaiyishiwuhz as sanbaiyishiwuhz,
+								sibaihz  as sibaihz,
+								wubaihz  as wubaihz,
+								liubaisanshihz  as liubaisanshihz,
+								babaihz  as babaihz,
+								yiqianhz  as yiqianhz,
+								yiqianerbaiwushihz  as yiqianerbaiwushihz,
+								yiqianliubaihz  as yiqianliubaihz,
+								erqianhz  as erqianhz,
+								erqianwubaihz  as erqianwubaihz,
+								sanqianyibaiwushihz  as sanqianyibaiwushihz,
+								siqianhz  as siqianhz,
+								wuqianhz  as wuqianhz,
+								liuqiansanbaihz  as liuqiansanbaihz,
+								baqianhz  as baqianhz,
+								yiwanhz  as yiwanhz
+								FROM zbgl_zxsy_cedian where {#condition#}
+							]]>
+						</value>
+						<condition name="id" label="id" hidden="true">
+							<value>
+								<![CDATA[( id = #data#)]]>
+							</value>
+					    </condition>
+					</select>
+				</sql>
+			</report>
+		
+		
+		</vpanel>
+	</page>
+	
+	
+	
+	
+	
+	</applications>

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<applications xmlns="http://www.wabacus.com"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.wabacus.com ../../../xsd/wabacus.applications.xsd">
+	<page id="zhuanjiaku"
+		js="/webresources/script/validate.js,/wabacusdemo/js/testcallback.js">
+		<report id="report1" title="专家库" align="center" type="editablelist"
+			template="${articlelist.report.template}" >
+			<interceptor>
+				  <imports>
+		  	 		   <import>com.wabacus.util.*</import>
+		  	 		   <import>com.wabacus.system.*</import>
+		  	 	  </imports>
+		  	 	  <preaction>
+		  	 	      <![CDATA[
+							String xiangmu_id = rrequest.getStringAttribute("xiangmu_id");							
+							rrequest.getRequest().setAttribute("xiangmu_id" ,xiangmu_id);	
+							System.out.println("################################"+xiangmu_id);						
+					  ]]>
+		  	 	  </preaction>
+	  	      </interceptor> 
+			<display>
+				<col column="juese" label="项目中角色" clickorderby="true">
+					</col>
+					<col column="id" label="id" displaytype="hidden"/>
+				   <col column="xingming" label="姓名" br="true">
+							<inputbox type="selectbox" >
+								<option dataset="@{select xingming from hyjs_hygli_zhuanjiaku}"
+									label="xingming" value="xingming">
+								</option>
+							</inputbox>
+				  </col>
+				  
+				   <col column="chushengriqi" label="出生日期" clickorderby="true"  datatype="date{yyyy-MM-dd}" br="true">
+							<inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)" ></inputbox>
+					</col>
+				   
+				   
+					<col column="zhichengzhiwu" label="职称/职务" clickorderby="true" >
+							
+					</col>
+				   <col column="gongzuodanwei" label="工作单位" filterwidth="120px" clickorderby="true" valuestyleproperty="style='mso-number-format:\@'" br="true">
+							
+					</col>
+				   
+				    <col column="zhuanyefangxiang" label="专业方向" filterwidth="120px" clickorderby="true" >
+						
+					</col>
+				   <!-- 
+				   <col column="lianxifangshi" label="联系方式" clickorderby="true"></col>
+				    -->
+				   <col column="lianxifangshi" label="联系方式" filterwidth="120px" clickorderby="true" br="true">
+							
+					</col> 
+				<!-- 	
+				   <col column="shenfenzheng" label="身份证" clickorderby="true" br="true"></col>
+				 -->   
+				  <col column="shenfenzheng" label="身份证" filterwidth="120px" clickorderby="true" >
+							
+					</col>  
+					<!-- 
+				   <col column="qita" label="其他" clickorderby="true"></col>
+				    -->
+				    <col column="qita" label="其他" filterwidth="120px" clickorderby="true" br="true">
+						
+					</col> 
+					
+				   <col column="XIANGMU_ID" label="XIANGMU_ID" displaytype="hidden"/>
+				</display>
+				<sql>
+					<select>
+			      		<value>
+				      		<![CDATA[SELECT * FROM zbgl_kygl_zhuanjiaku where  {#condition#} order by id]]>
+			      		</value>
+			        	<condition name="xiangmu_id" label="xiangmu_id" hidden="true">
+					  		<value>
+								<![CDATA[(xiangmu_id like  '%#data#%' )]]>
+							</value>
+					  	</condition>
+					  	
+		       		</select>
+		       		<insert pageurl="report{zhuanjiaku_edit.report1_detail}" urlparams="xiangmu_id=request{xiangmu_id}" popupparams="{title:'新增项目',width:750,height:500}"></insert>	
+		       		<delete>
+		  	        	delete from zbgl_kygl_zhuanjiaku where id=@{id__old};
+		        	</delete>
+				</sql>
+			 
+		</report>
+	</page>
+	
+	<page xmlns="http://www.wabacus.com" id="zhuanjiaku_edit" js="/webresources/script/validate.js,/wabacusdemo/js/testcallback.js">
+		<report id="report1_detail" title="专家库" align="center" type="editabledetail" template="${articlelist.report.template}" interceptor="interceptor.Keyanguanglizhuangjiaku_Interceptor" servervalidateclass="com.ShujuJiaoyan">
+			<display>
+				<col column="id" label="id" displaytype="hidden"/>
+				<col column="juese" label="项目中角色" clickorderby="true">
+					<inputbox type="selectbox" >
+						<option dataset="@{select juese from ZBGL_KYGL_JUESE}"
+								label="juese" value="juese"></option>
+					</inputbox>
+				</col>
+				<col column="xingming" label="姓名" br="true">
+					<inputbox type="selectbox" >
+						<autocomplete columns="chushengriqi;zhichengzhiwu;gongzuodanwei;zhuanyefangxiang;lianxifangshi;shenfenzheng;qita" colvaluecondition="xingming like '%#xingming#%'" dataset="SELECT * FROM XTSZ_JBXXWH_ZHUANJIAKU where  {#condition#}" multiple="first"></autocomplete>
+						<option label="全部" value=""></option>
+						<option dataset="@{select xingming from XTSZ_JBXXWH_ZHUANJIAKU}" label="xingming" value="xingming"></option>
+					</inputbox>
+				</col>
+				<col column="chushengriqi" label="出生日期" clickorderby="true" datatype="date{yyyy-MM-dd}" >
+					<inputbox type="datepicker"  br="true"></inputbox>
+				</col>
+				<col column="zhichengzhiwu" label="职称/职务" clickorderby="true" br="true"></col>
+				
+				<col column="gongzuodanwei" label="工作单位" filterwidth="120px" clickorderby="true" valuestyleproperty="style='mso-number-format:\@'"  >
+					<inputbox servervalidate="isNotEmpty(#label#列须从查询结果中选取)" servervalidatetype="both">
+						<typeprompt count="15" timeout="0" selectbox="true">
+							<promptcol label="DANWEIMINGCHENG" title="挂靠单位" matchmode="anywhere"></promptcol>
+							<datasource>
+								<option dataset="@{select DANWEIMINGCHENG from XTSZ_JBXXWH_DANWEI where {#matchcondition#}}"></option> 
+							</datasource>
+						</typeprompt>
+					</inputbox>
+				</col>
+				   
+				<col column="zhuanyefangxiang" label="专业方向" filterwidth="120px" clickorderby="true"  br="true"></col>
+				
+				<col column="lianxifangshi" label="联系方式" filterwidth="120px" clickorderby="true"  ></col> 
+				  
+				<col column="shenfenzheng" label="身份证" filterwidth="120px" clickorderby="true" br="true"></col>  
+					
+				<col column="qita" label="其他" filterwidth="120px" clickorderby="true" ></col> 
+
+				   <col column="XIANGMU_ID" label="XIANGMU_ID" displaytype="hidden">
+				   		<inputbox type="textbox"  defaultvalue="url{xiangmu_id}"></inputbox>
+				   </col>
+				</display>
+				<sql>
+					<select>
+			      		<value>
+				      		<![CDATA[SELECT * FROM zbgl_kygl_zhuanjiaku where  {#condition#} order by id]]>
+			      		</value>
+			        	<condition name="xiangmu_id" label="xiangmu_id" hidden="true">
+					  		<value>
+								<![CDATA[(xiangmu_id like  '%#data#%' )]]>
+							</value>
+					  	</condition>
+					  	
+		       		</select>
+		       		<insert>
+				    	<value>
+				    		insert into zbgl_kygl_zhuanjiaku(id=uuid{},@{xingming},@{chushengriqi},@{zhichengzhiwu},@{gongzuodanwei},@{zhuanyefangxiang},@{lianxifangshi},@{shenfenzheng},@{qita},XIANGMU_ID=url{xiangmu_id} ,@{juese});
+				    	</value>
+		       		</insert>
+		       		<delete>
+		  	        	delete from zbgl_kygl_zhuanjiaku where id=@{id__old};
+		        	</delete>
+				</sql>
+				
+		</report>
+	</page>
+</applications>

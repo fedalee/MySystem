@@ -1,0 +1,142 @@
+<applications xmlns="http://www.wabacus.com"
+			   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			   xsi:schemaLocation="http://www.wabacus.com ../xsd/wabacus.applications.xsd">
+	<page id="jiaochuanjieduan_shitingxingneng" js="/webresources/script/validate.js,/WebRoot/js/testcallback.js">
+<interceptor>
+				<imports>
+					<import>javax.servlet.http.HttpServletRequest;</import>
+					<import>com.wabacus.system.ReportRequest</import>
+				</imports>
+				<preaction>
+                      String xinghao=rrequest.getStringAttribute("suoshuxinghao");
+	  	 	  if(xinghao!=null){
+	  	 	  rrequest.getRequest().getSession().setAttribute("suoshuxinghao",xinghao);}
+	  	 	  
+	  	 	    
+					HttpServletRequest r=rrequest.getRequest();
+					String suoshu=rrequest.getStringAttribute("suoshu","");
+					String suoshujieduan=rrequest.getStringAttribute("suoshujieduan","");
+					r.setAttribute("suoshu",suoshu);
+					r.setAttribute("suoshujieduan",suoshujieduan);
+					if(suoshujieduan!=null)
+						if(!suoshujieduan.isEmpty())
+							if(suoshu!=null)
+								if(!suoshujieduan.isEmpty())
+								{
+									rrequest.getRequest().getSession().setAttribute("suoshu",suoshu);
+									rrequest.getRequest().getSession().setAttribute("suoshujieduan",suoshujieduan);
+									System.out.println(rrequest.getRequest().getSession().getAttribute("suoshujieduan")+"###############"+rrequest.getRequest().getSession().getAttribute("suoshu"));
+								}
+				</preaction>
+
+			</interceptor>
+		<!-- 实艇性能 -->
+		<tabpanel id="shitingxingneng"  title="url{suoshujieduan}的实艇性能" titlestyle="2">
+		<tabpanel id="tp1"  parenttitle="url{suoshujieduan}${shitingxingneng}" titleposition="left" titlealign="top" titlestyle="2" margin="10px"  height="100%">
+			<vpanel id="wulitexing_vpanel" parenttitle="${wulitexing}" margin="10px" border="0">
+    
+            	<framepanel id="tingxing_framepanel" title="${tingxing}"  margin="10px" border="1">
+               		<report id="tingxing_report"     extends="jcjd_shitingxingneng.tingxing_report" />
+			    </framepanel>
+			    <framepanel id="zcdhzytxcs_framepanel" title="${zhuchiduhezhuyaotingxingcanshu}"  margin="10px" border="1">
+                	<report id="zcdhzytxcs_report"     extends="jcjd_shitingxingneng.zcdhzytxcs_report" />
+			    </framepanel>
+			    <framepanel id="pslhcbfl_framepanel" title="${paishuilianghechubeifuli}"  margin="10px" border="1">
+                	<report id="pslhcbfl_report"     extends="jcjd_shitingxingneng.pslhcbfl_report" />
+			    </framepanel>
+			    <framepanel id="zhswkhft_framepanel" title="${zhihuishiweikehefuti}"  margin="10px" border="1">
+                	<report id="zhswkhft_report"     extends="jcjd_shitingxingneng.zhswkhft_report" />
+			    </framepanel>
+			</vpanel>
+			<vpanel id="jinglixingneng_vpanel" parenttitle="${jinglixingneng}" margin="10px" border="0">
+			    <framepanel id="fuxing_framepanel" title="${fuxing}"  margin="10px" border="1">
+	                <report id="fuxing_report"     extends="jcjd_shitingxingneng.fuxing_report" />
+			    </framepanel>
+			    <framepanel id="wenxing_framepanel" title="${wenxing}"  margin="10px" border="1">
+                	<report id="wenxing_report"     extends="jcjd_shitingxingneng.wenxing_report" />
+			    </framepanel>
+			    <framepanel id="buchenxing_framepanel" title="${buchenxing}"  margin="10px" border="1">
+	                <report id="buchenxing_report"     extends="jcjd_shitingxingneng.buchenxing_report" />
+			    </framepanel>		  
+			</vpanel>
+			<vpanel id="hangsuhexuhangli_vpanel" parenttitle="${hangsuhexuhangli}">
+			    <framepanel id="cghangsuhexuhangli_framepanel" title="${changgui}"  margin="10px" border="1">
+	                <report id="cghangsuhexuhangli_report"     extends="jcjd_shitingxingneng.cghangsuhexuhangli_report" />
+			    </framepanel>
+			    <framepanel id="hhangsuhexuhangli_framepanel" title="${he}"  margin="10px" border="1">
+	                <report id="hhangsuhexuhangli_report"     extends="jcjd_shitingxingneng.hhangsuhexuhangli_report" />	 
+			    </framepanel>			  
+			</vpanel>
+			    <framepanel id="xiaqianshendu_framepanel" title="${xiaqianshendu}"  parenttitle="${xiaqianshendu}"  margin="10px" border="1">
+                	<report id="xiaqianshendu_report"     extends="jcjd_shitingxingneng.xiaqianshendu_report" />			  
+			    </framepanel>          
+		    <vpanel id="yinbixing_hpanel">
+				<report id="yinbixing_report"          extends="jcjd_shitingxingneng.yinbixing_report" />					
+				<report id="yinbixingzhibiao_report"   extends="jcjd_shitingxingneng.yinbixingzhibiao_report" />		    
+			</vpanel>
+			<vpanel id="donglijidianli_vpanel" parenttitle="${donglijidianli}">
+			    <framepanel id="cgdonglijidianli_framepanel" title="${changgui}"  margin="10px" border="1">
+	                <report id="cgdonglijidianli_report"     extends="jcjd_shitingxingneng.cgdonglijidianli_report" />			  
+			    </framepanel>
+			    <framepanel id="hdianlijidongli_framepanel" title="${he}"  margin="10px" border="1">
+	                <report id="hdianlijidongli"            extends="jcjd_shitingxingneng.hdianlijidongli" />				  
+			    </framepanel>			  
+			</vpanel>
+			<tabpanel id="tp111"   titlestyle="2"  titlealign="top" parenttitle="ZZ能力" titlewidth="100px" margin="10px">
+		        <vpanel id="jingjietancenengli_vpanel" parenttitle="${jingjietancenengli}" margin="10px" >
+		            <report id="zaoshengmubiaozuoyongjuli_report"     extends="jcjd_shitingxingneng.zaoshengmubiaozuoyongjuli_report" />
+			        <report id="huishengcejujuli_report"              extends="jcjd_shitingxingneng.huishengcejujuli_report" />
+					<report id="zhenchajuli_report"                   extends="jcjd_shitingxingneng.zhenchajuli_report" />
+					<report id="yuleifaxianhebaojingjuli_report"      extends="jcjd_shitingxingneng.yuleifaxianhebaojingjuli_report" />
+					<report id="zaoshengcexiangguanchafanwei_report"  extends="jcjd_shitingxingneng.zaoshengcexiangguanchafanwei_report" />
+					<report id="zhenchacepinfanwei_report"            extends="jcjd_shitingxingneng.zhenchacepinfanwei_report" />
+					<framepanel id="shuishengtongxinjuli_framepanel"  title="${shuishengtongxinjuli}"  margin="10px" border="1">
+			        	<report id="shuishengotngxinjuli_report"      extends="jcjd_shitingxingneng.shuishengotngxinjuli_report" />
+			        </framepanel>
+			      	<framepanel id="shuishengpengbinengli_framepanel" title="${shuishengpengbinengli}"  margin="10px" border="1">
+			            <report id="shuishengpengbinengli_report"     extends="jcjd_shitingxingneng.shuishengpengbinengli_report" />
+			        </framepanel>
+			      	<framepanel id="leidatancehezhencha_framepanel"   title="${leidatancehezhencha}"  margin="10px" border="1">
+			            <report id="leidatancehezhencha_report"       extends="jcjd_shitingxingneng.leidatancehezhencha_report" />
+			        </framepanel>
+			      	<framepanel id="guangdiantance_framepanel"        title="${guangdiantance}"  margin="10px" border="1">
+			            <report id="guangdiantance_report"            extends="jcjd_shitingxingneng.guangdiantance_report" />
+			        </framepanel>
+                </vpanel>
+                <vpanel id="zhihuikongzhinengli_vpanel"               parenttitle="${zhihuikongzhinengli}" margin="10px" border="0">
+           	    	<framepanel id="chulimubiaonengli_framepanel"     title="${chulimubiaonengli}"  margin="10px" border="1">
+              	 		<report id="chulimubiaonengli_report"         extends="jcjd_shitingxingneng.chulimubiaonengli_report" />
+			  		</framepanel>
+			  		<framepanel id="mbzsnlhmbxxnl_framepanel"         title="${mubiaozhishinenglihemubiaoxinxinengli}"  margin="10px" border="1">
+			  			<report id="mbzsnlhmbxxnl_report"             extends="jcjd_shitingxingneng.mbzsnlhmbxxnl_report" />
+			        </framepanel>
+			    	<report id="xitongfanyingshijian_report"      extends="jcjd_shitingxingneng.xitongfanyingshijian_report" />
+                </vpanel>
+				
+                <vpanel id="gongfangnengi_vpanel"                 parenttitle="${gongfangnengli}" >
+		                <report id="yushuileigongji_report"       extends="jcjd_shitingxingneng.yushuileigongji_report" />
+					    <report id="daodangongji_report"          extends="jcjd_shitingxingneng.daodangongji_report" />
+					    <report id="shuishengduikangqicai_report" extends="jcjd_shitingxingneng.shuishengduikangqicai_report" />
+				</vpanel>
+			    <report id="zzxiaoguo_report"                     extends="jcjd_shitingxingneng.zzxiaoguo_report" />
+			    <report id="tongxinnengli_report"                 extends="jcjd_shitingxingneng.tongxinnengli_report" />
+			    <report id="daohangnengli_report" title="${daohangnengli}"   extends="jcjd_shitingxingneng.daohangnengli_report" />
+            </tabpanel>
+		    <vpanel id="pingtaixitong_vpanel" parenttitle="${pingtaixitong}">
+				<framepanel id="caozongkongzhixitong_framepanel"  title="${caozongkongzhixitong}"    margin="10px" border="1">
+		        	<report id="caozongkongzhixitong_report"      extends="jcjd_shitingxingneng.caozongkongzhixitong_report" />
+			    </framepanel>
+			    <framepanel id="daqihuanjingzonghekongzhixitong_framepanel" title="${daqihuanjingzonghekongzhixitong}"    margin="10px" border="1">
+		            <report id="daqihuanjingzonghekongzhixitong_report"     extends="jcjd_shitingxingneng.daqihuanjingzonghekongzhixitong_report" />
+			    </framepanel>
+			    <framepanel id="pingtaiguanlishebei_framepanel" title="${pingtaiguanlishebei}"    margin="10px" border="1">
+		            <report id="pingtaiguanlishebei_report"     extends="jcjd_shitingxingneng.pingtaiguanlishebei_report" />
+			    </framepanel>
+			</vpanel>
+				<framepanel id="shitingxingnengqita_framepanel" title="其他"  parenttitle="其他"  margin="10px" border="1">
+		            <report id="shitingxingnengqita_report"     extends="jcjd_shitingxingneng.shitingxingnengqita_report" />
+			    </framepanel>	   
+		</tabpanel>
+		</tabpanel>
+	</page>
+</applications>			   

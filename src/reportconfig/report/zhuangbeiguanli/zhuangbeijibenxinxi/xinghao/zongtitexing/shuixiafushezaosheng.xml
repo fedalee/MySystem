@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<applications xmlns="http://www.wabacus.com"
+			   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			   xsi:schemaLocation="http://www.wabacus.com ../xsd/wabacus.applications.xsd">
+	<page id="shuixiafushezaosheng">	
+		<report id="shuixiafushezaosheng_report" title="${shuixiafushezaosheng}" align="center" width="500px" type="editablelist2"  >
+			<display >	
+			    <col column="id" label="id" displaytype="hidden"/>
+			    <col column="suoshu" label="suoshu" displaytype="hidden"/>
+			    <col column="suoshujieduan" label="suoshujieduan" displaytype="hidden"/>
+				<col column="gongkuang" label="${gongkuang}"  />				
+				<col column="{non-fromdb}" property="cz" label="" />		
+			</display>
+			<sql >
+				<value>
+					<![CDATA[SELECT * FROM zbgl_zbjbxx_zttx_sxfszs where  {#condition#} order by id]]>
+				</value>
+				 <condition name="suoshu" label="${xinghao}" hidden="true">
+										<value>
+											<![CDATA[(suoshu = #data#)]]>
+										</value>
+				</condition>
+				 <condition name="suoshujieduan" label="${xinghao}" hidden="true">
+										<value>
+											<![CDATA[(suoshujieduan = #data#)]]>
+										</value>
+				</condition>	
+			    <insert>
+			      <params> 
+						<param name="suoshu" value="url{suoshu}"/><param name="suoshujieduan" value="url{suoshujieduan}"/>
+				  </params>	   
+		  		    insert into zbgl_zbjbxx_zttx_sxfszs(id=uuid{},suoshu=#{suoshu},suoshujieduan=#{suoshujieduan},@{gongkuang});	  		 
+			    </insert>
+			    <update>
+			        update zbgl_zbjbxx_zttx_sxfszs(@{gongkuang}) where id=@{id__old};
+			    </update>
+			    <delete>
+			  	     delete from zbgl_zbjbxx_zttx_sxfszs where id=@{id__old};			  	
+			    </delete>
+			 </sql>
+				<format>
+					<value>							
+						<![CDATA[
+			        				cz="<span onmouseover=\"this.style.cursor='pointer'\"  >"
+							 		+ "<a href=\"ShowReport.wx?PAGEID=shuixiafushezaosheng_caozuo&suoshugongkuang="+gongkuang+"&suoshu="+suoshu+"&suoshujieduan="+suoshujieduan+"\"  >"
+							 		+"操作"+"</a></span>"; 
+			     		]]>  
+					</value>
+				</format>
+		</report>
+	   
+	</page>
+</applications>                                                    

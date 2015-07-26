@@ -1,0 +1,493 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<applications xmlns="http://www.wabacus.com"
+			   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			   xsi:schemaLocation="http://www.wabacus.com ../xsd/wabacus.applications.xsd">
+	<page id="jibenxinxiweihu">
+		<tabpanel id="jibenxinxiweihu_tabpanel" margin="10px" titlestyle="2">
+			<tabpanel id="keyanguanli_tab" title="科研管理" margin="10px" titlestyle="2">
+				<report id="xiangmufenlei_report" title="项目分类" rowselect="single" align="center" type="editablelist">
+					<display>
+						<col column="id" label="id" displaytype="hidden" />
+						<group label="项目分类">
+							<!-- 项目一级分类 -->
+							<col column="xiangmuyijifenlei" label="${xiangmumingcheng}" rowgroup="true" />
+							<!-- 项目二级分类 -->
+							<col column="xiangmuerjifenlei" label="${xiangmufenlei}" rowgroup="true" />
+						</group>
+						<col column="beijingxinghao" label="${beijingxinghao}" clickorderby="true" displaytype="hidden" />
+						<col column="gaishu" label="概述" datatype="clob">
+							<inputbox type="textareabox"></inputbox>
+						</col>
+						<col column="beizhu" label="备注" datatype="clob">
+							<inputbox type="textareabox"></inputbox>
+						</col>
+					</display>
+					<sql>
+						<value>
+							<![CDATA[SELECT * FROM XTSZ_JBXXWH_KYGLXMFL  order by xiangmuyijifenlei]]>
+						</value>
+						<!-- <insert>
+							insert into XTSZ_JBXXWH_KYGLXMFL(id=uuid{},@{gaishu},@{beizhu},@{beijingxinghao};
+						</insert>
+						<update>
+							update XTSZ_JBXXWH_KYGLXMFL(@{gaishu},@{beizhu},@{beijingxinghao}) where id=@{id__old};
+						</update> -->
+						<insert pageurl="report{xiangmufenlei_detail.xiangmufenlei_report_detail}" popupparams="{title:'添加',width:750,height:400}"></insert>
+						<update pageurl="report{xiangmufenlei_detail.xiangmufenlei_report_detail}" urlparams="id=@{id}" popupparams="{title:'编辑',width:750,height:400}"></update>
+						<delete confirmessage="删除吗？">
+							delete from XTSZ_JBXXWH_KYGLXMFL where id=@{id__old};
+						</delete>
+					</sql>
+					<!-- <format>
+						<value>
+						      <![CDATA[
+						      	if(xiangmuerjifenlei.equals("背景型号")){
+						      		xiangmuerjifenlei="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">"
+						        +"<a href=\"ShowReport.wx?PAGEID=xiangmuliebiao&xiangmuerjifenlei="+xiangmuerjifenlei +"&id="+id +"'\" target=\"sampleframe\">"+xiangmuerjifenlei+"</a></span>";
+						      	}else{
+						      		xiangmuerjifenlei="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">"
+						        +"<a href=\"ShowReport.wx?PAGEID=CopyOfxiangmuliebiao&xiangmuerjifenlei="+xiangmuerjifenlei +"&id="+id +"'\" target=\"sampleframe\">"+xiangmuerjifenlei+"</a></span>";
+						      	}
+						     ]]>
+						</value>
+					</format> -->
+				</report>
+			</tabpanel>
+			<tabpanel id="zhuanxiangshiyan_subtab" title="专项试验" margin="10px" titlestyle="2">
+				<report id="hangxingzhendongzaoshenggongkuang_report" title="航行振动噪声工况" rowselect="single" align="center" type="editablelist">
+			 		<display>
+			 			<col column="{sequence}" label="序号"></col>
+			 			<col column="id" label="id" displaytype="hidden"></col>
+			 			<col column="gongkuangming" label="工况名"></col>
+			 			<col column="beizhu" label="备注"></col>
+			 		</display>
+			 		<sql>
+			 			<select >
+			 				<value>
+			 					<![CDATA[SELECT * FROM XTSZ_JBXXWH_HXZDZSGK where {#condition#} order by id]]>
+			 				</value>
+			 			</select>
+			 			<!-- <insert>
+				  			insert into XTSZ_JBXXWH_HXZDZSGK(id=uuid{},@{gongkuangming},@{beizhu});
+						</insert>
+				    	<update>
+				    		update XTSZ_JBXXWH_HXZDZSGK(@{id},@{gongkuangming},@{beizhu}) where id=@{id__old};
+				  		</update> -->
+				  		<insert pageurl="report{hangxingzhendongzaoshenggongkuang_detail.hangxingzhendongzaoshenggongkuang_report_detail}" popupparams="{title:'添加',width:750,height:400}"></insert>
+						<update pageurl="report{hangxingzhendongzaoshenggongkuang_detail.hangxingzhendongzaoshenggongkuang_report_detail}" urlparams="id=@{id}" popupparams="{title:'编辑',width:750,height:400}"></update>
+				  		<delete>
+				  			delete from XTSZ_JBXXWH_HXZDZSGK where id=@{id__old};
+				  		</delete>
+			 		</sql>
+			 	</report>
+			 	<report id="cedianguanli_report" title="测点管理" rowselect="single" align="center" type="editablelist">
+			 		<display>
+			 			<col column="{sequence}" label="序号"></col>
+			 			<col column="id" label="id" displaytype="hidden"></col>
+			 			<col column="cedianmingcheng" label="测点名称"></col>
+			 			<col column="cedianbianhao" label="测点编号"></col>
+			 			<col column="beizhu" label="备注"></col>
+			 		</display>
+			 		<sql>
+			 			<select >
+			 				<value>
+			 					<![CDATA[SELECT * FROM XTSZ_JBXXWH_CEDIANGUANLI where {#condition#} order by id]]>
+			 				</value>
+			 			</select>
+			 			<!-- <insert>
+				  			insert into XTSZ_JBXXWH_CEDIANGUANLI(id=uuid{},@{cedianmingcheng},@{cedianbianhao},@{beizhu});
+						</insert>
+				    	<update>
+				    		update XTSZ_JBXXWH_CEDIANGUANLI(@{id},@{cedianmingcheng},@{cedianbianhao},@{beizhu}) where id=@{id__old};
+				  		</update> -->
+				  		<insert pageurl="report{cedianguanli_detail.cedianguanli_report_detail}" popupparams="{title:'添加',width:750,height:400}"></insert>
+						<update pageurl="report{cedianguanli_detail.cedianguanli_report_detail}" urlparams="id=@{id}" popupparams="{title:'编辑',width:750,height:400}"></update>
+				  		<delete>
+				  			delete from XTSZ_JBXXWH_CEDIANGUANLI where id=@{id__old};
+				  		</delete>
+			 		</sql>
+			 	</report>
+			</tabpanel>
+			<tabpanel id="hangyejianshe_subtab" title="行业建设" margin="10px" titlestyle="2">
+				<report id="hongguanlunzheng_report" title="宏观论证课题分类" rowselect="single" align="center" type="editablelist">
+					<display>
+						<col column="{sequence}" label="序号"></col>
+					    <col column="id" label="id" displaytype="hidden"></col>
+					    <col column="leixing" label="类型" ></col>
+						<col column="beizhu" label="备注"></col>
+					</display>
+				    <sql>
+				    	<select>
+							<value>
+								<![CDATA[SELECT * FROM XTSZ_JBXXWH_HGLZKTFL where {#condition#} order by id]]>
+							</value>
+						</select>
+						<!-- <insert>
+					  		insert into XTSZ_JBXXWH_HGLZKTFL(id=uuid{},@{leixing},@{beizhu});
+						</insert>
+						<update>
+							update XTSZ_JBXXWH_HGLZKTFL(@{leixing},@{beizhu}) where id=@{id};					    
+						</update> -->
+						<insert pageurl="report{hongguanlunzhengketifenlei_detail.hongguanlunzhengketifenlei_report_detail}" popupparams="{title:'添加',width:750,height:400}"></insert>
+						<update pageurl="report{hongguanlunzhengketifenlei_detail.hongguanlunzhengketifenlei_report_detail}" urlparams="id=@{id}" popupparams="{title:'编辑',width:750,height:400}"></update>
+						<delete>
+					   		delete from XTSZ_JBXXWH_HGLZKTFL where id=@{id__old};
+						</delete>
+					</sql>	
+				</report>
+			</tabpanel>
+			<tabpanel id="shebeiguanli_subtab" title="设备管理" margin="10px" titlestyle="2">
+				<report id="shebeifenlei_report" title="设备分类" rowselect="single" pagesize="20" align="center" type="editablelist">
+					<display>
+						<col column="{sequence}" label="序号"></col>
+		                <col column="id" label="id" displaytype="hidden" />
+		                <col column="suoshuleibie" label="设备类别"></col>
+					</display>
+					<sql>
+					   <select>
+					     <value>
+							<![CDATA[SELECT * FROM XTSZ_JBXXWH_SHEBEIFENLEI where {#condition#} order by id]]>
+						 </value>
+					   </select>
+					   <!-- <insert>
+				  			insert into XTSZ_JBXXWH_SHEBEIFENLEI(id=uuid{},@{suoshuleibie});
+						</insert>
+				    	<update>
+				    		update XTSZ_JBXXWH_SHEBEIFENLEI(@{id},@{suoshuleibie}) where id=@{id__old};
+				  		</update> -->
+				  		<insert pageurl="report{shebeifenlei_detail.shebeifenlei_report_detail}" popupparams="{title:'添加',width:750,height:400}"></insert>
+						<update pageurl="report{shebeifenlei_detail.shebeifenlei_report_detail}" urlparams="id=@{id}" popupparams="{title:'编辑',width:750,height:400}"></update>
+				  		<delete>
+				  			delete from XTSZ_JBXXWH_SHEBEIFENLEI where id=@{id__old};
+				  		</delete>
+					</sql>
+			 	</report>
+			</tabpanel>
+			<tabpanel id="zhuanjiakuxinxi_subtab" title="专家库" margin="10px" titlestyle="2">
+				<report id="zhuanjiakuxinxi_report" title="专家库" rowselect="single" align="center" type="editablelist">
+					<display>
+					   <col column="{sequence}" label="序号"></col>
+					   <col column="id" label="id" displaytype="hidden"/>
+					   <col column="suoshujigou" label="所属机构" clickorderby="true"></col>
+					   <col column="xingming" label="姓名" clickorderby="true"></col>
+					   <col column="chushengriqi" label="出生日期" clickorderby="true" datatype="date{yyyy-MM-dd}">
+					   		<inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)"></inputbox>
+					   </col>
+					   <col column="zhichengzhiwu" label="职称/职务" clickorderby="true"></col>
+					   <col column="gongzuodanwei" label="工作单位" filter="true" filterwidth="120px" clickorderby="true" valuestyleproperty="style='mso-number-format:\@'"></col>
+					   <col column="zhuanyefangxiang" label="专业方向" clickorderby="true"></col>
+					   <col column="lianxifangshi" label="联系方式" clickorderby="true"></col>
+					   <col column="shenfenzheng" label="身份证" clickorderby="true"></col>
+					   <col column="qita" label="其他" clickorderby="true"></col>
+					</display>
+					<sql>
+			       		<select>
+				      		<value>
+					      		<![CDATA[SELECT * FROM XTSZ_JBXXWH_ZHUANJIAKU where {#condition#} order by id]]>
+				      		</value>
+			       		</select>
+			       		<!-- <insert>
+		  		        	insert into XTSZ_JBXXWH_ZHUANJIAKU(id=uuid{},@{suoshujigou},@{xingming},@{chushengriqi},@{zhichengzhiwu},@{gongzuodanwei},@{zhuanyefangxiang},@{lianxifangshi},@{shenfenzheng},@{qita});
+			        	</insert>
+			       		<update>
+			            	update XTSZ_JBXXWH_ZHUANJIAKU(@{id},@{suoshujigou},@{xingming},@{chushengriqi},@{zhichengzhiwu},@{gongzuodanwei},@{zhuanyefangxiang},@{lianxifangshi},@{shenfenzheng},@{qita}) where id=@{id};					    
+			       		</update> -->
+			       		<insert pageurl="report{zhuanjiakuxinxi_detail.zhuanjiakuxinxi_report_detail}" popupparams="{title:'添加',width:750,height:400}"></insert>
+						<update pageurl="report{zhuanjiakuxinxi_detail.zhuanjiakuxinxi_report_detail}" urlparams="id=@{id}" popupparams="{title:'编辑',width:750,height:400}"></update>
+			       		<delete>
+			  	        	delete from XTSZ_JBXXWH_ZHUANJIAKU where id=@{id__old};
+			        	</delete>
+					</sql>
+				</report>
+			</tabpanel>
+			<tabpanel id="danwei_subtab" title="单位" margin="10px" titlestyle="2">
+				<report id="danwei_report" title="单位" rowselect="single" align="center" type="editablelist">
+					<display>
+					   <col column="id" label="id" displaytype="hidden"/>
+					   <col column="danweimingcheng" label="单位名称" clickorderby="true"></col>
+					   <col column="danweibianhao" label="单位编号" clickorderby="true"></col>
+					   <col column="danweidizhi" label="单位地址" clickorderby="true"></col>
+					   <col column="danweidianhua" label="单位电话" clickorderby="true"></col>
+					   <col column="danweilianxiren" label="单位联系人" clickorderby="true"></col>
+					   <col column="suoshujigou" label="所属机构" clickorderby="true"></col>
+					   <col column="qita" label="其他" clickorderby="true"></col>
+					</display>
+					<sql>
+			       		<select>
+				      		<value>
+					      		<![CDATA[SELECT * FROM XTSZ_JBXXWH_DANWEI where {#condition#} order by id]]>
+				      		</value>
+			       		</select>
+			       		<!-- <insert>
+		  		        	insert into XTSZ_JBXXWH_DANWEI(id=uuid{},{danweimingcheng},@{danweibianhao},@{danweidizhi},@{danweidianhua},@{danweilianxiren},@{suoshujigou},@{lianxifangshi},@{qita});
+			        	</insert>
+			       		<update>
+			            	update XTSZ_JBXXWH_DANWEI(@{id},@{danweimingcheng},@{danweibianhao},@{danweidizhi},@{danweidianhua},@{danweilianxiren},@{suoshujigou},@{lianxifangshi},@{qita}) where id=@{id};					    
+			       		</update> -->
+			       		<insert pageurl="report{danwei_detail.danwei_report_detail}" popupparams="{title:'添加',width:750,height:400}"></insert>
+                        <update pageurl="report{danwei_detail.danwei_report_detail}" urlparams="id=@{id}" popupparams="{title:'编辑',width:750,height:400}"></update>
+			       		<delete>
+			  	        	delete from XTSZ_JBXXWH_DANWEI where id=@{id__old};
+			        	</delete>
+					</sql>
+				</report>
+			</tabpanel>
+	</tabpanel>
+	</page>
+	<!-- 这下面是各个report的弹出框 -->
+	<!-- 项目分类弹出框 -->
+	<page id="xiangmufenlei_detail">
+		<report id="xiangmufenlei_report_detail" title="编辑" width="700px" align="center" type="editabledetail">
+			<display>
+				<col column="id" label="id" displaytype="hidden" />
+				<group label="项目分类">
+					<!-- 项目一级分类 -->
+					<col column="xiangmuyijifenlei" label="${xiangmumingcheng}" rowgroup="true" />
+					<!-- 项目二级分类 -->
+					<col column="xiangmuerjifenlei" label="${xiangmufenlei}" rowgroup="true" />
+				</group>
+				<col column="beijingxinghao" label="${beijingxinghao}" clickorderby="true" displaytype="hidden" />
+				<col column="gaishu" label="概述" datatype="clob">
+					<inputbox type="textareabox"></inputbox>
+				</col>
+				<col column="beizhu" label="备注" datatype="clob">
+					<inputbox type="textareabox"></inputbox>
+				</col>
+			</display>
+			<sql>
+				<select>
+					<value>
+						<![CDATA[SELECT * FROM XTSZ_JBXXWH_KYGLXMFL  order by xiangmuyijifenlei]]>
+					</value>
+					<condition name="xiangmuyijifenlei" label="xiangmuyijifenlei" hidden="true">
+				  		<value>
+							<![CDATA[(xiangmuyijifenlei like '%#data#%' )]]>
+						</value>
+				  	</condition>
+				</select>
+				<insert>
+					insert into XTSZ_JBXXWH_KYGLXMFL(id=uuid{},@{gaishu},@{beizhu},@{beijingxinghao};
+				</insert>
+				<update>
+					update XTSZ_JBXXWH_KYGLXMFL(@{gaishu},@{beizhu},@{beijingxinghao}) where id=@{id__old};
+				</update>
+				<delete confirmessage="删除吗？">
+					delete from XTSZ_JBXXWH_KYGLXMFL where id=@{id__old};
+				</delete>
+			</sql>
+		</report>
+	</page>
+	<!-- 航行振动噪声工况弹出框 -->
+	<page id="hangxingzhendongzaoshenggongkuang_detail">
+		<report id="hangxingzhendongzaoshenggongkuang_report_detail" title="编辑" width="700px" align="center" type="editabledetail">
+	 		<display>
+	 			<!-- <col column="{sequence}" label="序号"></col> -->
+	 			<col column="id" label="id" displaytype="hidden"></col>
+	 			<col column="gongkuangming" label="工况名"></col>
+	 			<col column="beizhu" label="备注"></col>
+	 		</display>
+	 		<sql>
+	 			<select >
+	 				<value>
+	 					<![CDATA[SELECT * FROM XTSZ_JBXXWH_HXZDZSGK where {#condition#} order by id]]>
+	 				</value>
+	 				<condition name="id" label="id" hidden="true">
+				  		<value>
+							<![CDATA[(id like '%#data#%' )]]>
+						</value>
+				  	</condition>
+	 			</select>
+	 			<insert>
+		  			insert into XTSZ_JBXXWH_HXZDZSGK(id=uuid{},@{gongkuangming},@{beizhu});
+				</insert>
+		    	<update>
+		    		update XTSZ_JBXXWH_HXZDZSGK(@{id},@{gongkuangming},@{beizhu}) where id=@{id__old};
+		  		</update>
+		  		<delete>
+		  			delete from XTSZ_JBXXWH_HXZDZSGK where id=@{id__old};
+		  		</delete>
+	 		</sql>
+	 	</report>
+	</page>
+	<!-- 测点管理弹出框 -->
+	<page id="cedianguanli_detail">
+		<report id="cedianguanli_report_detail" title="测点管理" width="700px" align="center" type="editabledetail">
+	 		<display>
+	 			<!-- <col column="{sequence}" label="序号"></col> -->
+	 			<col column="id" label="id" displaytype="hidden"></col>
+	 			<col column="cedianmingcheng" label="测点名称"></col>
+	 			<col column="cedianbianhao" label="测点编号" br="true"></col>
+	 			<col column="beizhu" label="备注"></col>
+	 		</display>
+	 		<sql>
+	 			<select >
+	 				<value>
+	 					<![CDATA[SELECT * FROM XTSZ_JBXXWH_CEDIANGUANLI where {#condition#} order by id]]>
+	 				</value>
+	 				<condition name="id" label="id" hidden="true">
+				  		<value>
+							<![CDATA[(id like '%#data#%' )]]>
+						</value>
+				  	</condition>
+	 			</select>
+	 			<insert>
+		  			insert into XTSZ_JBXXWH_CEDIANGUANLI(id=uuid{},@{cedianmingcheng},@{cedianbianhao},@{beizhu});
+				</insert>
+		    	<update>
+		    		update XTSZ_JBXXWH_CEDIANGUANLI(@{id},@{cedianmingcheng},@{cedianbianhao},@{beizhu}) where id=@{id__old};
+		  		</update>
+		  		<delete>
+		  			delete from XTSZ_JBXXWH_CEDIANGUANLI where id=@{id__old};
+		  		</delete>
+	 		</sql>
+	 	</report>
+	</page>
+	<!-- 专家库弹出框 -->
+	<page id="zhuanjiakuxinxi_detail">
+		<report id="zhuanjiakuxinxi_report_detail" title="专家库" width="700px" align="center" type="editabledetail" servervalidateclass="com.ShujuJiaoyan">
+			<display>
+			   <!-- <col column="{sequence}" label="序号"></col> -->
+			   <col column="id" label="id" displaytype="hidden"/>
+			   <col column="suoshujigou" label="所属机构" clickorderby="true"></col>
+			   <col column="xingming" label="姓名" clickorderby="true" br="true"></col>
+			   <col column="chushengriqi" label="出生日期" clickorderby="true" datatype="date{yyyy-MM-dd}">
+			   		<inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)"></inputbox>
+			   </col>
+			   <col column="zhichengzhiwu" label="职称/职务" clickorderby="true" br="true"></col>
+			   <col column="gongzuodanwei" label="工作单位" filter="true" filterwidth="120px" clickorderby="true" valuestyleproperty="style='mso-number-format:\@'">
+		   			<inputbox servervalidate="isNotEmpty(#label#列须从查询结果中选取)" servervalidatetype="both">
+			        	<typeprompt count="15" timeout="0" selectbox="true">
+				       		<promptcol label="DANWEIMINGCHENG" title="工作单位" matchmode="anywhere"></promptcol>
+				       		<datasource>        <option dataset="@{select DANWEIMINGCHENG from XTSZ_JBXXWH_DANWEI where {#matchcondition#}}"></option>       </datasource>
+			        	</typeprompt>
+			     	</inputbox>
+			   </col>
+			   <col column="zhuanyefangxiang" label="专业方向" clickorderby="true" br="true"></col>
+			   <col column="lianxifangshi" label="联系方式" clickorderby="true"></col>
+			   <col column="shenfenzheng" label="身份证" clickorderby="true" br="true"></col>
+			   <col column="qita" label="其他" clickorderby="true"></col>
+			</display>
+			<sql>
+	       		<select>
+		      		<value>
+			      		<![CDATA[SELECT * FROM XTSZ_JBXXWH_ZHUANJIAKU where {#condition#} order by id]]>
+		      		</value>
+		      		<condition name="id" label="id" hidden="true">
+				  		<value>
+							<![CDATA[(id like '%#data#%' )]]>
+						</value>
+				  	</condition>
+	       		</select>
+	       		<insert>
+	 		        	insert into XTSZ_JBXXWH_ZHUANJIAKU(id=uuid{},@{suoshujigou},@{xingming},@{chushengriqi},@{zhichengzhiwu},@{gongzuodanwei},@{zhuanyefangxiang},@{lianxifangshi},@{shenfenzheng},@{qita});
+	        	</insert>
+	       		<update>
+	            	update XTSZ_JBXXWH_ZHUANJIAKU(@{id},@{suoshujigou},@{xingming},@{chushengriqi},@{zhichengzhiwu},@{gongzuodanwei},@{zhuanyefangxiang},@{lianxifangshi},@{shenfenzheng},@{qita}) where id=@{id};					    
+	       		</update>
+	       		<delete>
+	  	        	delete from XTSZ_JBXXWH_ZHUANJIAKU where id=@{id__old};
+	        	</delete>
+			</sql>
+		</report>
+	</page>
+	<!-- 宏观论证课题分类弹出框 -->
+	<page id="hongguanlunzhengketifenlei_detail">
+		<report id="hongguanlunzhengketifenlei_report_detail" title="宏观论证课题分类" width="700px" align="center" type="editabledetail">
+			<display>
+				<!-- <col column="{sequence}" label="序号"></col> -->
+			    <col column="id" label="id" displaytype="hidden"></col>
+			    <col column="leixing" label="类型" ></col>
+				<col column="beizhu" label="备注"></col>
+			</display>
+		    <sql>
+		    	<select>
+					<value>
+						<![CDATA[SELECT * FROM XTSZ_JBXXWH_HGLZKTFL where {#condition#} order by id]]>
+					</value>
+					<condition name="id" label="id" hidden="true">
+				  		<value>
+							<![CDATA[(id like '%#data#%' )]]>
+						</value>
+				  	</condition>
+				</select>
+				<insert>
+			  		insert into XTSZ_JBXXWH_HGLZKTFL(id=uuid{},@{leixing},@{beizhu});
+				</insert>
+				<update>
+					update XTSZ_JBXXWH_HGLZKTFL(@{leixing},@{beizhu}) where id=@{id};					    
+				</update>
+				<delete>
+			   		delete from XTSZ_JBXXWH_HGLZKTFL where id=@{id__old};
+				</delete>
+			</sql>	
+		</report>
+	</page>
+	<!-- 设备分类弹出框 -->
+	<page id="shebeifenlei_detail">
+		<report id="shebeifenlei_report_detail" title="设备分类" width="700px" align="center" type="editabledetail">
+			<display>
+				<!-- <col column="{sequence}" label="序号"></col> -->
+                <col column="id" label="id" displaytype="hidden" />
+                <col column="suoshuleibie" label="设备类别"></col>
+			</display>
+			<sql>
+			   <select>
+			     <value>
+					<![CDATA[SELECT * FROM XTSZ_JBXXWH_SHEBEIFENLEI where {#condition#} order by id]]>
+				 </value>
+				 <condition name="id" label="id" hidden="true">
+				  		<value>
+							<![CDATA[(id like '%#data#%' )]]>
+						</value>
+				  	</condition>
+			   </select>
+			   <insert>
+		  			insert into XTSZ_JBXXWH_SHEBEIFENLEI(id=uuid{},@{suoshuleibie});
+				</insert>
+		    	<update>
+		    		update XTSZ_JBXXWH_SHEBEIFENLEI(@{id},@{suoshuleibie}) where id=@{id__old};
+		  		</update>
+		  		<delete>
+		  			delete from XTSZ_JBXXWH_SHEBEIFENLEI where id=@{id__old};
+		  		</delete>
+			</sql>
+	 	</report>
+	</page>
+	<!-- 单位弹出框 -->
+	<page id="danwei_detail">
+		<report id="danwei_report_detail" title="单位" width="700px" align="center" type="editabledetail">
+			<display>
+				<!-- <col column="{sequence}" label="序号"></col> -->
+                <col column="id" label="id" displaytype="hidden" />
+                <col column="danweimingcheng" label="单位名称" clickorderby="true"></col>
+				<col column="danweibianhao" label="单位编号" clickorderby="true" br="true"></col>
+			    <col column="danweidizhi" label="单位地址" clickorderby="true"></col>
+				<col column="danweidianhua" label="单位电话" clickorderby="true" br="true"></col>
+			    <col column="danweilianxiren" label="单位联系人" clickorderby="true"></col>
+			    <col column="suoshujigou" label="所属机构" clickorderby="true" br="true"></col>
+				<col column="qita" label="其他" clickorderby="true"></col>
+			</display>
+			<sql>
+	       		<select>
+		      		<value>
+			      		<![CDATA[SELECT * FROM XTSZ_JBXXWH_DANWEI where {#condition#} order by id]]>
+		      		</value>
+		      		<condition name="id" label="id" hidden="true">
+				  		<value>
+							<![CDATA[(id like '%#data#%' )]]>
+						</value>
+				  	</condition>
+	       		</select>
+	       		<insert>
+	 		        	insert into XTSZ_JBXXWH_DANWEI(id=uuid{},@{danweimingcheng},@{danweibianhao},@{danweidizhi},@{danweidianhua},@{danweilianxiren},@{suoshujigou},@{qita});
+	        	</insert>
+	       		<update>
+	            	update XTSZ_JBXXWH_DANWEI(@{id},@{danweimingcheng},@{danweibianhao},@{danweidizhi},@{danweidianhua},@{danweilianxiren},@{suoshujigou},@{qita}) where id=@{id};					    
+	       		</update>
+	       		<delete>
+	  	        	delete from XTSZ_JBXXWH_DANWEI where id=@{id__old};
+	        	</delete>
+			</sql>
+		</report>
+	</page>
+</applications>

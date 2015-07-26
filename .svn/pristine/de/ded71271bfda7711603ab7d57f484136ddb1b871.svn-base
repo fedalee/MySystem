@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>导航栏</title>
+<link rel="stylesheet" type="text/css" href="css/nav/left-nav.css" />
+<script type="text/javascript" src="js/jquery-1.7.1.min.js"></script>
+</head>
+<body>
+	<div id="firstpane" class="menu_list">
+	    <p class="menu_head current">ZB管理</p>
+	    <div style="display:block" class=menu_body >
+			<a href="ShowReport.wx?PAGEID=xinghao" target="sampleframe">ZB基本信息</a>
+			<a href="ShowReport.wx?PAGEID=keyanguanli" target="sampleframe">科研管理</a>
+			<a href="ShowReport.wx?PAGEID=zhuangbeiyanzhi" target="sampleframe">ZB研制</a>
+			<a href="ShowReport.wx?PAGEID=zhuanxiangshiyan_homePage" target="sampleframe">专项实验</a>
+			<a href="ShowReport.wx?PAGEID=zhuangbeishiyong" target="sampleframe">ZB使用</a>
+			<a href="ShowReport.wx?PAGEID=zbwxjghzh_main" target="sampleframe">ZB维修及改换装</a>
+	    </div>
+	    <p class="menu_head">行业建设</p>
+	    <div style="display:none" class=menu_body >
+			<a href="ShowReport.wx?PAGEID=hongguanlunzheng" target="sampleframe">宏观论证</a>
+			<a href="ShowReport.wx?PAGEID=hangyeguanli" target="sampleframe">行业管理</a>
+	    </div>
+	    <p class="menu_head">设备管理</p>
+	    <div style="display:none" class=menu_body >
+			<a href="ShowReport.wx?PAGEID=shebei" target="sampleframe">设备</a>
+			<a href="ShowReport.wx?PAGEID=cailiaoguanli" target="sampleframe">材料管理</a>
+	    </div>
+	    <p class="menu_head">信息检索</p>
+	    <div style="display:none" class=menu_body >
+			<a href="ShowReport.wx?PAGEID=xinxijiansuo" target="sampleframe">数据分析</a>
+			<a href="#" target="sampleframe">多种信息检索</a>
+			<a href="ShowReport.wx?PAGEID=shujuziyuan" target="sampleframe">数据资源</a>
+	    </div>
+	    <p class="menu_head">数据交换</p>
+	    <div style="display:none" class=menu_body >
+			<a href="#" target="sampleframe">数据导入</a>
+			<a href="#" target="sampleframe">数据导出</a>
+	    </div>
+	    <p class="menu_head">系统设置</p>
+	    <div style="display:none" class=menu_body >
+			<a href="ShowReport.wx?PAGEID=jibenxinxiweihu" target="sampleframe">基本信息维护</a>
+	  		<a href="ShowReport.wx?PAGEID=yonghuguanli" target="sampleframe">用户管理</a>
+			<a href="#" target="sampleframe">数据元管理</a>
+			<a href="#" target="sampleframe">数据库定制功能</a>
+			<a href="#" target="sampleframe">其他相关</a>
+	    </div>
+	    <p class="menu_head">系统支持</p>
+	    <div style="display:none" class=menu_body >
+			<a href="#" target="sampleframe">文件管理</a>
+	    </div>
+	</div>
+	<script type=text/javascript>
+	$(document).ready(function(){
+		$("#firstpane .menu_body:eq(0)").show();
+		$("#firstpane p.menu_head").click(function(){
+			$(this).addClass("current").next("div.menu_body").slideToggle(300).siblings("div.menu_body").slideUp("slow");
+			$(this).siblings().removeClass("current");
+		});
+		$(".menu_body a").click(function(){
+			$(".menu_body a").removeClass("isClick");
+			$(this).addClass("isClick");
+		});
+		$(".menu_body a").mouseover(function(){
+			$(this).addClass("current");
+			$(this).siblings().removeClass("current");
+		});
+		$(".menu_body a").mouseout(function(){
+			$(this).removeClass("current");
+		});
+	});
+	</script>
+</body>
+</html>

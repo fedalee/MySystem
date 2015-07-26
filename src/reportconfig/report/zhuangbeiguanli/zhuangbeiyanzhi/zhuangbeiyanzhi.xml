@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<applications xmlns="http://www.wabacus.com"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.wabacus.com ../xsd/wabacus.applications.xsd">
+	<page id="zhuangbeiyanzhi" js="/webresources/script/validate.js,/wabacusdemo/js/testcallback.js">
+		<report id="report2" title="${zhuangbeiyanzhi}" align="left" type="editablelist" rowselect="single" celldrag="0">
+			<display>
+				<col column="{sequence:1}" label="序号"  ></col>
+				<col column="id" label="id" displaytype="hidden" />
+				<col column="xinghao" label="${xinghao}" clickorderby="true">
+				</col>
+				<col column="lixianglunzhengjihuahao" label="${lixianglunzhengjihuahao}"
+					clickorderby="true" />
+				<col column="lunzhengdanwei" label="${lunzhengdanwei}" clickorderby="true">				
+				</col>
+				<col column="shejidanwei" label="${shejidanwei}" clickorderby="true">
+					
+				</col>
+				<col column="jianzaodanwei" label="${jianzaodanwei}" datatype="clob" />
+				<col column="gaishu" label="概述" datatype="clob">
+					<inputbox type="textareabox"></inputbox>
+				</col>
+				<col column="beizhu" label="备注" datatype="clob">
+					<inputbox type="textareabox"></inputbox>
+				</col>
+			</display>
+			<sql>
+				<value>
+					<![CDATA[SELECT * FROM zbgl_zbyz_xinghaoxinxi where  {#condition#}]]>
+				</value>
+				<!-- xianhao查询狂 -->
+				<condition name="xinghao" label="${xinghao}" >
+						     <value>
+							<![CDATA[(xinghao like  '%#data#%' )]]>
+						</value>
+						<inputbox >
+					       <typeprompt count="15">
+						      <promptcol label="xinghao" title="${xinghao}" matchmode="anywhere" ></promptcol>
+						       <datasource>
+							       <option dataset="@{select xinghao from zbgl_zbyz_xinghaoxinxi where {#matchcondition#} and {#condition#}}">
+								        <datasetconditions>
+									         <condition name="xiala">
+										          <value> <![CDATA[( xianhao like '#data#%')]]></value>
+									         </condition>
+								        </datasetconditions>
+							       </option>
+						      </datasource>
+					       </typeprompt>
+					    </inputbox>				
+				</condition>
+				
+				<!-- 立项论证计划号查询狂 -->				
+ 				<condition name="lixianglunzhengjihuahao" label="立项论证计划号">
+						     <value>
+							<![CDATA[(lixianglunzhengjihuahao like  '%#data#%' )]]>
+						</value>
+						<inputbox>
+					       <typeprompt count="15">
+					       <promptcol label="lixianglunzhengjihuahao" title="立项论证计划号" matchmode="anywhere"></promptcol>
+						      <datasource>
+							       <option dataset="@{select lixianglunzhengjihuahao from zbgl_zbyz_xinghaoxinxi where {#matchcondition#} and {#condition#}}">
+								        <datasetconditions>
+									         <condition name="xiala2">
+										          <value> <![CDATA[( lixianglunzhengjihuahao like '#data#%')]]></value>
+									         </condition>
+								        </datasetconditions>
+							       </option>
+						      </datasource>
+					       </typeprompt>
+					    </inputbox>				
+				</condition>
+				<insert pageurl="report{zhuangbeiyanzhiPopupPage.zhuangbeiyanzhiPopup}" popupparams="{title:'新增${xianhao}',width:1000,height:500}">	</insert>
+				<update pageurl="report{zhuangbeiyanzhiPopupPage.zhuangbeiyanzhiPopup}" urlparams="suoshuxinghao=@{xinghao}" popupparams="{title:'修改qiantingzhuangtaijibeizhu',width:1000,height:500}"></update>
+				<delete>
+					delete from zbgl_zbyz_xinghaoxinxi where id=@{id__old};
+					delete from zbgl_zbyz_shitingxingneng where xinghao=@{xinghao};
+				</delete>
+			</sql>
+			<format>
+				<value>
+			  <![CDATA[
+			  				String str="";
+			  				
+			  				gaishu=gaishu==null?"":gaishu.trim();
+			  				if(!gaishu.equals(""))
+			  				{
+			  					str=gaishu;
+			  					if(str.length()>7)
+			  						str=str.substring(0,7)+"……";
+			  					gaishu="<span onclick=\"wx_tip('"+gaishu+"',this,{color:'#666666',width:'350px'})\">"+str+"</span>";
+			  				}			  
+			  
+			        xinghao="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">"
+			        +"<a href=\"ShowReport.wx?PAGEID=yanzhijieduan&xinghaoid="+id+"&xinghao="+xinghao+"\" target=\"sampleframe\">"
+			        +xinghao+"</a></span>";
+			     ]]>
+				</value>
+			</format>
+		</report>
+	</page>
+</applications>                                                                                                                                                   

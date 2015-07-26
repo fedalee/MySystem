@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<applications xmlns="http://www.wabacus.com"
+			   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			   xsi:schemaLocation="http://www.wabacus.com ../xsd/wabacus.applications.xsd">
+	<page id="keti" js="/webresources/script/validate.js,/WebRoot/js/testcallback.js">
+	
+		<report id="report2" title="  " align="center" >
+			
+			<display > 
+			<col column="{sequence:1}" label="序号"></col>
+			 <col column="id" label="id" displaytype="hidden" />
+				 <col column="niandu"  label="开始年度/年"  />
+				 <col column="jieshunian"  label="结束年度/年"  />
+				 <col column="zhouqi"  label="周期/年" >
+				 </col>
+				     
+			</display>
+			
+			<sql>
+				<value>
+					<![CDATA[SELECT * FROM zbgl_kygl_ketixiangxixinxi]]>
+				</value>
+				
+			<insert>
+		  		 insert into zbgl_kygl_ketixiangxixinxi(id=uuid{},@{niandu},@{jieshunian},@{zhouqi});
+			  </insert>
+			     <update>
+			     update zbgl_kygl_ketixiangxixinxi(@{id},@{niandu},@{jieshunian},@{zhouqi}) where id=@{id__old};
+			  </update>
+			       <delete>
+			  	 delete from zbgl_kygl_ketixiangxixinxi where id=@{id__old};
+			  </delete>
+			</sql>
+			
+		</report>
+         <report id="report3" title=" 年度计划 " align="center" type="editablelist2" width="1000px" interceptor="com.wabacus.util.IdentifierGenerator_Interceptor">
+			
+			<display > 
+			<col column="{sequence:1}" label="序号"></col>
+			 <col column="id" label="id" displaytype="optional" />
+				 <col column="niandu"  label="年度"  />
+				 
+				<col column="{non-fromdb}" property="cz" label="年度计划"></col>      
+			</display>
+			
+			<sql>
+				<value>
+					<![CDATA[SELECT * FROM zbgl_kygl_ketixiangxixinxi]]>
+				</value>
+				
+			<insert>
+		  		 insert into zbgl_kygl_ketixiangxixinxi(id=uuid{},@{niandu});
+			  </insert>
+			     <update>
+			     update zbgl_kygl_ketixiangxixinxi(@{id},@{niandu}) where id=@{id__old};
+			  </update>
+			       <delete>
+			  	 delete from zbgl_kygl_ketixiangxixinxi where id=@{id__old};
+			  </delete>
+			</sql>
+			<format>
+			  <value>
+			  <![CDATA[
+			  
+			  	
+			 
+			        cz="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">"
+			        +"<a href=\"ShowReport.wx?PAGEID=nianjihua\" target=\"_blank\">"
+			        +"详细信息"+"</a></span>";
+			     ]]>   
+			  </value>
+			</format>
+		</report>
+	</page>
+</applications>

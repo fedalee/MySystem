@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<applications xmlns="http://www.wabacus.com"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.wabacus.com ../xsd/wabacus.applications.xsd">
+	<page id="jianzaojihuajieduan"
+		js="/webresources/script/validate.js,/WebRoot/js/testcallback.js">
+   <report id="jianzaojihua" title=" " type="editabledetail"
+			template="relative{htmltemplate/zhuangbeiguanli/zhuangbeiyanzhi/jianzao_template.html}">
+			<interceptor>
+				<imports>
+					<import>javax.servlet.http.HttpServletRequest;</import>
+					<import>com.wabacus.system.ReportRequest</import>
+				</imports>
+				<preaction>
+
+					HttpServletRequest r=rrequest.getRequest();
+					r.setAttribute("suoshuxinghao",r.getParameter("xinghao"));
+				</preaction>
+
+			</interceptor>
+			<display>
+				<col column="id" label="id" displaytype="hidden" />
+				<col column="xinghao" label="${xinghao}" displaytype="hidden" />				
+				<col column="jianzaofangshi" label="${jianzaofangshi}"><inputbox type="textareabox" styleproperty="rows='5'"></inputbox></col>
+				<col column="jianzaotedian" label="${jianzaotedian}"><inputbox type="textareabox" styleproperty="rows='5'"></inputbox></col>
+				<col column="guanjiangongyi" label="${guanjiangongyi}"><inputbox type="textareabox" styleproperty="rows='5'"></inputbox></col>
+				<col column="jianzaoshuliang" label="${jianzaoshuliang}"></col>
+				
+			</display>
+			<sql>
+				<select>
+					<value> <![CDATA[SELECT * FROM zbgl_zbyz_xinghaoxinxi where {#condition#}]]>
+					</value>
+					<condition name="xinghao" hidden="true">
+						<value> <![CDATA[(xinghao = #data# )]]>
+						</value>
+					</condition>
+
+				</select>
+				
+				<update>
+					update
+					zbgl_zbyz_xinghaoxinxi(@{id},@{jianzaofangshi},@{jianzaotedian},@{jianzaoshuliang},@{guanjiangongyi})
+					where id=@{id__old};
+				</update>
+				
+			</sql>
+			<format>
+
+				<!-- <value> <![CDATA[ cc="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">" 
+					+"<a href=\"ShowReport.wx?PAGEID=jianzao\" target=\"sampleframe\">" +"详细信息"+"</a></span>"; 
+					]]> </value> -->
+
+		</format>
+		</report>
+
+
+
+
+
+
+
+
+
+	<report id="zongtijianzaoliebiao" title="url{xinghao}号的${xianhao}列表 "
+			type="editablelist" rowselect="single" celldrag="0">
+
+			<interceptor>
+				<imports>
+					<import>javax.servlet.http.HttpServletRequest;</import>
+					<import>com.wabacus.system.ReportRequest</import>
+				</imports>
+				<preaction>
+
+					HttpServletRequest r=rrequest.getRequest();
+					r.setAttribute("suoshuxinghao",r.getParameter("xinghao"));
+
+
+				</preaction>
+
+			</interceptor>
+			<display  valuetdwidth="80px" labeltdwidth="80px" labelbgcolor="#f0f0f0" labelalign="left" valuealign="left">
+				<col column="id" label="id" displaytype="hidden" />
+				<col column="{sequence:1}" label="序号"  ></col>
+				<col column="xinghao" label="${xinghao}" displaytype="hidden" />
+				<col column="xianhao" label="${xianhao}"></col>
+                <col column="jianzaofangshi" label="${jianzaofangshi}"  br="true"></col>
+				<col column="jianzaojihuashijian" label="${jianzaojihuashijian}" datatype="date{yyyy-MM-dd}">
+					<inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)" ></inputbox>
+				</col>
+				<col column="jianzaoshijishijian" label="${jianzaoshijishijian}" datatype="date{yyyy-MM-dd}" >
+					<inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)"></inputbox>
+				</col>
+				<col column="jianzaotedian" label="${jianzaotedian}"></col>
+				<col column="guanjiangongyi" label="${guanjiangongyi}"></col>
+				<col column="zongzhuangchang" label="${zongzhuangchang}"></col>
+				<col column="jianzaozhouqi" label="${jianzaozhouqi}"></col>
+				<col column="yanshoupinggujieguo" label="验收评估结果"></col>
+				<col column="dashiji" label="大事记"></col>
+				<col column="zhongdawentishuoming" label="重大问题说明"></col>
+				<col column="jianzaozhuangtai" label="建造状态"></col>
+				<col column="{non-fromdb}" property="xgzl" label="相关资料"></col>
+				<col column="{non-fromdb}" property="cc" label="附件"></col>
+			</display>
+			<sql>
+				<select>
+					<value>
+					<![CDATA[SELECT * FROM zbgl_zbyz_jianzaojihua where  {#condition#}]]>
+					</value>
+
+					<condition name="xinghao" hidden="true">
+						<value>
+								<![CDATA[(xinghao =  #data# )]]>
+						</value>
+					</condition>
+					<condition name="xianhao" label="${xianhao}">
+						<value> <![CDATA[(xianhao = #data# )]]>
+						</value>
+						<inputbox>
+					       <typeprompt count="15">
+						      <promptcol label="xianhao" title="${xianhao}" matchmode="anywhere"></promptcol>
+						       <datasource>
+							       <option dataset="@{select xianhao from zbgl_zbyz_jianzaojihua where {#matchcondition#} and {#condition#}}">
+								        <datasetconditions>
+									         <condition name="xiala">
+										          <value> <![CDATA[( xianhao like '#data#%')]]></value>										          
+									         </condition>
+								        </datasetconditions>
+							       </option>
+						      </datasource>
+					       </typeprompt>
+					    </inputbox>	
+					</condition>
+					
+
+				</select>
+
+				<insert pageurl="report{jianzaojihuaPopupPage.jianzaojihuaPopup}"
+					urlparams="xinghao=request{suoshuxinghao}" popupparams="{title:'新增${xianhao}',width:800,height:430}">
+				</insert>
+
+				<update pageurl="report{jianzaojihuaPopupPage.jianzaojihuaPopup}"
+					urlparams="suoshuxianhao=@{xianhao};suoshuxinghao=@{xinghao}"
+					popupparams="{title:'修改',width:800,height:430}"></update>
+				<delete>
+				<![CDATA[
+					delete from zbgl_zbyz_jianzaojihua where id=@{id__old};
+					update zbgl_zbjbxx_xianhao set jieduan='待建造' where xianhao=@{xianhao} and suoshuxinghao=@{xinghao};
+				]]>
+				</delete>
+			</sql>
+			<format>
+				<value>
+			  <![CDATA[
+			  				String str="";
+			  				
+			  				jianzaofangshi=jianzaofangshi==null?"":jianzaofangshi.trim();
+			  				if(!jianzaofangshi.equals(""))
+			  				{
+			  					str=jianzaofangshi;
+			  					if(str.length()>7)
+			  						str=str.substring(0,7)+"……";
+			  					jianzaofangshi="<span onclick=\"wx_tip('"+jianzaofangshi+"',this,{color:'#666666',width:'350px'})\">"+str+"</span>";
+			  				}
+			  							  
+			  				jianzaotedian=jianzaotedian==null?"":jianzaotedian.trim();
+			  				if(!jianzaotedian.equals(""))
+			  				{
+			  					str=jianzaotedian;
+			  					if(str.length()>7)
+			  						str=str.substring(0,7)+"……";
+			  					jianzaotedian="<span onclick=\"wx_tip('"+jianzaotedian+"',this,{color:'#666666',width:'350px'})\">"+str+"</span>";
+			  				}			  
+
+			  				guanjiangongyi=guanjiangongyi==null?"":guanjiangongyi.trim();
+			  				if(!guanjiangongyi.equals(""))
+			  				{
+			  					str=guanjiangongyi;
+			  					if(str.length()>7)
+			  						str=str.substring(0,7)+"……";
+			  					guanjiangongyi="<span onclick=\"wx_tip('"+guanjiangongyi+"',this,{color:'#666666',width:'350px'})\">"+str+"</span>";
+			  				}			  
+
+			  				yanshoupinggujieguo=yanshoupinggujieguo==null?"":yanshoupinggujieguo.trim();
+			  				if(!yanshoupinggujieguo.equals(""))
+			  				{
+			  					str=yanshoupinggujieguo;
+			  					if(str.length()>7)
+			  						str=str.substring(0,7)+"……";
+			  					yanshoupinggujieguo="<span onclick=\"wx_tip('"+yanshoupinggujieguo+"',this,{color:'#666666',width:'350px'})\">"+str+"</span>";
+			  				}			  
+
+		  				
+			  				zhongdawentishuoming=zhongdawentishuoming==null?"":zhongdawentishuoming.trim();
+			  				if(!zhongdawentishuoming.equals(""))
+			  				{
+			  					str=zhongdawentishuoming;
+			  					if(str.length()>5)
+			  						str=str.substring(0,5)+"……";
+			  					zhongdawentishuoming="<span onclick=\"wx_tip('"+zhongdawentishuoming+"',this,{color:'#666666',width:'350px'})\">"+str+"</span>";
+			  				}			  				
+			  				dashiji=dashiji==null?"":dashiji.trim();
+			  				if(!dashiji.equals(""))
+			  				{
+			  					str=dashiji;
+			  					if(str.length()>7)
+			  						str=str.substring(0,7)+"……";
+			  					dashiji="<span onclick=\"wx_tip('"+dashiji+"',this,{color:'#666666',width:'350px'})\">"+str+"</span>";
+			  				}
+			  							  							  
+			        cc="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">"
+							 + "<a href=\"#\" onclick=\"wx_winpage('ShowReport.wx?PAGEID=zbyz_fujian&leibie="+xinghao+xianhao+"&fujiansuoshu=建造计划阶段',{width:1100,height:400})\" target=\"sampleframe\">"
+							 + "点击查看" + "</a></span>";
+					xgzl="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">"
+							 + "<a href=\"#\" onclick=\"wx_winpage('ShowReport.wx?PAGEID=zbyz_xiangguanziliao_fujian&leibie="+xinghao+xianhao+"&fujiansuoshu=建造计划阶段相关资料',{width:1100,height:400})\" target=\"sampleframe\">"
+							 + "点击查看" + "</a></span>";
+			     ]]>
+	
+	
+				</value>
+			</format>
+		</report>
+
+	</page>
+</applications>
+

@@ -1,0 +1,1008 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<applications xmlns="http://www.wabacus.com"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.wabacus.com ../../../xsd/wabacus.applications.xsd">
+	<page id="zhendongzaosheng_tabs" interceptor="interceptor.GetIdInterceptor">
+		<tabpanel id="allStageTabs">
+
+
+
+			<!--Stage One -->
+			<vpanel id="taijia_frame" parenttitle="台架实验">
+				<report id="taijia_danjishebei_report" title="url{suoshuxianhao}单机设备列表"
+					type="editablelist2" top="10px">
+					<display>
+						<col column="id" label="id" displaytype="optional" />
+						<col column="{sequence}" label="序号"></col>
+						<col column="jieduan" label="阶段（测试使用不要添数据！)" displaytype="hidden" />
+						<col column="name" label="单机设备名称">
+							<inputbox type="selectbox">
+								<option dataset="class{dataSource.optionList.ShiTingBuZhi}"></option>
+							</inputbox>
+						</col>
+						<col column="suoshuxianhao" label="所属舷号（测试）" displaytype="hidden"></col>
+						<col column="suoshushebei" label="所属设备（测试）" displaytype="hidden"></col>
+						<col column="xianhaozhuangtai" label="舷号状态(测试)" displaytype="hidden"></col>
+					</display>
+					<sql>
+						<select>
+							<value>
+								<![CDATA[SELECT * FROM zbgl_zxsy_djsb a left join zbgl_zxsy_shebei b
+											on a.suoshushebei=b.id where {#condition#} and gongkuang is null and b.jieduan='taijia' order by a.name]]>
+							</value>
+							<condition name="suoshuxianhao" label="舷号" hidden="true">
+								<value>
+									<![CDATA[(suoshuxianhao = #data#)]]>
+								</value>
+							</condition>
+							<condition name="zhuangtai" label="状态" hidden="true">
+								<value>
+									<![CDATA[(xianhaozhuangtai = #data#)]]>
+								</value>
+							</condition>
+							<condition name="name" label="单机设备名称" hidden="true">
+								<value>
+									<![CDATA[(name like '%#data#%')]]>
+								</value>
+							</condition>
+						</select>
+						<insert>
+							<params>
+								<param name="uuid" value="uuid{}" />
+								<param name="taijiaId" value="request{taijia}" />
+							</params>
+							insert into
+							zbgl_zxsy_djsb (id,name,suoshushebei) values
+							(#{uuid},@{name},#{taijiaId});
+						</insert>
+						<!-- <update> update zbgl_zxsy_djsb(@{name}) where id = @{id__old}; 
+							</update> -->
+						<delete>
+							delete from zbgl_zxsy_djsb where id=@{id__old};
+						</delete>
+					</sql>
+				</report>
+
+				<!-- ;suoshuxianhao=@{suoshuxianhao};zhuangtai=@{xianhaozhuangtai}" 是为了给拦截器传参 
+					suoshushebei=@{suoshushebei}; 是为了数据库插入 name=@{name} 只是为了当作过滤条件和显示 -->
+				<report id="danjishebei_gongkuang_report" title="url{name}相应工况列表"
+					type="editablelist2" left="10px" top="10px" depends="taijia_danjishebei_report"
+					dependsparams="suoshushebei=@{suoshushebei};
+								   name=@{name} ;suoshuxianhao=@{suoshuxianhao};
+								   zhuangtai=@{xianhaozhuangtai}">
+					<display>
+						<col column="{sequence}" label="序号"></col>
+						<col column="id" label="id" displaytype="hidden" />
+						<col column="gongkuang" label="工况名称" />
+						<col column="suoshushebei" label="所属设备" displaytype="hidden" />
+						<col column="name" label="单机设备名称" displaytype="hidden" />
+					</display>
+					<sql>
+						<select>
+							<value>
+								<![CDATA[SELECT * FROM zbgl_zxsy_djsb a left join zbgl_zxsy_shebei b
+											on a.suoshushebei=b.id where {#condition#} and gongkuang is not null
+											 order by a.name]]>
+							</value>
+							<condition name="工况" label="工况名称" hidden="true">
+								<value>
+									<![CDATA[(gongkuang like '%#data#%')]]>
+								</value>
+							</condition>
+							<condition name="suoshushebei" label="所属设备" hidden="true">
+								<value>
+									<![CDATA[(suoshushebei = #data#)]]>
+								</value>
+							</condition>
+							<condition name="name" label="单机设备名称" hidden="true">
+								<value>
+									<![CDATA[(name = #data#)]]>
+								</value>
+							</condition>
+						</select>
+						<insert>
+							<params>
+								<param name="uuid" value="uuid{}" />
+							</params>
+							insert into
+							zbgl_zxsy_djsb (id,name,suoshushebei,gongkuang) values
+							(#{uuid},url{name},url{suoshushebei},@{gongkuang});
+						</insert>
+						<!-- <update> update zbgl_zxsy_djsb(@{gongkuang}) where id = @{id__old}; 
+							</update> -->
+						<delete>
+							delete from zbgl_zxsy_djsb where id=@{id__old};
+						</delete>
+					</sql>
+					<format>
+						<value>
+								<![CDATA[											
+											gongkuang="<span onmouseover=\"this.style.cursor='pointer'\">"
+												+"<a href=\"ShowReport.wx?PAGEID=taijiashiyan_cedianleixing_tabs&suoshudanjishebei="+id+"\" target=\"_blank\">"
+												+gongkuang+"</a></span>";
+								]]>
+						</value>
+					</format>
+				</report>
+			</vpanel>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			<!--Stage Two 码头实验 -->
+			<tabpanel id="matoushiyanshuju_zongheyinshen_vpanel"
+				parenttitle="${matou}实验" titlestyle="2">
+				<!-- 码头实验——非声性隐身 -->
+				<report id="feishengyinshen_report" type="form"
+					parenttitle="${feishengyinshenxingneng}"
+					template="relative{htmltemplate/zhuangbeiguanli/shiyanshihang/matoushiyanfeishengyinshenxingneng_template.html}">
+					<display>
+						<col column="id" displaytype="hidden" />
+						<col column="leidaboyinshen" label="${leidabo}${yinshen}：">
+							<inputbox jsvalidate="isNumeric(#data#不是合法数字)"></inputbox>
+						</col>
+						<col column="hongwaiyinshen" label="${hongwai}${yinshen}：">
+							<inputbox jsvalidate="isNumeric(#data#不是合法数字)"></inputbox>
+						</col>
+						<col column="ciyinshen" label="${ci}${yinshen}：">
+							<inputbox jsvalidate="isNumeric(#data#不是合法数字)"></inputbox>
+						</col>
+						<col column="dianchangyinshen" label="电场隐身：">
+							<inputbox jsvalidate="isNumeric(#data#不是合法数字)"></inputbox>
+						</col>
+					</display>
+					<sql>
+						<select>
+							<value>
+									<![CDATA[SELECT * FROM zbgl_zxsy_mtsy where {#condition#}]]>
+								</value>
+
+							<condition name="suoshuxianhao" label="suoshuxianhao"
+								hidden="true">
+								<value>
+										<![CDATA[(suoshuxianhao = #data#)]]>
+								</value>
+
+							</condition>
+							<condition name="zhuangtai" label="状态" hidden="true">
+								<value> 
+								<![CDATA[(xianhaozhuangtai = #data#)]]>
+								</value>
+							</condition>
+
+						</select>
+						<update>
+							update
+							zbgl_zxsy_mtsy(@{leidaboyinshen},@{hongwaiyinshen},@{ciyinshen},@{dianchangyinshen})
+							where id=@{id__old};
+						</update>
+					</sql>
+				</report>
+
+				<vpanel id="fujian" parenttitle="试验资料">
+				 <report id="matoushiyanshiyandagang_report"   title="试验大纲"  type="editablelist" template="relative{htmltemplate/zhuangbeiguanli/zhuanxiangshiyan/matoushiyanshiyandagang.html}">
+						 	<interceptor>
+								<preaction>
+								<![CDATA[
+									String suoshuxianhao =rrequest.getStringAttribute("suoshuxianhao","");
+									rrequest.getRequest().setAttribute("fujiansuoshu",suoshuxianhao);
+									rrequest.getRequest().getSession().setAttribute("fujiansuoshu",suoshuxianhao);
+									
+									String zhuangtai =rrequest.getStringAttribute("zhuangtai","");
+									rrequest.getRequest().setAttribute("fujiansuoshu2",zhuangtai);
+									rrequest.getRequest().getSession().setAttribute("fujiansuoshu2",zhuangtai);
+								]]>
+								</preaction>
+						    </interceptor>				
+							<display valuetdwidth="80px" labeltdwidth="80px" labelbgcolor="#f0f0f0" labelalign="left" valuealign="left">
+								<col column="{sequence}" label="序号"></col>					
+								<col column="id" label="id" displaytype="hidden"/>
+							    <col column="fujian" label="附件" ></col>
+							     <col column="leibie" label="类别"  displaytype="hidden"></col>
+							    <col column="time" label="上传时间" clickorderby="true"></col>
+								<col column="beizhu" label="备注" ></col>
+								<col column="fujiansuoshu" label="附件所属" ></col>
+								<col column="{non-fromdb}" property="cz" label="操作"></col>				  
+							</display>
+							
+							<sql >	
+								<select>
+									<value>
+										<![CDATA[SELECT * FROM zbgl_zbwxjghz_fujian where leibie='码头试验试验大纲' and {#condition#} order by id]]>
+									</value>
+									
+									<condition name="suoshuxianhao" hidden="true">
+										<value>
+											<![CDATA[ fujiansuoshu='#data#']]>
+										</value>
+									</condition>
+									<condition name="zhuangtai" hidden="true">
+										<value>
+											<![CDATA[ fujiansuoshu2='#data#']]>
+										</value>
+									</condition>
+							    </select> 
+								<delete confirmessage="删除吗？" preparedstatement="false" originalparams="true">
+					   					 delete from zbgl_zbwxjghz_fujian where time=to_date('@{time__old}','mm/dd/yyyy hh24:mi:ss') and  leibie='@{leibie__old}'  and fujiansuoshu='@{fujiansuoshu__old}';
+								</delete>
+							</sql>
+							<format>
+						    	<value>
+						  			<![CDATA[
+						  			rrequest.getRequest().setAttribute("leibie" ,leibie);
+									rrequest.getRequest().setAttribute("fujiansuoshu" ,fujiansuoshu);
+						        		if(fujian!=null&&!fujian.trim().equals(""))
+												{//这里引用资源文件定义的路径
+												String fujianname=fujian.substring(fujian.lastIndexOf("/")+1);//取到文件名
+												cz="<a href=\"/MySystem/ShowReport.wx?ACTIONTYPE=download&serverfilepath=${file.path}&serverfilename="+fujianname+"\">下载附件</a>";
+												}else
+												{
+													cz="无文件";
+												}			
+						     		]]>   
+						  		</value>
+							</format>				
+					   </report>
+					   
+					    <report id="matoushiyanshiyanziliao_report"   title="试验资料"  type="editablelist" template="relative{htmltemplate/zhuangbeiguanli/zhuanxiangshiyan/matoushiyanshiyanziliao.html}">
+						 	<interceptor>
+								<preaction>
+								<![CDATA[
+									String suoshuxianhao =rrequest.getStringAttribute("suoshuxianhao","");
+									rrequest.getRequest().setAttribute("fujiansuoshu",suoshuxianhao);
+									rrequest.getRequest().getSession().setAttribute("fujiansuoshu",suoshuxianhao);
+									
+									String zhuangtai =rrequest.getStringAttribute("zhuangtai","");
+									rrequest.getRequest().setAttribute("fujiansuoshu2",zhuangtai);
+									rrequest.getRequest().getSession().setAttribute("fujiansuoshu2",zhuangtai);
+									
+									
+								]]>
+								</preaction>
+						    </interceptor>				
+							<display valuetdwidth="80px" labeltdwidth="80px" labelbgcolor="#f0f0f0" labelalign="left" valuealign="left">
+								<col column="{sequence}" label="序号"></col>					
+								<col column="id" label="id" displaytype="hidden"/>
+							    <col column="fujian" label="附件" ></col>
+							    <col column="leibie" label="类别"  displaytype="hidden"></col>
+							    <col column="time" label="上传时间" clickorderby="true"></col>
+								<col column="beizhu" label="备注" ></col>
+								<col column="fujiansuoshu" label="附件所属" ></col>
+								<col column="{non-fromdb}" property="cz" label="操作"></col>				  
+							</display>
+							
+							<sql >	
+								<select>
+									<value>
+										<![CDATA[SELECT * FROM zbgl_zbwxjghz_fujian where leibie='码头试验试验资料' and {#condition#} order by id]]>
+									</value>
+									
+									<condition name="suoshuxianhao" hidden="true">
+										<value>
+											<![CDATA[ fujiansuoshu='#data#']]>
+										</value>
+									</condition>
+									<condition name="zhuangtai" hidden="true">
+										<value>
+											<![CDATA[ fujiansuoshu2='#data#']]>
+										</value>
+									</condition>
+							    </select> 
+								<delete confirmessage="删除吗？" preparedstatement="false" originalparams="true">
+					   					 delete from zbgl_zbwxjghz_fujian where time=to_date('@{time__old}','mm/dd/yyyy hh24:mi:ss') and  leibie='@{leibie__old}'  and fujiansuoshu='@{fujiansuoshu__old}';
+								</delete>
+							</sql>
+							<format>
+						    	<value>
+						  			<![CDATA[
+						  			rrequest.getRequest().setAttribute("leibie" ,leibie);
+									rrequest.getRequest().setAttribute("fujiansuoshu" ,fujiansuoshu);
+						        		if(fujian!=null&&!fujian.trim().equals(""))
+												{//这里引用资源文件定义的路径
+												String fujianname=fujian.substring(fujian.lastIndexOf("/")+1);//取到文件名
+												cz="<a href=\"/MySystem/ShowReport.wx?ACTIONTYPE=download&serverfilepath=${file.path}&serverfilename="+fujianname+"\">下载附件</a>";
+												}else
+												{
+													cz="无文件";
+												}			
+						     		]]>   
+						  		</value>
+							</format>				
+					   </report>
+					   
+					   
+</vpanel>
+
+
+				<!-- 码头实验——>设备振动噪声 -->
+				<!-- 码头实验——>设备振动噪声——>单机设备 -->
+				<vpanel id="danjishebei_hpanel" parenttitle="单机设备振动噪声">
+					<report id="matou_danjishebei_report" title="url{suoshuxianhao}单机设备列表"
+						type="editablelist2" top="10px">
+						<display>
+							<col column="id" label="id" displaytype="optional" />
+							<col column="{sequence}" label="序号"></col>
+							<col column="jieduan" label="阶段（测试使用）" displaytype="hidden" />
+							<col column="name" label="单机设备名称">
+							<inputbox type="selectbox">
+								<option dataset="class{dataSource.optionList.ShiTingBuZhi}"></option>
+							</inputbox>
+							</col>
+							<col column="suoshuxianhao" label="所属舷号（测试）" displaytype="hidden"></col>
+							<col column="suoshushebei" label="所属设备（测试）" displaytype="hidden"></col>
+							<col column="xianhaozhuangtai" label="舷号状态（测试）" displaytype="hidden"></col>
+						</display>
+						<sql>
+							<select>
+								<value>
+								<![CDATA[SELECT * FROM zbgl_zxsy_djsb a left join zbgl_zxsy_shebei b
+											on a.suoshushebei=b.id where {#condition#} and gongkuang is null and b.jieduan='matou' and a.suoshuzuheshebei is null order by a.name]]>
+							</value>
+								<condition name="suoshuxianhao" label="舷号" hidden="true">
+									<value>
+									<![CDATA[(suoshuxianhao = #data#)]]>
+									</value>
+								</condition>
+								<condition name="zhuangtai" label="状态" hidden="true">
+									<value>
+									<![CDATA[(xianhaozhuangtai = #data#)]]>
+									</value>
+								</condition>
+								<condition name="name" label="单机设备名称">
+									<value>
+									<![CDATA[(name like '%#data#%')]]>
+									</value>
+								</condition>
+							</select>
+							<insert>
+								<params>
+									<param name="uuid" value="uuid{}" />
+									<param name="id" value="request{matou}" />
+								</params>
+								insert into
+								zbgl_zxsy_djsb (id,name,suoshushebei) values
+								(#{uuid},@{name},#{id});
+							</insert>
+							<!-- <update> update zbgl_zxsy_djsb(@{name}) where id = @{id__old}; 
+								</update> -->
+							<delete>
+								delete from zbgl_zxsy_djsb where id=@{id__old};
+							</delete>
+						</sql>
+					</report>
+
+					<report id="matou_danjishebei_gongkuang_report" title="url{name}相应工况列表"
+						type="editablelist2" top="10px" left="10px" depends="matou_danjishebei_report"
+						dependsparams="suoshushebei=@{suoshushebei};
+								   name=@{name};suoshuxianhao=@{suoshuxianhao};
+								   zhuangtai=@{xianhaozhuangtai}">
+						<display>
+							<col column="{sequence}" label="序号"></col>
+							<col column="id" label="id" displaytype="hidden" />
+							<col column="gongkuang" label="工况名称（点击查看测点）" />
+							<col column="suoshushebei" label="所属设备" displaytype="hidden" />
+							<col column="name" label="单机设备名称" displaytype="hidden" />
+						</display>
+						<sql>
+							<select>
+								<value>
+								<![CDATA[SELECT * FROM zbgl_zxsy_djsb  where {#condition#} and gongkuang is not null
+											 order by a.name]]>
+							</value>
+								<condition name="工况" label="工况名称">
+									<value>
+									<![CDATA[(gongkuang like '%#data#%')]]>
+									</value>
+								</condition>
+								<condition name="suoshushebei" label="所属设备" hidden="true">
+									<value>
+									<![CDATA[(suoshushebei = #data#)]]>
+									</value>
+								</condition>
+								<condition name="name" label="单机设备名称" hidden="true">
+									<value>
+									<![CDATA[(name = #data#)]]>
+									</value>
+								</condition>
+							</select>
+							<insert>
+								<params>
+									<param name="uuid" value="uuid{}" />
+									<param name="uuidd" value="uuid{}" />
+								</params>
+								insert into
+								zbgl_zxsy_djsb (id,name,suoshushebei,gongkuang)
+								values
+								(#{uuid},url{name},url{suoshushebei},@{gongkuang});
+								insert
+								into
+								zbgl_zxsy_cedian(id,cedianmingcheng,suoshu,cedianleibie)
+								values
+								(#{uuidd},'placeholder',#{uuid},'辐射噪声');
+
+							</insert>
+							<!-- <update> update zbgl_zxsy_djsb(@{gongkuang}) where id = @{id__old}; 
+								</update> -->
+							<delete>
+								delete from zbgl_zxsy_djsb where id=@{id__old};
+							</delete>
+						</sql>
+						<format>
+							<value>
+								<![CDATA[											
+											gongkuang="<span onmouseover=\"this.style.cursor='pointer'\">"
+												+"<a href=\"ShowReport.wx?PAGEID=matou_hangxing_danji_cedianleixing_tabs&suoshudanjishebei="+id+"\" target=\"_blank\">"
+												+gongkuang+"</a></span>";
+								]]>
+						</value>
+						</format>
+					</report>
+				</vpanel>
+
+				<!-- 码头实验——>设备振动噪声——>组合设备 -->
+				<vpanel id="zuheshebei_hpanel" parenttitle="组合设备振动噪声">
+
+					<!-- 组合设备主表 @suoshuxianhao为显示记录的过滤条件 从url中获取 由上层传入 @suoshushebei为要插入数据库的字段 
+						存储组合设备所属舷号和所处阶段两个属性 从session中获取 由拦截器查询数据库之后设定 -->
+					<report id="matou_zuheshebei_report" title="url{suoshuxianhao}组合组合列表"
+						type="editablelist2" top="10px">
+						<display>
+							<col column="id" label="id" displaytype="optional" />
+							<col column="{sequence}" label="序号"></col>
+							<col column="jieduan" label="阶段（测试使用）" displaytype="hidden" />
+							<col column="name" label="组合设备名称" />
+							<col column="suoshuxianhao" label="所属舷号（测试）" displaytype="hidden"></col>
+							<col column="suoshushebei" label="所属设备（测试）" displaytype="hidden"></col>
+							<col column="xianhaozhuangtai" label="舷号状态（测试）"></col>
+						</display>
+						<sql>
+							<select>
+								<value>
+								<![CDATA[SELECT * FROM zbgl_zxsy_zhsb a left join zbgl_zxsy_shebei b
+											on a.suoshushebei=b.id where {#condition#} and gongkuang is null and b.jieduan='matou' order by a.name]]>
+							</value>
+								<condition name="suoshuxianhao" label="舷号" hidden="true">
+									<value>
+									<![CDATA[(suoshuxianhao = #data#)]]>
+									</value>
+								</condition>
+								<condition name="name" label="组合设备名称">
+									<value>
+									<![CDATA[(name like '%#data#%')]]>
+									</value>
+								</condition>
+							</select>
+							<insert>
+								<params>
+									<param name="uuid" value="uuid{}" />
+									<param name="id" value="request{matou}" />
+								</params>
+								insert into
+								zbgl_zxsy_zhsb (id,name,suoshushebei) values
+								(#{uuid},@{name},#{id});
+							</insert>
+							<!-- <update> update zbgl_zxsy_zhsb(@{name}) where id = @{id__old}; 
+								</update> -->
+							<delete>
+								delete from zbgl_zxsy_zhsb where id=@{id__old};
+							</delete>
+						</sql>
+					</report>
+
+					<!-- 工况从表 从属组合设备 @name 是组合设备名称，由主从关系传入 用作显示标题和作为插入记录的字段 @suoshushebei 
+						是记录数据库中组合设备表父表的字段 仅作为插入记录的字段 -->
+					<report id="matou_zuheshebei_gongkuang_report" title="url{name}相应工况列表"
+						type="editablelist2" top="10px" left="10px" depends="matou_zuheshebei_report"
+						dependsparams="suoshushebei=@{suoshushebei};
+								   name=@{name}">
+						<display>
+
+							<col column="{sequence}" label="序号"></col>
+							<col column="jieduan" label="阶段（测试使用）" displaytype="hidden" />
+							<col column="id" label="id" displaytype="optional" />
+							<col column="gongkuang" label="工况名称（点击查看某些测点）" />
+							<col column="suoshushebei" label="所属设备" displaytype="hidden" />
+							<col column="name" label="组合设备名称" displaytype="hidden" />
+							<col column="suoshuxianhao" label="所属舷号（传参）"></col>
+						</display>
+						<sql>
+							<select>
+								<value>
+								<![CDATA[SELECT * FROM zbgl_zxsy_zhsb a left join zbgl_zxsy_shebei b
+											on a.suoshushebei=b.id where {#condition#} and gongkuang is not null
+											 order by a.name]]>
+							</value>
+								<condition name="工况" label="工况名称">
+									<value>
+									<![CDATA[(gongkuang like '%#data#%')]]>
+									</value>
+								</condition>
+								<condition name="suoshushebei" label="所属设备" hidden="true">
+									<value>
+									<![CDATA[(suoshushebei = #data#)]]>
+									</value>
+								</condition>
+								<condition name="name" label="单机设备名称" hidden="true">
+									<value>
+									<![CDATA[(name = #data#)]]>
+									</value>
+								</condition>
+							</select>
+							<insert>
+								<params>
+									<param name="uuid" value="uuid{}" />
+									<param name="uuidd" value="uuid{}" />
+								</params>
+								insert into
+								zbgl_zxsy_zhsb (id,name,suoshushebei,gongkuang)
+								values
+								(#{uuid},url{name},url{suoshushebei},@{gongkuang});
+
+								insert
+								into
+								zbgl_zxsy_cedian(id,cedianmingcheng,suoshu,cedianleibie)
+								values
+								(#{uuidd},'placeholder',#{uuid},'辐射噪声');
+							</insert>
+							<!-- <update> update zbgl_zxsy_zhsb(@{gongkuang}) where id = @{id__old}; 
+								</update> -->
+							<delete>
+								delete from zbgl_zxsy_zhsb where id=@{id__old};
+							</delete>
+						</sql>
+						<format>
+							<value>
+								<![CDATA[											
+											gongkuang="<span onmouseover=\"this.style.cursor='pointer'\">"
+												+"<a href=\"ShowReport.wx?PAGEID=gongkuang_cedianleixing&suoshuzuheshebei="+id+
+												"&gongkuang="+gongkuang+"&suoshushebei="+suoshushebei+"&suoshuxianhao="+suoshuxianhao+"\" target=\"_blank\">"
+												+gongkuang+"</a></span>";
+								]]>
+						</value>
+						</format>
+					</report>
+
+
+					<!-- 单机设备从表 从属工况 与前两个表不同的是，这个表不再向zbgl_zxsy_zhsb中添加记录，而是向zbgl_zxsy_djsb中添加记录 
+						@suoshushebei 用于插入字段 @suoshuzuheshebei 用于插入字段 注意：其实只要有suoshuzuheshebei这个字段理论上就可以得到suoshushebei 
+						不过为了方便起见，两个字段都要存 -->
+					<!-- <report id="matou_zuheshebei_gongkuang_danjishebei_report" title="url{gongkuang}下单机设备列表" 
+						type="editablelist2" top="10px" left="10px" depends="matou_zuheshebei_gongkuang_report" 
+						dependsparams="suoshushebei=@{suoshushebei}; suoshuzuheshebei=@{id}; gongkuang=@{gongkuang}; 
+						"> <display> <col column="id" label="id" displaytype="hidden" /> <col column="{sequence}" 
+						label="序号"></col> <col column="name" label="单机设备名称"> </col> <col column="suoshushebei" 
+						label="所属设备" displaytype="hidden" /> <col column="suoshuzuheshebei" label="所属组合设备" 
+						displaytype="hidden" /> </display> <sql> <select> <value> <![CDATA[SELECT 
+						* FROM zbgl_zxsy_djsb a where {#condition#} order by a.name]]> </value> <condition 
+						name="suoshuzuheshebei" label="所属组合设备" hidden="true"> <value> <![CDATA[(suoshuzuheshebei 
+						= #data#)]]> </value> </condition> <condition name="danjishebei" label="单机设备名称"> 
+						<value> <![CDATA[(name = #data#)]]> </value> </condition> </select> <insert> 
+						<params> <param name="uuid" value="uuid{}" /> <param name="uuidd" value="uuid{}" 
+						/> </params> insert into zbgl_zxsy_djsb (id,name,suoshuzuheshebei,suoshushebei) 
+						values (#{uuid},@{name},url{suoshuzuheshebei},url{suoshushebei}); insert 
+						into zbgl_zxsy_cedian(id,cedianmingcheng,suoshudanjishebei,cedianleibie) 
+						values (#{uuidd},'placeholder',#{uuid},'辐射噪声'); </insert> <update> update 
+						zbgl_zxsy_djsb(@{name}) where id = @{id__old}; </update> <delete> delete 
+						from zbgl_zxsy_djsb where id=@{id__old}; </delete> </sql> <format> <value> 
+						<![CDATA[ name="<span onmouseover=\"this.style.cursor='pointer'\">" +"<a 
+						href=\"ShowReport.wx?PAGEID=matoushiyan_hangxingshiyan_cedianleixing_tabs&suoshudanjishebei="+id+"\" 
+						target=\"_blank\">" +name+"</a></span>"; ]]> </value> </format> </report> -->
+				</vpanel>
+
+			</tabpanel><!-- end of 码头实验 -->
+
+
+			<!-- Stage Three 航行实验 -->
+			<tabpanel id="hangxingshiyan_tab" title="航行实验"
+				titleposition="top" titlestyle="2">
+				<report id="feishengyinshenxingneng_report" type="form"
+					title="非声隐身性能"
+					template="relative{htmltemplate/zhuangbeiguanli/shiyanshihang/hangxingshiyanfeishengyinshenxingneng_template.html}">
+					<display>
+						<col column="suoshuxianhao" displaytype="hidden" />
+						<col column="leidaboyinshen" label="${leidaboyishen}：">
+							<inputbox jsvalidate="isNumeric(#data#不是合法数字)"></inputbox>
+						</col>
+						<col column="hongwaiyinshen" label="${hongwaiyinshen}：">
+							<inputbox jsvalidate="isNumeric(#data#不是合法数字)"></inputbox>
+						</col>
+						<col column="ciyinshen" label="${ciyinshen}：">
+							<inputbox jsvalidate="isNumeric(#data#不是合法数字)"></inputbox>
+						</col>
+						<col column="dianchangyinshen" label="${dianchangyinshen}：">
+							<inputbox jsvalidate="isNumeric(#data#不是合法数字)"></inputbox>
+						</col>
+						<col column="weiji" label="${weiji}：" datatype="clob">
+							<inputbox type="textareabox" styleproperty="rows='4' cols='140%' "></inputbox>
+						</col>
+					</display>
+					<sql>
+						<select>
+							<value>
+									<![CDATA[SELECT * FROM zbgl_zxsy_hxsy where {#condition#}]]>
+								</value>
+							<condition name="suoshuxianhao" label="suoshuxianhao"
+								hidden="true">
+								<value>
+										<![CDATA[(suoshuxianhao = #data#)]]>
+								</value>
+							</condition>
+						</select>
+						<update>
+							update
+							zbgl_zxsy_hxsy(@{leidaboyinshen},@{hongwaiyinshen},@{ciyinshen},@{dianchangyinshen},@{weiji})
+							where suoshuxianhao=@{suoshuxianhao__old};
+						</update>
+					</sql>
+				</report>
+
+				<report id="shengmubiaoqiangdu_report" type="form" title="声目标强度"
+					template="relative{htmltemplate/zhuangbeiguanli/shiyanshihang/hangxingshiyanfeishengyinshenxingneng_shengmubiaoqiangdu_template.html}">
+					<display>
+						<col column="suoshuxianhao" displaytype="hidden" />
+						<col column="shengmubiaoqiangdu" label="${shengmubiaoqiangdu}">
+							<inputbox jsvalidate="isNumeric(#data#不是合法数字)"></inputbox>
+						</col>
+					</display>
+					<sql>
+						<select>
+							<value>
+									<![CDATA[SELECT * FROM zbgl_zxsy_hxsy where {#condition#}]]>
+								</value>
+							<condition name="suoshuxianhao" label="suoshuxianhao"
+								hidden="true">
+								<value>
+										<![CDATA[(suoshuxianhao = #data#)]]>
+								</value>
+							</condition>
+						</select>
+						<update>
+							update zbgl_zxsy_hxsy(@{shengmubiaoqiangdu})
+							where
+							suoshuxianhao=@{suoshuxianhao__old};
+						</update>
+					</sql>
+				</report>
+				<vpanel id="fujianl" parenttitle="试验资料">
+				 <report id="hangxingshiyanshiyandagang_report"   title="试验大纲"  type="editablelist" template="relative{htmltemplate/zhuangbeiguanli/zhuanxiangshiyan/hangxingshiyanshiyandagang.html}">
+						 	<interceptor>
+								<preaction>
+								<![CDATA[
+									String suoshuxianhao =rrequest.getStringAttribute("suoshuxianhao","");
+									rrequest.getRequest().setAttribute("fujiansuoshu",suoshuxianhao);
+									rrequest.getRequest().getSession().setAttribute("fujiansuoshu",suoshuxianhao);
+									
+									String zhuangtai =rrequest.getStringAttribute("zhuangtai","");
+									rrequest.getRequest().setAttribute("fujiansuoshu2",zhuangtai);
+									rrequest.getRequest().getSession().setAttribute("fujiansuoshu2",zhuangtai);
+								]]>
+								</preaction>
+						    </interceptor>				
+							<display valuetdwidth="80px" labeltdwidth="80px" labelbgcolor="#f0f0f0" labelalign="left" valuealign="left">
+								<col column="{sequence}" label="序号"></col>					
+								<col column="id" label="id" displaytype="hidden"/>
+							    <col column="fujian" label="附件" ></col>
+							     <col column="leibie" label="类别"  displaytype="hidden"></col>
+							    <col column="time" label="上传时间" clickorderby="true"></col>
+								<col column="beizhu" label="备注" ></col>
+								<col column="fujiansuoshu" label="附件所属" ></col>
+								<col column="{non-fromdb}" property="cz" label="操作"></col>				  
+							</display>
+							
+							<sql >	
+								<select>
+									<value>
+										<![CDATA[SELECT * FROM zbgl_zbwxjghz_fujian where leibie='航行试验试验大纲' and {#condition#} order by id]]>
+									</value>
+									
+									<condition name="gaihuanzhuangxiangmu" hidden="true">
+										<value>
+											<![CDATA[ fujiansuoshu='#data#']]>
+										</value>
+									</condition>
+									<condition name="zhuangtai" hidden="true">
+										<value>
+											<![CDATA[ fujiansuoshu2='#data#']]>
+										</value>
+									</condition>
+							    </select> 
+								<delete confirmessage="删除吗？" preparedstatement="false" originalparams="true">
+					   					 delete from zbgl_zbwxjghz_fujian where time=to_date('@{time__old}','mm/dd/yyyy hh24:mi:ss') and  leibie='@{leibie__old}'  and fujiansuoshu='@{fujiansuoshu__old}';
+								</delete>
+							</sql>
+							<format>
+						    	<value>
+						  			<![CDATA[
+						  			rrequest.getRequest().setAttribute("leibie" ,leibie);
+									rrequest.getRequest().setAttribute("fujiansuoshu" ,fujiansuoshu);
+						        		if(fujian!=null&&!fujian.trim().equals(""))
+												{//这里引用资源文件定义的路径
+												String fujianname=fujian.substring(fujian.lastIndexOf("/")+1);//取到文件名
+												cz="<a href=\"/MySystem/ShowReport.wx?ACTIONTYPE=download&serverfilepath=${file.path}&serverfilename="+fujianname+"\">下载附件</a>";
+												}else
+												{
+													cz="无文件";
+												}			
+						     		]]>   
+						  		</value>
+							</format>				
+					   </report>
+					   
+					    <report id="hangxingshiyanshiyanziliao_report"   title="试验资料"  type="editablelist" template="relative{htmltemplate/zhuangbeiguanli/zhuanxiangshiyan/hangxingshiyanshiyanziliao.html}">
+						 	<interceptor>
+								<preaction>
+								<![CDATA[
+									String suoshuxianhao =rrequest.getStringAttribute("suoshuxianhao","");
+									rrequest.getRequest().setAttribute("fujiansuoshu",suoshuxianhao);
+									rrequest.getRequest().getSession().setAttribute("fujiansuoshu",suoshuxianhao);
+									
+									String zhuangtai =rrequest.getStringAttribute("zhuangtai","");
+									rrequest.getRequest().setAttribute("fujiansuoshu2",zhuangtai);
+									rrequest.getRequest().getSession().setAttribute("fujiansuoshu2",zhuangtai);
+								]]>
+								</preaction>
+						    </interceptor>				
+							<display valuetdwidth="80px" labeltdwidth="80px" labelbgcolor="#f0f0f0" labelalign="left" valuealign="left">
+								<col column="{sequence}" label="序号"></col>					
+								<col column="id" label="id" displaytype="hidden"/>
+							    <col column="fujian" label="附件" ></col>
+							    <col column="leibie" label="类别"  displaytype="hidden"></col>
+							    <col column="time" label="上传时间" clickorderby="true"></col>
+								<col column="beizhu" label="备注" ></col>
+								<col column="fujiansuoshu" label="附件所属" ></col>
+								<col column="{non-fromdb}" property="cz" label="操作"></col>				  
+							</display>
+							
+							<sql >	
+								<select>
+									<value>
+										<![CDATA[SELECT * FROM zbgl_zbwxjghz_fujian where leibie='航行试验试验资料' and {#condition#} order by id]]>
+									</value>
+									
+									<condition name="gaihuanzhuangxiangmu" hidden="true">
+										<value>
+											<![CDATA[ fujiansuoshu='#data#']]>
+										</value>
+									</condition>
+									<condition name="zhuangtai" hidden="true">
+										<value>
+											<![CDATA[ fujiansuoshu2='#data#']]>
+										</value>
+									</condition>
+							    </select> 
+								<delete confirmessage="删除吗？" preparedstatement="false" originalparams="true">
+					   					 delete from zbgl_zbwxjghz_fujian where time=to_date('@{time__old}','mm/dd/yyyy hh24:mi:ss') and  leibie='@{leibie__old}'  and fujiansuoshu='@{fujiansuoshu__old}';
+								</delete>
+							</sql>
+							<format>
+						    	<value>
+						  			<![CDATA[
+						  			rrequest.getRequest().setAttribute("leibie" ,leibie);
+									rrequest.getRequest().setAttribute("fujiansuoshu" ,fujiansuoshu);
+						        		if(fujian!=null&&!fujian.trim().equals(""))
+												{//这里引用资源文件定义的路径
+												String fujianname=fujian.substring(fujian.lastIndexOf("/")+1);//取到文件名
+												cz="<a href=\"/MySystem/ShowReport.wx?ACTIONTYPE=download&serverfilepath=${file.path}&serverfilename="+fujianname+"\">下载附件</a>";
+												}else
+												{
+													cz="无文件";
+												}			
+						     		]]>   
+						  		</value>
+							</format>				
+					   </report>
+					   
+					   
+</vpanel>
+
+				<!-- 悬停振动噪声 -->
+				<vpanel id="xuanting_danjishebei_hp" title="单机设备"
+					parenttitle="悬停振动噪声(单机设备)">
+					<report id="hangxing_xuanting_danjishebei_report" extends="zhendongzaosheng_tabs.matou_danjishebei_report">
+						<sql>
+							<select>
+								<value>
+								<![CDATA[SELECT * FROM zbgl_zxsy_djsb a left join zbgl_zxsy_shebei b
+											on a.suoshushebei=b.id where {#condition#} and gongkuang is null and b.jieduan='hangxing'
+											 and a.suoshuzuheshebei is null order by a.name]]>
+							</value>
+								<condition name="suoshuxianhao" label="舷号" hidden="true">
+									<value>
+									<![CDATA[(suoshuxianhao = #data#)]]>
+									</value>
+								</condition>
+								<condition name="name" label="单机设备名称">
+									<value>
+									<![CDATA[(name like '%#data#%')]]>
+									</value>
+								</condition>
+							</select>
+							<insert>
+								<params>
+									<param name="uuid" value="uuid{}" />
+									<param name="id" value="request{hangxing}" />
+								</params>
+								insert into
+								zbgl_zxsy_djsb (id,name,suoshushebei) values
+								(#{uuid},@{name},#{id});
+							</insert>
+							<update>
+								update zbgl_zxsy_djsb(@{name}) where id =
+								@{id__old};
+							</update>
+							<delete>
+								delete from zbgl_zxsy_djsb where id=@{id__old};
+							</delete>
+						</sql>
+					</report>
+					<report id="hangxing_xuanting_danjishebei_gongkuang_report"
+						depends="hangxing_xuanting_danjishebei_report" extends="zhendongzaosheng_tabs.matou_danjishebei_gongkuang_report">
+					</report>
+				</vpanel>
+
+				<vpanel id="xuanting_zuheshebei_hp" title="组合设备" parenttitle="悬停振动噪声(组合设备)">
+					<report id="hangxing_xuanting_zuheshebei_report" extends="zhendongzaosheng_tabs.matou_zuheshebei_report">
+						<sql>
+							<select>
+								<value>
+								<![CDATA[SELECT * FROM zbgl_zxsy_zhsb a left join zbgl_zxsy_shebei b
+											on a.suoshushebei=b.id where {#condition#} and gongkuang is null and b.jieduan='hangxing' order by a.name]]>
+							</value>
+								<condition name="suoshuxianhao" label="舷号" hidden="true">
+									<value>
+									<![CDATA[(suoshuxianhao = #data#)]]>
+									</value>
+								</condition>
+								<condition name="name" label="组合设备名称">
+									<value>
+									<![CDATA[(name like '%#data#%')]]>
+									</value>
+								</condition>
+							</select>
+							<insert>
+								<params>
+									<param name="uuid" value="uuid{}" />
+									<param name="id" value="request{hangxing}" />
+								</params>
+								insert into
+								zbgl_zxsy_zhsb (id,name,suoshushebei) values
+								(#{uuid},@{name},#{id});
+							</insert>
+							<update> update zbgl_zxsy_zhsb(@{name}) where id = @{id__old};
+							</update>
+							<delete>
+								delete from zbgl_zxsy_djsb where id=@{id__old};
+							</delete>
+						</sql>
+					</report>
+					<report id="hangxing_xuanting_zuheshebei_gongkuang_report"
+						depends="hangxing_xuanting_zuheshebei_report" extends="zhendongzaosheng_tabs.matou_zuheshebei_gongkuang_report"></report>
+					<!-- <report id="hangxing_xuanting_zuheshebei_gongkuang_danjishebei_report" 
+						depends="hangxing_xuanting_zuheshebei_gongkuang_report" extends="zhendongzaosheng_tabs.matou_zuheshebei_gongkuang_danjishebei_report"></report> -->
+				</vpanel>
+
+
+
+
+
+
+				<vpanel id="hangxing_zhendongzaosheng_hpanel" title="航行振动噪声">
+					<report id="hangxing_zhendongzaosheng_report" title="url{suoshuxianhao}航行振动工况列表"
+						type="editablelist2">
+						<display>
+							<col column="{sequence}" label="序号"></col>
+							<col column="id" label="id" displaytype="hidden"></col>
+							<col column="jieduan" label="阶段" displaytype="hidden"></col>
+							<col column="hangsu" label="工况">
+														<inputbox type="selectbox">
+								<option dataset="class{dataSource.optionList.HangXingGongKuang}"></option>
+							</inputbox>
+							</col>
+							<col column="suoshuxianhao" label="舷号" displaytype="hidden"></col>
+						</display>
+						<sql>
+							<select>
+								<value>									
+										<![CDATA[select * from zbgl_zxsy_shebei where  {#condition#} and jieduan='hangxing' and hangsu<>'-1' order by hangsu]]>
+									</value>
+								<condition name="suoshuxianhao" label="舷号" hidden="true">
+									<value>
+									<![CDATA[(suoshuxianhao = #data#)]]>
+									</value>
+								</condition>
+								<condition name="zhuangtai" label="舷号状态" hidden="true">
+									<value>
+									<![CDATA[(xianhaozhuangtai= #data#)]]>
+									</value>
+								</condition>
+							</select>
+							<insert>
+								<params>
+									<param name="id" value="uuid{}" />
+									<param name="uuidd" value="uuid{}" />
+									<param name="xianhao" value="url{suoshuxianhao}" />
+									<param name="zhuangtai" value="url{zhuangtai}" />
+								</params>
+								insert into
+								zbgl_zxsy_shebei(id,suoshuxianhao,hangsu,jieduan,xianhaozhuangtai)
+								values(#{id},#{xianhao},@{hangsu},'hangxing',#{zhuangtai});
+
+								insert into
+								zbgl_zxsy_cedian(id,cedianmingcheng,suoshu,cedianleibie)
+								values
+								(#{uuidd},'placeholder',#{id},'辐射噪声');
+							</insert>
+							<!-- <update> update zbgl_zxsy_shebei(@{hangsu}) where id = @{id__old}; 
+								</update> -->
+							<delete>
+								delete from zbgl_zxsy_shebei where id=@{id__old};
+							</delete>
+						</sql>
+						<format>
+							<value>
+								<![CDATA[											
+											hangsu="<span onmouseover=\"this.style.cursor='pointer'\">"
+												+"<a href=\"ShowReport.wx?PAGEID=gongkuang_cedianleixing&suoshuzuheshebei="
+												+id+"&suoshushebei="+id+"&suoshuxianhao="+suoshuxianhao+"\" target=\"_blank\">"
+												+hangsu+"</a></span>";
+								]]>
+						</value>
+						</format>
+
+					</report>
+					<!-- <report id="hangsu_report" depends="hangxing_zhendongzaosheng_report" 
+						title="url{hangsu}下设备列表" type="editablelist2" left="10px" dependsparams="suoshushebei=@{id};hangsu=@{hangsu};suoshuxianhao=@{suoshuxianhao}"> 
+						<display> <col column="id" label="id" displaytype="hidden"></col> <col column="name" 
+						label="单机设备名称"> <inputbox type="selectbox"> <option dataset="class{dataSource.optionList.Test}"></option> 
+						</inputbox> </col> <col column="suoshushebei" label="所属设备(测试使用)" displaytype="hidden"></col> 
+						<col column="gongkuang" label="工况（测试使用）" displaytype="hidden"></col> </display> 
+						<sql> <select> <value> <![CDATA[select * from zbgl_zxsy_djsb where {#condition#} 
+						]]> </value> <condition name="suoshushebei" label="所属设备" hidden="true"> <value> 
+						<![CDATA[(suoshushebei=#data#)]]> </value> </condition> </select> <insert> 
+						<params> <param name="uuid" value="uuid{}" /> <param name="uuidd" value="uuid{}" 
+						/> </params> insert into zbgl_ZXSY_djsb (id,name,suoshushebei,suoshuzuheshebei,gongkuang) 
+						values (#{uuid},@{name},url{suoshushebei},'航行实验_没有组合设备','航行实验_没有工况'); insert 
+						into zbgl_zxsy_cedian(id,cedianmingcheng,suoshudanjishebei,cedianleibie) 
+						values (#{uuidd},'placeholder',#{uuid},'辐射噪声'); </insert> <delete> delete 
+						from zbgl_zxsy_djsb where id=@{id__old}; </delete> </sql> <format> <value> 
+						<![CDATA[ name="<span onmouseover=\"this.style.cursor='pointer'\">" +"<a 
+						href=\"ShowReport.wx?PAGEID=matoushiyan_hangxingshiyan_cedianleixing_tabs&suoshudanjishebei="+id+"\" 
+						target=\"_blank\">" +name+"</a></span>"; ]]> </value> </format> </report> -->
+				</vpanel>
+			</tabpanel>
+		</tabpanel>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	</page>
+</applications>

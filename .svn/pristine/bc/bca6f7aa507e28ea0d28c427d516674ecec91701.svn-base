@@ -1,0 +1,457 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<applications xmlns="http://www.wabacus.com"
+			   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			   xsi:schemaLocation="http://www.wabacus.com ../。。/../../xsd/wabacus.applications.xsd">
+	 <page id="chuantizongzhendong" >
+	 	<report id="chuantizongzhendongdetail_report" title="${chuantizongzhendong}"  align="center" type="editabledetail" >
+ 			<display>
+				<col column="id" label="id" displaytype="hidden"></col>
+		 		<col column="suoshuxinghao" label="所属${xinghao}" displaytype="hidden"/>
+				<col column="zhuangtai" label="状态" valuestyleproperty="colspan='5'" br="true">
+					<inputbox type="selectbox">						  
+						<option value="水上垂直" label="水上垂直"></option>
+						<option value="水上水平" label="水上水平"></option>
+						<option value="水下垂直" label="水下垂直"></option>
+						<option value="水下水平" label="水下水平"></option>							          
+						<option value="水下纵向" label="水下纵向"></option>								      							
+					</inputbox>
+				</col>
+				<col column="yijie" label="1阶"></col>
+				<col column="erjie" label="2阶"></col>
+				<col column="sanjie" label="3阶"></col>
+			</display>	     
+			<sql>
+				<select>
+					<value>
+						<![CDATA[SELECT * FROM zbgl_zbjbxx_xinghao_ctzd  where  {#condition#} order by id]]>
+					</value>
+				 <condition name="suoshuid" hidden="true">
+										       <value>
+											<![CDATA[(id =  #data# )]]>
+										</value>
+									      </condition>
+				</select>	
+				<insert>
+					<params> 
+						<param name="suoshuxinghao" value="url{suoshuxinghao}"/>
+					</params>
+					insert into zbgl_zbjbxx_xinghao_ctzd(id=uuid{},suoshuxinghao=#{suoshuxinghao},@{zhuangtai},@{yijie},@{erjie},@{sanjie});
+				</insert>
+				<update>
+					update zbgl_zbjbxx_xinghao_ctzd(@{zhuangtai},@{yijie},@{erjie},@{sanjie}) where id=@{id__old};
+				</update>
+				<delete>
+					delete from zbgl_zbjbxx_xinghao_ctzd where id=@{id__old};
+				</delete>
+			</sql>			    
+		</report> 
+	 </page>
+	 <page id="naiyachuantizhijing">
+	 	<report id="naiyachuantizhijingdetail_report" title="${naiyachuanti}直径" align="center" type="editabledetail" >
+			<display>
+				<col column="id" label="id" displaytype="hidden"></col>
+				<col column="suoshuxinghao" label="所属${xinghao}" displaytype="hidden"/>
+				<col column="jiegouxingshi" label="结构形式" valuestyleproperty="colspan='3'" br="true">
+					<inputbox type="selectbox">
+						<option value="斜锥段" label="斜锥段"></option> 
+			            <option value="柱壳段" label="柱壳段"></option>
+					</inputbox>
+				</col>				    	
+					<col column="syi" label="${leiguqujian}首" ></col>
+					<col column="wyi" label="${leiguqujian}尾" br="true"></col>
+					<col column="ser" label="${naiyachuanti}直径首" ></col>
+					<col column="wer" label="${naiyachuanti}直径尾" ></col>
+				
+			</display>
+			<sql>
+				<select>
+					<value>
+						<![CDATA[SELECT * FROM zbgl_zbjbxx_xinghao_nyctzj where  {#condition#} order by id]]>
+					</value>
+					 <condition name="suoshuid" hidden="true">
+										       <value>
+											<![CDATA[(id =  #data# )]]>
+										</value>
+									      
+					</condition>
+				</select>
+				<insert>
+					<params> 
+						<param name="suoshuxinghao" value="url{suoshuxinghao}"/>
+					</params>
+					insert into zbgl_zbjbxx_xinghao_nyctzj(id=uuid{},suoshuxinghao=#{suoshuxinghao},@{jiegouxingshi},@{syi},@{wyi},@{ser},@{wer});
+				</insert>
+				<update>
+				 	update zbgl_zbjbxx_xinghao_nyctzj(@{jiegouxingshi},@{syi},@{wyi},@{ser},@{wer}) where id=@{id__old};
+				</update>
+				<delete>
+					delete from zbgl_zbjbxx_xinghao_nyctzj where id=@{id__old};
+				</delete>
+			</sql>						
+		</report>
+	</page>
+	<page id="naiyakebanhoudu">
+	   <report id="naiyakebanhoududetail_report" title="壳板厚度" align="center" type="editabledetail" >
+							  <display>
+							    <col column="id" label="id" displaytype="hidden"></col>
+							    <col column="suoshuxinghao" label="所属${xinghao}" displaytype="hidden"/>
+							    <col column="leixing" label="类型" displaytype="hidden"/>
+							    <col column="kebanhoudu" label="${kebanhoudu}"/>							  
+							        <col column="syi" label="${leiguqujian}首"  br="true"></col>
+							        <col column="wyi" label="${leiguqujian}尾" ></col>						
+							        <col column="beizhu" label="备注" ></col>
+							  </display>
+							  <sql>
+								       <select>
+									      <value>
+										<![CDATA[SELECT * FROM zbgl_zbjbxx_xinghao_kbhd where  {#condition#}  and leixing='耐压' order by id]]>
+									</value>
+									 <condition name="suoshuid" hidden="true">
+										       <value>
+											<![CDATA[(id =  #data# )]]>
+										</value>
+									      </condition>
+									</select>
+									 <insert>
+									 <params> 
+									 	<param name="suoshuxinghao" value="url{suoshuxinghao}"/>
+									 	<param name="leixing" value="耐压"/>
+								     </params>
+							  		 insert into zbgl_zbjbxx_xinghao_KBHD(id=uuid{},suoshuxinghao=#{suoshuxinghao},leixing=#{leixing},@{syi},@{wyi},@{kebanhoudu},@{beizhu});
+								  </insert>
+								  <update>
+								     update zbgl_zbjbxx_xinghao_KBHD(@{syi},@{wyi},@{kebanhoudu},@{beizhu}) where id=@{id__old};
+								  </update>
+								  <delete>
+								  	 delete from zbgl_zbjbxx_xinghao_KBHD where id=@{id__old};
+								  </delete>
+									</sql>				
+			 </report>
+	</page>
+	<page id="naiyaleigucanshu">
+		 <report id="naiyaleigucanshudetail_report" title="${leigu]布置、间距"  align="center" type="editabledetail"  >
+							  <display>
+					
+							    <col column="id" label="id" displaytype="hidden"></col>
+							    <col column="suoshuxinghao" label="所属${xinghao}" displaytype="hidden"/>
+							    <col column="leixing" label="类型" displaytype="hidden"/>							   
+							        <col column="syi" label="${leiguqujian}首" ></col>
+							        <col column="wyi" label="${leiguqujian}尾" ></col>							
+							        <col column="leigujianju" label="${leiguqujian}" ></col>
+							  </display>
+							  <sql>
+								       <select>
+									      <value>
+										<![CDATA[SELECT * FROM zbgl_zbjbxx_xinghao_lgjj where  {#condition#} and leixing='耐压' order by id]]>
+									</value>
+									 <condition name="suoshuid" hidden="true">
+										       <value>
+											<![CDATA[(id =  #data# )]]>
+										</value>
+									      </condition>
+									</select>
+									 <insert>
+									  <params> 
+									  	<param name="suoshuxinghao" value="url{suoshuxinghao}"/>
+									  	<param name="leixing" value="耐压"/>
+								      </params>
+							  		 insert into zbgl_zbjbxx_xinghao_lgjj(id=uuid{},suoshuxinghao=#{suoshuxinghao},leixing=#{leixing},@{syi},@{wyi},@{leigujianju});
+								  </insert>
+								  <update>
+								     update zbgl_zbjbxx_xinghao_lgjj(@{syi},@{wyi},@{leigujianju}) where id=@{id__old};
+								  </update>
+								  <delete>
+								  	 delete from zbgl_zbjbxx_xinghao_lgjj where id=@{id__old};
+								  </delete>
+									</sql>						
+							  </report> 
+	</page>
+	<page id="naiyachuanticailiao">
+	 <report id="naiyachuanticailiaodetail_report" title="船体材料" type="editabledetail" >
+								    <display>
+									     <col column="id" label="id" displaytype="hidden"></col>
+									     <col column="suoshuxinghao" label="所属${xinghao}" displaytype="hidden"/>
+									      <col column="leixing" label="类型" displaytype="hidden"/>
+									      <col column="cailiaoleibie" label="材料类别">
+									       <inputbox type="selectbox">						  
+												<option value="金属材料" label="金属材料"></option>
+												<option value="非金属材料" label="非金属材料"></option>								
+											</inputbox>
+									      </col>
+									      <col column="cailiaoxinghao" label="材料型号"></col>
+									      <col column="yingyongfanwei" label="应用范围"></col>
+								    </display>
+								    <sql>
+								       <select>
+									      <value>
+										<![CDATA[SELECT * FROM zbgl_zbjbxx_xinghao_ctcl where  {#condition#} and leixing='耐压' order by id]]>
+									</value>
+									 <condition name="suoshuid" hidden="true">
+										       <value>
+											<![CDATA[(id =  #data# )]]>
+										</value>
+									      </condition>
+									</select>
+								       <insert>
+								       <params> 
+								       		<param name="suoshuxinghao" value="url{suoshuxinghao}"/>
+								       		<param name="leixing" value="耐压"/>
+								       </params>
+							  		 insert into zbgl_zbjbxx_xinghao_ctcl(id=uuid{},suoshuxinghao=#{suoshuxinghao},leixing=#{leixing},@{cailiaoleibie},@{cailiaoxinghao},@{yingyongfanwei});
+								  </insert>
+								       <update>
+								     update zbgl_zbjbxx_xinghao_ctcl(@{cailiaoleibie},@{cailiaoxinghao},@{yingyongfanwei}) where id=@{id__old};;
+								    
+								  </update>
+								       <delete>
+								  	 delete from zbgl_zbjbxx_xinghao_ctcl where id=@{id__old};
+								  </delete>
+								    </sql>				    
+							   </report>  
+	</page>
+	<page id="naiyaleiguxinghao">
+		  <report id="naiyaleiguxinghaodetail_report" title="${leiguxinghao}"  align="center" type="editabledetail" >
+							  <display>
+							    <col column="id" label="id" displaytype="hidden"></col>
+							    <col column="suoshuxinghao" label="所属${xinghao}" displaytype="hidden"/>
+								<col column="leixing" label="类型" displaytype="hidden"/>
+							    <col column="leiguxinghao" label="${leiguxinghao}" ></col>
+							    <col column="leiguhao" label="${leigu}号" br="true"></col>
+							    <col column="leigubuzhixingshi" label="${leigu}布置形式" >
+								    <inputbox type="selectbox">						  
+										<option value="内肋骨" label="内肋骨"></option>
+										<option value="外肋骨" label="外肋骨"></option>
+										<option value="特大肋骨" label="特大肋骨"></option>
+									</inputbox>
+							    </col>
+							    <col column="beizhu" label="备注" ></col>
+							  </display>
+							  <sql>
+								       <select>
+									      <value>
+										<![CDATA[SELECT * FROM zbgl_zbjbxx_xinghao_lgxh where  {#condition#}  and leixing='耐压' order by id]]>
+									</value>
+									 <condition name="suoshuid" hidden="true">
+										       <value>
+											<![CDATA[(id =  #data# )]]>
+										</value>
+									      </condition>
+									</select>
+									 <insert>
+									 <params> 
+										 <param name="suoshuxinghao" value="url{suoshuxinghao}"/>
+										 <param name="leixing" value="耐压"/>
+								     </params>
+							  		 insert into zbgl_zbjbxx_xinghao_lgxh(id=uuid{},suoshuxinghao=#{suoshuxinghao},leixing=#{leixing},@{leiguxinghao},@{leiguhao},@{leigubuzhixingshi},@{beizhu});
+								  </insert>
+								  <update>
+								     update zbgl_zbjbxx_xinghao_lgxh(@{leiguxinghao},@{leiguhao},@{leigubuzhixingshi},@{beizhu}) where id=@{id__old};
+								  </update>
+								  <delete>
+								  	 delete from zbgl_zbjbxx_xinghao_lgxh where id=@{id__old};
+								  </delete>
+									</sql>						
+							  </report>
+	 </page>
+	 <page id="naiyachuantiqiangdu">
+	  <report id="naiyachuantiqiangdudetail_report" title="${naiyachuanti}的强度和稳定性"  align="center" type="editabledetail" >
+							  <display>
+				
+							    <col column="id" label="id" displaytype="hidden"></col>
+							    <col column="suoshuxinghao" label="所属${xinghao}" displaytype="hidden" />
+							        <col column="jiegouquyu" label="${jiegouquyu}" ></col>
+							        <col column="zhongmianyingli" label="中面压力" br="true"></col>
+							        <col column="zongmianyingli" label="纵面压力" ></col>
+							        <col column="linjieyali" label="临界压力" br="true"></col>
+							        <col column="beizhu" label="备注" valuestyleproperty="colspan='5'" ></col>
+							  </display>
+							  <sql>
+								       <select>
+									      <value>
+										<![CDATA[SELECT * FROM zbgl_zbjbxx_xinghao_nyctqd where  {#condition#}]]>
+									</value>
+									 <condition name="suoshuid" hidden="true">
+										       <value>
+											<![CDATA[(id =  #data# )]]>
+										</value>
+									      </condition>
+									</select>
+									 <insert>
+									 <params> 
+									 	<param name="suoshuxinghao" value="url{suoshuxinghao}"/>
+								     </params>
+							  		 insert into zbgl_zbjbxx_xinghao_nyctqd(id=uuid{},suoshuxinghao=#{suoshuxinghao},@{jiegouquyu},@{zhongmianyingli},@{zongmianyingli},@{linjieyali},@{beizhu});
+								  </insert>
+								  <update>
+								     update zbgl_zbjbxx_xinghao_nyctqd(@{jiegouquyu},@{zhongmianyingli},@{zongmianyingli},@{linjieyali},@{beizhu}) where id=@{id__old};
+								  </update>
+								  <delete>
+								  	 delete from zbgl_zbjbxx_xinghao_nyctqd where id=@{id__old};
+								  </delete>
+									</sql>
+							  </report>
+	</page>
+	<page id="fnaiyakebanhoudu">
+	<report id="fnaiyakebanhoududetail_report" title="${kebanhoudu}"  align="center" type="editabledetail" >
+							  <display>
+							    <col column="id" label="id" displaytype="hidden"></col>
+							    <col column="suoshuxinghao" label="所属${xinghao}" displaytype="hidden"/>
+							    <col column="leixing" label="类型" displaytype="hidden"/>
+							    <col column="kebanhoudu" label="${kebanhoudu}"/>							 
+							        <col column="syi" label="${leiguqujian}首" br="true"></col>
+							        <col column="wyi" label="${leiguqujian}尾" ></col>					
+							        <col column="beizhu" label="备注" ></col>
+							  </display>
+							  <sql>
+								       <select>
+									      <value>
+										<![CDATA[SELECT * FROM zbgl_zbjbxx_xinghao_kbhd where  {#condition#}  and leixing='非耐压' order by id]]>
+									</value>
+									  <condition name="suoshuid" hidden="true">
+										       <value>
+											<![CDATA[(id =  #data# )]]>
+										</value>
+									      </condition>
+									</select>
+									 <insert>
+									 <params> 
+									 	<param name="suoshuxinghao" value="url{suoshuxinghao}"/>
+									 	<param name="leixing" value="非耐压"/>
+								     </params>
+							  		 insert into zbgl_zbjbxx_xinghao_kbhd(id=uuid{},suoshuxinghao=#{suoshuxinghao},leixing=#{leixing},@{syi},@{wyi},@{kebanhoudu},@{beizhu});
+								  </insert>
+								  <update>
+								     update zbgl_zbjbxx_xinghao_kbhd(@{syi},@{wyi},@{kebanhoudu},@{beizhu}) where id=@{id__old};
+								  </update>
+								  <delete>
+								  	 delete from zbgl_zbjbxx_xinghao_kbhd where id=@{id__old};
+								  </delete>
+									</sql>				
+							  </report>
+	</page>
+	<page id="fnaiyaleigubuzhi">
+	<report id="fnaiyaleigubuzhidetail_report" title="${leigu}布置、间距"  align="center" type="editabledetail" >
+							  <display>
+							    <col column="id" label="id" displaytype="hidden"></col>
+							    <col column="suoshuxinghao" label="所属${xinghao}" displaytype="hidden"/>
+							     <col column="leixing" label="类型" displaytype="hidden"/>
+							        <col column="syi" label="${leiguqujian}首" ></col>
+							        <col column="wyi" label="肋骨区间${leiguqujian}尾" ></col>
+							        <col column="leigujianju" label="${leiguqujian}" ></col>
+							  </display>
+							  <sql>
+								       <select>
+									      <value>
+										<![CDATA[SELECT * FROM zbgl_zbjbxx_xinghao_lgjj where  {#condition#} and leixing='非耐压' order by id]]>
+									</value>
+									 <condition name="suoshuid" hidden="true">
+										       <value>
+											<![CDATA[(id =  #data# )]]>
+										</value>
+									      </condition>
+									</select>
+									 <insert>
+									  <params> 
+										  <param name="suoshuxinghao" value="url{suoshuxinghao}"/>
+										  <param name="leixing" value="非耐压"/>
+								      </params>
+							  		 insert into zbgl_zbjbxx_xinghao_lgjj(id=uuid{},suoshuxinghao=#{suoshuxinghao},leixing=#{leixing},@{syi},@{wyi},@{leigujianju});
+								  </insert>
+								  <update>
+								     update zbgl_zbjbxx_xinghao_lgjj(@{syi},@{wyi},@{leigujianju}) where id=@{id__old};
+								  </update>
+								  <delete>
+								  	 delete from zbgl_zbjbxx_xinghao_lgjj where id=@{id__old};
+								  </delete>
+									</sql>						
+							  </report> 
+	</page>
+	<page id="fnaiyachuanticailiao">
+	<report id="fnaiyachuanticailiaodetail_report" title="${chuanticailiao}" type="editabledetail"  >
+								    <display>
+									     <col column="id" label="id" displaytype="hidden"></col>
+									     <col column="suoshuxinghao" label="所属${xinghao}" displaytype="hidden"/>
+									     <col column="leixing" label="类型" displaytype="hidden"/>
+									      <col column="cailiaoleibie" label="材料类别">
+									       <inputbox type="selectbox">						  
+												<option value="金属材料" label="金属材料"></option>
+												<option value="非金属材料" label="非金属材料"></option>								
+											</inputbox>
+									      </col>
+									      <col column="cailiaoxinghao" label="材料型号"></col>
+									      <col column="yingyongfanwei" label="应用范围"></col>
+								    </display>
+								    <sql>
+								       <select>
+									      <value>
+										<![CDATA[SELECT * FROM zbgl_zbjbxx_xinghao_ctcl where  {#condition#} and leixing='非耐压' order by id]]>
+									</value>
+									 <condition name="suoshuid" hidden="true">
+										       <value>
+											<![CDATA[(id =  #data# )]]>
+										</value>
+									      </condition>
+									</select>
+								       <insert>
+								       <params> 
+									       <param name="suoshuxinghao" value="url{suoshuxinghao}"/>
+									       <param name="leixing" value="非耐压"/>
+								       </params>
+							  		 insert into zbgl_zbjbxx_xinghao_ctcl(id=uuid{},suoshuxinghao=#{suoshuxinghao},leixing=#{leixing},@{cailiaoleibie},@{cailiaoxinghao},@{yingyongfanwei});
+								  </insert>					       
+								  <update>
+								     update zbgl_zbjbxx_xinghao_ctcl(@{cailiaoleibie},@{cailiaoxinghao},@{yingyongfanwei}) where id=@{id__old};
+								    
+								  </update>
+								       <delete>
+								  	 delete from zbgl_zbjbxx_xinghao_ctcl where id=@{id__old};
+								  </delete>
+								    </sql>				    
+							   </report>  
+	</page>
+	<page id="fnaiyaleiguxinghao">
+	<report id="fnaiyaleiguxinghaodetail_report" title="${leiguxinghao}"  align="center" type="editabledetail">
+							  <display>
+				
+							    <col column="id" label="id" displaytype="hidden"></col>
+							    <col column="suoshuxinghao" label="所属${xinghao}" displaytype="hidden"/>
+								<col column="leixing" label="类型" displaytype="hidden"/>
+							    <col column="leiguxinghao" label="${leiguxinghao}" ></col>
+							    <col column="leiguhao" label="${leigu}号" br="true"></col>
+							    <col column="leigubuzhixingshi" label="${leigu}布置形式" >
+							   		<inputbox type="selectbox">						  
+										<option value="内肋骨" label="内肋骨"></option>
+										<option value="外肋骨" label="外肋骨"></option>
+										<option value="特大肋骨" label="特大肋骨"></option>
+									</inputbox>
+							    </col>
+							    <col column="beizhu" label="备注" ></col>
+							  </display>
+							  <sql>
+								       <select>
+									      <value>
+										<![CDATA[SELECT * FROM zbgl_zbjbxx_xinghao_lgxh where  {#condition#} and leixing='非耐压' order by id]]>
+									</value>
+									 <condition name="suoshuid" hidden="true">
+										       <value>
+											<![CDATA[(id =  #data# )]]>
+										</value>
+									      </condition>
+									</select>
+									 <insert>
+									 <params> 
+									 	<param name="suoshuxinghao" value="url{suoshuxinghao}"/>
+									 	<param name="leixing" value="非耐压"/>
+								     </params>
+							  		 insert into zbgl_zbjbxx_xinghao_lgxh(id=uuid{},suoshuxinghao=#{suoshuxinghao},leixing=#{leixing},@{leiguxinghao},@{leiguhao},@{leigubuzhixingshi},@{beizhu});
+								  </insert>
+								  <update>
+								     update zbgl_zbjbxx_xinghao_lgxh(@{leiguxinghao},@{leiguhao},@{leigubuzhixingshi},@{beizhu}) where id=@{id__old};
+								  </update>
+								  <delete>
+								  	 delete from zbgl_zbjbxx_xinghao_lgxh where id=@{id__old};
+								  </delete>
+									</sql>						
+							  </report>
+	</page>
+</applications>

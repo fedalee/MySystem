@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<applications xmlns="http://www.wabacus.com"
+			   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			   xsi:schemaLocation="http://www.wabacus.com ../xsd/wabacus.applications.xsd">
+<page id="jiaochuanjieduan" js="/webresources/script/validate.js,/WebRoot/js/testcallback.js">
+	 <report id="jiaochuanjieduan_report"  type="editablelist" title="url{xinghao}号的${xianhao}列表"  rowselect="single"  celldrag="0">
+			 <interceptor>
+				<imports>
+					<import>javax.servlet.http.HttpServletRequest;</import>
+					<import>com.wabacus.system.ReportRequest</import>
+					<import>java.io.*</import>
+				</imports>
+				<preaction>
+                    HttpServletRequest r=rrequest.getRequest();
+					String xinghao=r.getParameter("xinghao");
+					
+					rrequest.getRequest().setAttribute("xinghao" ,xinghao);	
+			
+					</preaction>
+
+			</interceptor>
+			<display>
+				<col column="id" label="id" displaytype="hidden" />
+				<col column="{sequence}" label="序号"></col>
+				<col column="xianhao" label="${xianhao}"></col>
+				<col column="xinghao" label="${xinghao}" displaytype="hidden" />
+				<col column="jiaochuanjihuashijian" datatype="date{yyyy-MM-dd}" label="${jiaochuanjihuashijian}"
+					clickorderby="true"></col>
+				<col column="jiaochuanshijishijian" datatype="date{yyyy-MM-dd}" label="${jiaochuanshijishijian}"
+					clickorderby="true"></col>
+				<col column="jiaochuanzhuangtai" label="${jiaochuanzhuangtai}"></col>
+				<col column="{non-fromdb}" property="shitingxingneng" label="${shitingxingneng}"></col>
+				<col column="{non-fromdb}" property="cd" label="附件"></col>
+
+			</display>
+			<sql>
+				<select>
+					<value>
+					<![CDATA[SELECT * FROM zbgl_zbyz_jiaochuan where  {#condition#}]]>
+					</value>
+					<condition name="xinghao" label="${xinghao}" hidden="true">
+						<value> 
+								<![CDATA[(xinghao = #data# )]]>
+						</value>					
+					</condition>
+					
+                    <condition name="xianhao" label="${xianhao}">
+						<value> <![CDATA[(xianhao = #data# )]]>
+						</value>
+						  <inputbox>
+					       <typeprompt count="15">
+						      <promptcol label="xianhao" title="${xianhao}" matchmode="anywhere"></promptcol>
+						       <datasource>
+							       <option dataset="@{select xianhao from zbgl_zbyz_jiaochuan where {#matchcondition#} and {#condition#}}">
+								        <datasetconditions>
+									         <condition name="xiala">
+										          <value> <![CDATA[( xianhao like '#data#%')]]></value>
+									         </condition>
+								        </datasetconditions>
+							       </option>
+						      </datasource>
+					       </typeprompt>
+					    </inputbox>
+					</condition>
+					<condition name="zhuangtai" label="${jiaochuanzhuangtai}">
+						<value> <![CDATA[(jiaochuanzhuangtai = #data# )]]>
+						</value>
+							<inputbox type="selectbox">
+							      <option value="" label="全部"></option>
+							      <option value="进行中" label="进行中"></option> 
+							      <option value="已完成" label="已完成"></option>
+						     </inputbox>
+					</condition>
+				</select>
+				<insert pageurl="report{jiaochuanPopupPage.jiaochuanPopup}"
+					urlparams="xinghao=request{xinghao};" popupparams="{title:'新增${xianhao}',width:780,height:350}">
+				</insert>
+
+				<update pageurl="report{jiaochuanPopupPage.jiaochuanPopup}"
+					urlparams="suoshuxianhao=@{xianhao};xinghao=request{xinghao}" popupparams="{title:'${xiugaiqiantingzhuangtaijibeizhu}',width:780,height:350}"></update>
+				<delete>
+				<![CDATA[
+					delete from zbgl_zbyz_jiaochuan  where id=@{id__old};
+					delete from zbgl_zbyz_shitingxingneng  where suoshu=@{id};
+				]]>
+				</delete>
+			</sql>
+			<format>
+					<imports>
+					         <import>javax.servlet.http.HttpServletRequest</import>
+					    </imports>
+				<value>
+			  <![CDATA[
+			        cd="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">"
+							 + "<a href=\"#\" onclick=\"wx_winpage('ShowReport.wx?PAGEID=zbyz_fujian&leibie="+xinghao+xianhao+"&fujiansuoshu=jiaochuan实验阶段',{width:1100,height:400})\" target=\"sampleframe\">"
+							 + "点击查看" + "</a></span>";
+
+				    shitingxingneng="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">"
+							 + "<a href=\"ShowReport.wx?PAGEID=jiaochuan_shitingxingneng_button&suoshu="+id+"&suoshujieduan=交船阶段 \" target=\"blank\">"
+							 + "点击查看" + "</a></span>";
+	       
+			     ]]>
+
+				</value>
+			</format>	
+	  </report>
+
+		<!-- QQ总体 -->
+	<!-- QQ总体-数据1 -->
+
+					<report id="JC_qiantingzongti_report" parenttitle="基本数据" type="editabledetail"  
+							template="relative{htmltemplate/zhuangbeiguanli/zhuangbeiyanzhi/QQzongti_shujuyi_jiaochuan_template.html}">
+						
+						<display>
+							<col column="id" displaytype="hidden"  />
+								<col column="paishuiliang" label="${paishuiliang}">
+								<inputbox jsvalidate="isNumeric(#data#不是合法数字)"></inputbox>
+							</col>
+							<col column="xiaqianshendu" label="${xiaqianshendu}">
+								<inputbox jsvalidate="isNumeric(#data#不是合法数字)"></inputbox>
+							</col>
+							<col column="fuxing" datatype="clob" label="${fuxing}">
+								<inputbox type="textareabox" styleproperty="rows='4' cols='140%' "></inputbox>
+							</col>
+							<col column="wenxing" datatype="clob" label="${wenxing}">
+								<inputbox type="textareabox" styleproperty="rows='4' cols='140%' "></inputbox>
+							</col>
+							<col column="zongtidiancijianrong" datatype="clob" label="总体${diancijianrong}">
+								<inputbox type="textareabox" styleproperty="rows='4' cols='140%' "></inputbox>
+							</col>
+						</display>
+						<sql>				  
+
+							<select>
+							   <value>
+									<![CDATA[SELECT id,paishuiliang,xiaqianshendu,fuxing,wenxing,zongtidiancijianrong FROM zbgl_zbyz_jiaochuan where  {#condition#} order by id]]>
+							   </value>
+					          <condition name="txtid" label="id" hidden="true">
+					             	<value>
+										<![CDATA[(id = #data#)]]>
+					            	</value>
+					         </condition>						
+	
+							</select> 
+							<update>
+								update ZBGL_ZBYZ_JIAOCHUAN(@{paishuiliang},@{xiaqianshendu},@{fuxing},@{wenxing},@{zongtidiancijianrong}) 
+								where id=@{id__old};
+							</update>
+						</sql>
+					</report>
+				
+	<!-- QQ总体-快速性 -->
+					<report id="qiantingzongti_kuaisuxing_report" title="快速性" type="editablelist"  celldrag="0" rowselect="single">					
+			<interceptor>
+				<imports>
+					<import>javax.servlet.http.HttpServletRequest;</import>
+					<import>com.wabacus.system.ReportRequest</import>
+				</imports>
+				<preaction>
+
+					HttpServletRequest r=rrequest.getRequest();
+					r.setAttribute("gongkuangsuoshu",r.getParameter("txtid"));
+
+				</preaction>
+
+			</interceptor>							
+							
+						<display>
+							<col column="{sequence}" label="序号" width="10%"/>							
+							<col column="id" displaytype="hidden"  />
+							<col column="gongkuangsuoshu" displaytype="hidden"  />
+							<col column="gongkuangmingcheng" label="${gongkuang}名称"  />
+							<col column="hangsu" label="${hangsu}">
+							</col>
+							<col column="jiangzhuansu" label="${jiangzhuansu}" >
+							</col>
+							<col column="gonglv" label="功率" >
+							</col>
+							<col column="tuijinzhuangtai" label="${tuijinzhuangtai}"  datatype="clob"></col>
+						</display>
+						<sql>
+							<select>
+							   <value>
+									<![CDATA[SELECT *  FROM zbgl_zbyz_jiaochuangongkuang where  {#condition#} order by gongkuangmingcheng]]>
+							   </value>
+				               <condition name="txtid" label="gongkuangsuoshu" hidden="true">
+						          <value>
+										<![CDATA[(gongkuangsuoshu = #data#)]]>
+						          </value>
+					          </condition>							
+								
+							</select>
+							<insert pageurl="report{jiaochuan_QQzongtiPopupPage.qiantingzongti_kuaisuxing_pop}"
+					                urlparams="gongkuangsuoshu=request{gongkuangsuoshu};" popupparams="{title:'新增${xianhao}',width:780,height:350}">
+				            </insert>
+
+				            <update pageurl="report{jiaochuan_QQzongtiPopupPage.qiantingzongti_kuaisuxing_pop}"
+				                 	urlparams="gongkuangmingcheng=@{gongkuangmingcheng};gongkuangsuoshu=request{gongkuangsuoshu};" popupparams="{title:'修改',width:780,height:350}"></update>
+		
+							<delete>
+								delete from zbgl_zbyz_jiaochuangongkuang where id=@{id__old};
+							</delete>
+					  </sql>
+					  			<format>
+				<value>
+			  <![CDATA[
+			  				String str="";
+			  				
+			  				tuijinzhuangtai=tuijinzhuangtai==null?"":tuijinzhuangtai.trim();
+			  				if(!tuijinzhuangtai.equals(""))
+			  				{
+			  					str=tuijinzhuangtai;
+			  					if(str.length()>7)
+			  						str=str.substring(0,7)+"……";
+			  					tuijinzhuangtai="<span onclick=\"wx_tip('"+tuijinzhuangtai+"',this,{color:'#666666',width:'350px'})\">"+str+"</span>";
+			  				} ]]>
+			  				</value>
+			  				</format>
+					</report>
+				
+	<!-- QQ总体-${shuimiancaozongxing} -->
+					<report id="qiantingzongti_shuimiancaozongxing_report" type="editabledetail" parenttitle="${shuimiancaozongxing}"
+							template="relative{htmltemplate/zhuangbeiguanli/zhuangbeiyanzhi/jiaochuan_shuimiancaozongxing_template.html}">
+						<display>
+							<col column="id" displaytype="hidden"  />
+							<col column="m_jiangzhuansu" label="${shuimianjiangzhuansu}">
+								<inputbox jsvalidate="isNumeric(#data#不是合法数字)"></inputbox>
+							</col>
+							<col column="m_shouxiangjiao" label="${shuimianshouxiangjiao}">
+								<inputbox jsvalidate="isNumeric(#data#不是合法数字)"></inputbox>
+							</col>
+							<col column="m_zongqingjiao" label="${shuimianzongqingjiao}">
+								<inputbox jsvalidate="isNumeric(#data#不是合法数字)"></inputbox>
+							</col>
+							<col column="m_fangxiangduoduojiao" label="${shuimianfangxiangduoduojiao}">
+								<inputbox jsvalidate="isNumeric(#data#不是合法数字)"></inputbox>
+							</col>
+							<col column="m_tuijinzhuangtai" datatype="clob" label="${shuimiantuijinzhuangtai}">
+								<inputbox type="textareabox" styleproperty="rows='4' cols='140%' "></inputbox>
+							</col>
+							<col column="shuimianhuizhuanzhijing" label="${shuimianhuizhuanzhijing}">
+								<inputbox jsvalidate="isNumeric(#data#不是合法数字)"></inputbox>
+							</col>
+							<col column="shuimianzxingcaoduo" datatype="clob" label="${shuimianzxingcaoduo}">
+								<inputbox type="textareabox" styleproperty="rows='4' cols='140%' "></inputbox>
+							</col>
+							<col column="shuimiandaoche" datatype="clob" label="${shuimiandaoche}">
+								<inputbox type="textareabox" styleproperty="rows='4' cols='140%' "></inputbox>
+							</col>
+							<col column="shuimianzhidong" datatype="clob" label="${shuimianzhidong}">
+								<inputbox type="textareabox" styleproperty="rows='4' cols='140%' "></inputbox>
+							</col>
+							
+						</display>
+						<sql>
+							<select>
+								   <value>
+									<![CDATA[SELECT id,m_jiangzhuansu,m_shouxiangjiao,m_zongqingjiao,m_fangxiangduoduojiao,m_tuijinzhuangtai,shuimianhuizhuanzhijing,shuimianzxingcaoduo,shuimiandaoche,shuimianzhidong FROM zbgl_zbyz_jiaochuan where  {#condition#} order by id]]>
+							       </value>
+		     						<condition name="txtid" label="id" hidden="true">
+										<value>
+											<![CDATA[(id = #data#)]]>
+										</value>
+									</condition>						
+							</select> 
+							<update>
+								update zbgl_zbyz_jiaochuan(@{m_jiangzhuansu},@{m_shouxiangjiao},@{m_zongqingjiao},@{m_fangxiangduoduojiao},@{m_tuijinzhuangtai},
+									@{shuimianhuizhuanzhijing},@{shuimianzxingcaoduo},@{shuimiandaoche},@{shuimianzhidong}) 
+								where id=@{id__old};
+							</update>
+						</sql>
+					</report>
+				
+	<!-- QQ总体-${shuixiacaozongxing} -->
+					<report id="qiantingzongti_shuixiacaozongxing_report" type="editabledetail" parenttitle="${shuixiacaozongxing}" 
+							template="relative{htmltemplate/zhuangbeiguanli/zhuangbeiyanzhi/jiaochuan_shuixiacaozongxing_template.html}">
+						<display>
+							<col column="id" displaytype="hidden" valuestyleproperty="style='mso-number-format:\@'" />
+							<col column="x_hangsu" label="${shuixiahangsu}">
+								<inputbox jsvalidate="isNumeric(#data#不是合法数字)"></inputbox>
+							</col>
+							<col column="x_jiangzhuansu" label="${shuixiajiangzhuansu}">
+								<inputbox jsvalidate="isNumeric(#data#不是合法数字)"></inputbox>
+							</col>
+							<col column="x_shouxiangjiao" label="${shuixiashouxiangjiao}">
+								<inputbox jsvalidate="isNumeric(#data#不是合法数字)"></inputbox>
+							</col>
+							<col column="x_zongqingjiao" label="${shuixiazongqingjiao}">
+								<inputbox jsvalidate="isNumeric(#data#不是合法数字)"></inputbox>
+							</col>
+							<col column="x_fangxiangduoduojiao" label="${shuixiafangxiangduoduojiao}">
+								<inputbox jsvalidate="isNumeric(#data#不是合法数字)"></inputbox>
+							</col>
+							<col column="shuixiahuizhuanzhijing" label="${shuixiahuizhuanzhijing}">
+								<inputbox jsvalidate="isNumeric(#data#不是合法数字)"></inputbox>
+							</col>
+							<col column="huizhuannisu" label="${huizhuannisu}">
+								<inputbox jsvalidate="isNumeric(#data#不是合法数字)"></inputbox>
+							</col>
+							<col column="shuidonglixishu" label="${shuidonglixishu}">
+								<inputbox jsvalidate="isNumeric(#data#不是合法数字)"></inputbox>
+							</col>
+							<col column="shuiweishengjiangduonisu" label="${shuiweishengjiangduonisu}">
+								<inputbox jsvalidate="isNumeric(#data#不是合法数字)"></inputbox>
+							</col>
+							<col column="sushenglv" label="${sushenglv}">
+								<inputbox jsvalidate="isNumeric(#data#不是合法数字)"></inputbox>
+							</col>
+							<col column="shuixiazxingcaoduo" datatype="clob" label="${shuixiazxingcaoduo}">
+								<inputbox type="textareabox" styleproperty="rows='4' cols='140%' "></inputbox>
+							</col>
+							<col column="shuixiahuiduo" datatype="clob" label="${shuixiahuiduo}">
+								<inputbox type="textareabox" styleproperty="rows='4' cols='140%' "></inputbox>
+							</col>
+							<col column="shuipingwendingyundong" datatype="clob" label="${shuipingwendingyundong}">
+								<inputbox type="textareabox" styleproperty="rows='4' cols='140%' "></inputbox>
+							</col>
+							<col column="qianfujidongxing" datatype="clob" label="${qianfujidongxing}">
+								<inputbox type="textareabox" styleproperty="rows='4' cols='140%' "></inputbox>
+							</col>
+							
+						</display>
+						<sql>
+							<select>
+							   <value>
+									<![CDATA[SELECT id,x_hangsu,x_jiangzhuansu,x_shouxiangjiao,x_zongqingjiao,x_fangxiangduoduojiao,shuixiahuizhuanzhijing,shuixiahuiduo，huizhuannisu,shuidonglixishu,shuiweishengjiangduonisu,sushenglv,shuixiazxingcaoduo,shuipingwendingyundong,qianfujidongxing  FROM zbgl_zbyz_jiaochuan where  {#condition#} order by id]]>
+							   </value>
+								<condition name="txtid" label="id" hidden="true">
+									<value>
+										<![CDATA[(id = #data#)]]>
+									</value>
+								</condition>						
+							</select> 
+							<update>
+								update zbgl_zbyz_jiaochuan(@{x_hangsu},@{x_jiangzhuansu},@{x_shouxiangjiao},@{x_zongqingjiao},@{x_fangxiangduoduojiao},
+									@{shuixiahuizhuanzhijing},@{huizhuannisu},@{shuidonglixishu},@{shuiweishengjiangduonisu},@{sushenglv},
+									@{shuixiazxingcaoduo},@{shuixiahuiduo},@{shuipingwendingyundong},@{qianfujidongxing}) 
+								where id=@{id__old};
+							</update>
+						</sql>
+					</report>
+
+
+<!-- ${zhuyaoxitong} -->
+
+					<report id="JC_zhuyaoxitong_report" parenttitle="${zhuyaoxitong}" type="editabledetail" 
+							template="relative{htmltemplate/zhuangbeiguanli/zhuangbeiyanzhi/zhuyaoxitong_template.html}">
+						<display>
+						    <col column="id" label="id" displaytype="hidden"></col>
+							<col column="donglixitong" label="${donglixitong}" datatype="clob">
+								<inputbox type="textareabox" styleproperty="rows='4' cols='140%' "></inputbox>
+							</col>
+							<col column="caotingxitong" label="${caotingxitong}" datatype="clob">
+								<inputbox type="textareabox" styleproperty="rows='4' cols='140%' "></inputbox>
+							</col>
+							<col column="quanchuanbaozhangxitong" label="${quanchuanbaozhangxitong}" datatype="clob">
+								<inputbox type="textareabox" styleproperty="rows='4' cols='140%' "></inputbox>
+							</col>
+							<col column="zuozhanxitong" label="${zuozhanxitong}" datatype="clob">
+								<inputbox type="textareabox" styleproperty="rows='4' cols='140%' "></inputbox>
+							</col>
+						</display>
+						<sql>
+							<select>
+								   <value>
+									<![CDATA[SELECT id,donglixitong,caotingxitong,quanchuanbaozhangxitong,zuozhanxitong  FROM zbgl_zbyz_jiaochuan where  {#condition#} order by id]]>
+								   </value>
+									<condition name="txtid" label="id" hidden="true">
+										<value>
+											<![CDATA[(id = #data#)]]>
+										</value>
+									</condition>					
+							</select>
+							<update>
+								update zbgl_zbyz_jiaochuan(@{donglixitong},@{caotingxitong},@{quanchuanbaozhangxitong},@{zuozhanxitong}) 
+								where id=@{id__old};
+							</update>
+						</sql>
+					</report>
+
+		</page>
+	</applications>
+

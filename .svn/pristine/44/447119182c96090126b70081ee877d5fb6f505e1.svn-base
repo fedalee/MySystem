@@ -1,0 +1,789 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<applications xmlns="http://www.wabacus.com"
+			   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			   xsi:schemaLocation="http://www.wabacus.com ../../../../xsd/wabacus.applications.xsd">
+	 <page id="chuantijiegou" >
+	      <tabpanel id="tabpanel11"  titlealign="top" titlestyle="2" parenttitle="${chuantijiegou}" align="center" margin="10px">
+			<framepanel id="jiegouzhuchidu_framepanel" parenttitle="${chuantijiegou}"  title="url{suoshuxinghao}号${jiegouzhuchidu}" margin="10px">
+				<vpanel id="jiegouzhuchidu_vpanel">
+					<hpanel id="jiegouzhuchidu_hpanel">	   
+							  <report id="jiegouzhuchidu_report" title="${jiegouzhuchidu}" type="form" width="600px"
+							  template="relative{htmltemplate/zhuangbeiguanli/zhuangbeijibenxinxi/xinghaojiegouzhuchidu_template.html}">
+							   <display>		   
+								         <col column="id" displaytype="hidden" ></col>
+								         <col column="xinghao" label="所属${xinghao}" displaytype="hidden"/>
+									     <col column="zongchangdu" label="${chuantizongchangdu}" ></col>
+									     <col column="zcdxingkuan" label="型宽(m)"></col>
+									     <col column="zcdxingshen" label="型深(m)"></col>
+									     <col column="naiyachuanti" label="${naiyachuanti}长度(m)"></col>
+									     <col column="yuanzhukezhijing" label="${naiyachuanti}圆柱壳直径(m)"></col>
+									     <col column="fasheshuicangcd" label="${fasheshuicangchangdu}(m)"></col>
+									     <col column="shuichuanmiducd" label="${chuantichangdu}(m)"></col>
+									     <col column="wendingyikuandu" label="${zuidakuandu}(m)"></col>
+									     <col column="jixianzhihuixian" label="${zuigaodiandegaodu}(m)"></col>
+									     <col column="{non-fromdb}" property="jibenjiegoushuomingshu" label="基本结构说明书" />
+									     <col column="zcdjiegouchengyanengli" datatype="clob" valuestyleproperty="colspan='2'" label="${chengyanengli}">				        
+									         <inputbox type="textareabox" styleproperty="rows='5'" ></inputbox>					   
+									     </col>
+								    </display>
+							      <sql>
+							      	 <select>
+									      <value>
+										<![CDATA[SELECT * FROM zbgl_zbjbxx_xinghao  where  {#condition#} order by id]]>
+									</value>
+									 <condition name="suoshuxinghao" hidden="true">
+										       <value>
+											<![CDATA[(xinghao =  #data# )]]>
+										</value>
+									  </condition>						     
+								       </select>					        
+								    <update>
+									     update zbgl_zbjbxx_xinghao(@{zongchangdu},@{zcdxingkuan},@{zcdxingshen},@{naiyachuanti}, @{yuanzhukezhijing},@{fasheshuicangcd},@{shuichuanmiducd},
+									     @{wendingyikuandu},@{jixianzhihuixian},@{zcdjiegouchengyanengli}) where id=@{id__old};
+									    
+								  </update>			
+							      </sql>
+							      <format>
+			    	<value>
+			  			<![CDATA[
+			        		jibenjiegoushuomingshu="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">"
+			        		+"<a href=\"#\" onclick=\"wx_winpage('ShowReport.wx?PAGEID=zbwxjghz_fujian&leibie=船体结构&fujiansuoshu="+xinghao+"',{width:1100,height:400})\" target=\"sampleframe\">"
+							 + "点击查看附件</a></span>";
+			     		]]>
+			  		</value>
+				</format>				      
+							  </report>
+							  <report id="jiegouzhuchidutupian_report"   left="30px" pagesize="2"  width="300px" type="editablelist2"  title="基本结构图、型线图："  >
+									<display dataheader="" >
+				                    	<col column="id" label="id" displaytype="hidden"/>
+									  	<col column="photo" label="" >
+								    	</col>  
+								    </display>
+								  	<sql>		
+										<select>
+											<value>
+													<![CDATA[SELECT * FROM zbgl_zbwxjghz_pic  where tupianzhonglei='船体结构' and {#condition#} ]]>
+											</value>
+											<condition name="suoshuxinghao"  hidden="true">
+												<value>
+														<![CDATA[(tupiansuoshu = #data#)]]>
+												</value>
+											</condition>
+										</select>
+								      	<delete>
+								      		delete from zbgl_zbwxjghz_pic where id=@{id__old}; 			    
+								  		</delete>     
+								    </sql>
+				  					<format>
+							      		<imports>
+									    	<import>com.wabacus.util.*</import>
+							      		</imports>
+							      		<value>
+							  				<![CDATA[
+							  					if(photo!=null&&!photo.trim().equals(""))
+												{
+												  photo="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">"+"<a href=\"#\" onclick=\"wx_winpage('jsp/showPic.jsp?src="+photo+"',{initsize:'max'})\" >"+"<img src=\""+photo+"\"  width='100' height='100'>"+"</a></span>";
+												}else
+												{
+													photo="无照片";
+												}
+					  				
+							  				]]>
+							  			</value>
+							   		</format> 
+							   		<buttons buttonspacing="5" align="right">
+							  			<button name="upload" position="title" label="上传图片">
+										 <imports>
+								   			   <import>com.wabacus.system.*</import><!-- 用到了这个包下面的CacheDataBean类 -->
+							    		 </imports>
+											  <dynevent>
+												<![CDATA[
+													String str = rrequest.getStringAttribute("suoshuxinghao","");
+													System.out.println("***********************"+str);
+													StringBuffer sbuffer=new StringBuffer();
+													sbuffer.append("wx_winpage('upLoadImage.jsp?table=zbgl_zbwxjghz_pic&amp;tupianzhonglei=船体结构&amp;tupiansuoshu=");
+													sbuffer.append(str);
+													sbuffer.append("&amp;page=xinghaojibenxinxi&amp;report=jiegouzhuchidutupian_report');");
+													return sbuffer.toString();//返回拼凑好的事件
+												]]>
+											</dynevent>
+										</button>
+					  				</buttons> 
+							  	</report>
+							  	</hpanel>				 				  				  			
+					<report id="chuantizongzhendong_report" title="${chuantizongzhendong}"  align="center" type="editablelist" >
+							        <interceptor>
+									  	<imports>
+							  	 		   	<import>com.wabacus.util.*</import>
+							  	 		   	<import>com.wabacus.system.*</import>
+							  	 	  	</imports>
+							  	 	  	<preaction>
+							  	 	      <![CDATA[
+												String xh = rrequest.getStringAttribute("suoshuxinghao");							
+												rrequest.getRequest().setAttribute("key" ,xh);	
+												
+																		
+										  ]]>
+							  	 	  	</preaction>
+	  	      						</interceptor> 
+							       <display>
+							           <col column="{sequence:1}" label="序号"></col>
+					                     <col column="id" label="id" displaytype="hidden"></col>
+								         <col column="suoshuxinghao" label="所属${xinghao}" displaytype="hidden"/>
+									     <col column="zhuangtai" label="状态" >
+								            <inputbox type="selectbox">						  
+												<option value="水上垂直" label="水上垂直"></option>
+												<option value="水上水平" label="水上水平"></option>
+												<option value="水下垂直" label="水下垂直"></option>
+												<option value="水下水平" label="水下水平"></option>
+												<option value="水下纵向" label="水下纵向"></option>								
+											</inputbox>
+							            </col>
+						                <col column="yijie" label="1阶"></col>
+									    <col column="erjie" label="2阶"></col>
+									    <col column="sanjie" label="3阶"></col>
+								</display>	     
+							      <sql>
+							      	 <select>
+									      <value>
+										<![CDATA[SELECT * FROM zbgl_zbjbxx_xinghao_ctzd  where  {#condition#} order by id]]>
+									</value>
+									     <condition name="suoshuxinghao" hidden="true">
+										       <value>
+											<![CDATA[(suoshuxinghao =  #data# )]]>
+										</value>
+									      </condition>
+								      </select>	
+								      <insert pageurl="report{chuantizongzhendong.chuantizongzhendongdetail_report}" urlparams="suoshuxinghao=request{key}" popupparams="{title:'新增船体总振动',width:980,height:400}"></insert>
+					                  <update pageurl="report{chuantizongzhendong.chuantizongzhendongdetail_report}" urlparams="suoshuid=@{id}" popupparams="{title:'编辑船体总振动',width:980,height:400}" ></update>
+									  <delete>
+									  	 delete from zbgl_zbjbxx_xinghao_ctzd where id=@{id__old};
+									  </delete>
+							      </sql>			    
+							  </report> 
+				</vpanel>
+			</framepanel>
+			<framepanel id="naiyajiegou_framepanel" parenttitle="${naiyajiegou}"  title="url{suoshuxinghao}${naiyajiegou}" margin="10px">
+							   <vpanel id="naiyajiegou_vpanel">
+							   <hpanel id="naiyajiegou_hpanel">
+							   <report id="naiyajiegou_report" type="form" width="600px"
+							   template="relative{htmltemplate/zhuangbeiguanli/zhuangbeijibenxinxi/xinghaonaiyachuanti_template.html}">
+								    <display>
+									      <col column="id" label="id" displaytype="hidden"></col> 
+									      <col column="xinghao" label="${xinghao}" displaytype="hidden"/>
+									      <col column="naiyachuantizucheng" label="${naiyachuanti}组成" />
+									      <col column="naiyachuantizongchang" label="${naiyachuanti}总长"></col> 
+									       <col column="chuantijiegoutedian" label="${chuantijiegou}特点" datatype="clob" valuestyleproperty="colspan='2'" br="true">
+									         <inputbox type="textareabox" styleproperty="rows='5'" ></inputbox>
+								         </col>						     
+								    </display>
+								    <sql>
+								       <select>
+									      <value>
+										<![CDATA[SELECT * FROM zbgl_zbjbxx_xinghao where  {#condition#}]]>
+									</value>
+									 <condition name="suoshuxinghao" hidden="true">
+										       <value>
+											<![CDATA[(xinghao =  #data# )]]>
+										</value>
+									      </condition>
+									</select>
+								   <update>
+								     	update zbgl_zbjbxx_xinghao(@{naiyachuantizucheng},@{naiyachuantizongchang},@{chuantijiegoutedian}) where id=@{id__old};
+						  	       </update>
+									
+								    </sql>				     
+							   </report>
+							     <report id="naiyajiegoutupian_report"   left="30px" pagesize="2"  width="300px" type="editablelist2"  title="图片：" >
+									<display dataheader="" >
+				                    	<col column="id" label="id" displaytype="hidden"/>
+									  	<col column="photo" label="" >
+									    	<inputbox type="file"   displaytype="image" deletetype="2" savepath="${image.path}" rooturl="/uploadfile/"></inputbox> <!-- />-->
+								    	</col>  
+								    </display>
+								  	<sql>				     
+										<select>
+											<value>
+													<![CDATA[SELECT * FROM zbgl_zbwxjghz_pic  where tupianzhonglei='耐压结构' and {#condition#} ]]>
+											</value>
+											<condition name="suoshuxinghao"  hidden="true">
+												<value>
+														<![CDATA[(tupiansuoshu = #data#)]]>
+												</value>
+											</condition>
+										</select>
+								      	<delete>
+								      		delete from zbgl_zbwxjghz_pic where id=@{id__old}; 			    
+								  		</delete>     
+								    </sql>
+				  					<format>
+							      		<imports>
+									    	<import>com.wabacus.util.*</import>
+							      		</imports>
+							      		<value>
+							  				<![CDATA[
+							  					if(photo!=null&&!photo.trim().equals(""))
+												{
+												  photo="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">"+"<a href=\"#\" onclick=\"wx_winpage('jsp/showPic.jsp?src="+photo+"',{initsize:'max'})\" >"+"<img src=\""+photo+"\"  width='100' height='100'>"+"</a></span>";
+												}else
+												{
+													photo="无照片";
+												}
+					  				
+							  				]]>
+							  			</value>
+							   		</format> 
+							   		<buttons buttonspacing="5" align="right">
+							  			<button name="upload" position="title" label="上传图片">
+										 <imports>
+								   			   <import>com.wabacus.system.*</import><!-- 用到了这个包下面的CacheDataBean类 -->
+							    		 </imports>
+											  <dynevent>
+												<![CDATA[
+													String str = rrequest.getStringAttribute("suoshuxinghao","");
+													System.out.println("***********************"+str);
+													StringBuffer sbuffer=new StringBuffer();
+													sbuffer.append("wx_winpage('upLoadImage.jsp?table=zbgl_zbwxjghz_pic&amp;tupianzhonglei=耐压结构&amp;tupiansuoshu=");
+													sbuffer.append(str);
+													sbuffer.append("&amp;page=chuantijiegou&amp;report=naiyajiegou_report');");
+													return sbuffer.toString();//返回拼凑好的事件
+												]]>
+											</dynevent>
+										</button>
+					  				</buttons> 
+							  	</report> 
+							   </hpanel>
+						 <report id="naiyachuantizhijing_report" title="${naiyachuanti}直径" align="center" type="editablelist" >
+							  <interceptor>
+								<imports>
+							  	 	<import>com.wabacus.util.*</import>
+							  	 	<import>com.wabacus.system.*</import>
+							  	</imports>
+							  	 	 <preaction>
+							  	 	     <![CDATA[
+									String xh = rrequest.getStringAttribute("suoshuxinghao");							
+									rrequest.getRequest().setAttribute("key" ,xh);									
+										  ]]>
+							  </preaction>
+	  	      				  </interceptor> 
+							  <display>
+							    <col column="{sequence:1}" label="序号"></col>
+							    <col column="id" label="id" displaytype="hidden"></col>
+							    <col column="suoshuxinghao" label="所属${xinghao}" displaytype="hidden">
+							    </col>
+							    <col column="jiegouxingshi" label="${jiegouxingshi}">
+							       <inputbox type="selectbox">
+							          <option value="${xiezhuiduan}" label="${xiezhuiduan}"></option> 
+			                          <option value="${zhukeduan}" label="${zhukeduan}"></option>
+							       </inputbox>
+							    </col>
+							    <group label="${leiguqujian}">
+							        <col column="syi" label="首" ></col>
+							        <col column="wyi" label="尾" ></col>
+							    </group>
+							    <group label="${naiyajiegou}直径">
+							        <col column="ser" label="首" ></col>
+							        <col column="wer" label="尾" ></col>
+							    </group>
+							  </display>
+							  <sql>
+								       <select>
+									      <value>
+										<![CDATA[SELECT * FROM zbgl_zbjbxx_xinghao_nyctzj where  {#condition#} order by id]]>
+									</value>
+									<condition name="suoshuxinghao" hidden="true">
+										<value>
+											<![CDATA[(suoshuxinghao =  #data# )]]>
+										</value>
+									</condition>
+									</select>
+								  <insert pageurl="report{naiyachuantizhijing.naiyachuantizhijingdetail_report}" urlparams="suoshuxinghao=request{key}" popupparams="{title:'新增耐压船体直径',width:980,height:400}"></insert>
+					              <update pageurl="report{naiyachuantizhijing.naiyachuantizhijingdetail_report}" urlparams="suoshuid=@{id}" popupparams="{title:'编辑耐压船体直径',width:980,height:400}" ></update>
+								  <delete>
+								  	 delete from zbgl_zbjbxx_xinghao_nyctzj where id=@{id__old};
+								  </delete>
+						</sql>						
+					</report>
+							   
+						<report id="naiyakebanhoudu_report" title="${kebanhoudu}" align="center" type="editablelist" >
+						      <interceptor>
+								<imports>
+							  	 	<import>com.wabacus.util.*</import>
+							  	 	<import>com.wabacus.system.*</import>
+							  	</imports>
+							  	 	 <preaction>
+							  	 	     <![CDATA[
+									String xh = rrequest.getStringAttribute("suoshuxinghao");							
+									rrequest.getRequest().setAttribute("key" ,xh);									
+										  ]]>
+							  </preaction>
+	  	      				  </interceptor> 
+							  <display>
+							    <col column="{sequence:1}" label="序号"></col>
+							    <col column="id" label="id" displaytype="hidden"></col>
+							    <col column="suoshuxinghao" label="所属${xinghao}" displaytype="hidden"/>
+							    <col column="leixing" label="类型" displaytype="optional"/>
+							    <col column="kebanhoudu" label="${kebanhoudu}"/>
+							    <group label="${leiguqujian}">
+							        <col column="syi" label="首" ></col>
+							        <col column="wyi" label="尾" ></col>
+							    </group>
+							        <col column="beizhu" label="备注" ></col>
+							  </display>
+							  <sql>
+								       <select>
+									      <value>
+										<![CDATA[SELECT * FROM zbgl_zbjbxx_xinghao_kbhd where  {#condition#}  and leixing='耐压' order by id]]>
+									</value>
+									 <condition name="suoshuxinghao" hidden="true">
+										<value>
+											<![CDATA[(suoshuxinghao =  #data# )]]>
+										</value>
+									      </condition>
+									</select>
+								  <insert pageurl="report{naiyakebanhoudu.naiyakebanhoududetail_report}" urlparams="suoshuxinghao=request{key}" popupparams="{title:'新增壳板厚度',width:980,height:400}"></insert>
+					              <update pageurl="report{naiyakebanhoudu.naiyakebanhoududetail_report}" urlparams="suoshuid=@{id}" popupparams="{title:'编辑壳板厚度',width:980,height:400}" ></update>
+								  <delete>
+								  	 delete from zbgl_zbjbxx_xinghao_kbhd where id=@{id__old};
+								  </delete>
+									</sql>				
+							  </report>
+							  <report id="naiyaleigucanshu_report" title="${leigu}布置、间距"  align="center" type="editablelist"  >
+							  <display>
+							    <col column="{sequence:1}" label="序号"></col>
+							    <col column="id" label="id" displaytype="hidden"></col>
+							    <col column="suoshuxinghao" label="所属${xinghao}" displaytype="optional"/>
+							    <col column="leixing" label="类型" displaytype="optional"/>
+							    <group label="${leiguqujian}">
+							        <col column="syi" label="首" ></col>
+							        <col column="wyi" label="尾" ></col>
+							    </group>
+							        <col column="leigujianju" label="${leiguqujian}" ></col>
+							  </display>
+							  <sql>
+								       <select>
+									      <value>
+										<![CDATA[SELECT * FROM zbgl_zbjbxx_xinghao_lgjj where  {#condition#} and leixing='耐压' order by id]]>
+									</value>
+									 <condition name="suoshuxinghao" hidden="true">
+										       <value>
+											<![CDATA[(suoshuxinghao =  #data# )]]>
+										</value>
+									      </condition>
+									</select>
+								  <insert pageurl="report{naiyaleigucanshu.naiyaleigucanshudetail_report}" urlparams="suoshuxinghao=request{key}" popupparams="{title:'新增肋骨布置、间距',width:980,height:400}"></insert>
+					              <update pageurl="report{naiyaleigucanshu.naiyaleigucanshudetail_report}" urlparams="suoshuid=@{id}" popupparams="{title:'编辑肋骨布置、间距',width:980,height:400}" ></update>
+								  <delete>
+								  	 delete from zbgl_zbjbxx_xinghao_lgjj where id=@{id__old};
+								  </delete>
+									</sql>						
+							  </report> 
+							  <report id="naiyachuanticailiao_report" title="${chuanticailiao}" type="editablelist" >
+							  <interceptor>
+								<imports>
+							  	 	<import>com.wabacus.util.*</import>
+							  	 	<import>com.wabacus.system.*</import>
+							  	</imports>
+							  	 	 <preaction>
+							  	 	     <![CDATA[
+									String xh = rrequest.getStringAttribute("suoshuxinghao");							
+									rrequest.getRequest().setAttribute("key" ,xh);									
+										  ]]>
+							  </preaction>
+	  	      				  </interceptor> 
+								    <display>
+									    <col column="{sequence:1}" label="序号"></col>
+									     <col column="id" label="id" displaytype="hidden"></col>
+									     <col column="suoshuxinghao" label="所属${xinghao}" displaytype="optional"/>
+									      <col column="leixing" label="类型" displaytype="optional"/>
+									      <col column="cailiaoleibie" label="材料类别">
+									       <inputbox type="selectbox">						  
+												<option value="金属材料" label="金属材料"></option>
+												<option value="非金属材料" label="非金属材料"></option>								
+											</inputbox>
+									      </col>
+									      <col column="cailiaoxinghao" label="材料${xinghao}"></col>
+									      <col column="yingyongfanwei" label="应用范围"></col>
+								    </display>
+								    <sql>
+								       <select>
+									      <value>
+										<![CDATA[SELECT * FROM zbgl_zbjbxx_xinghao_ctcl where  {#condition#} and leixing='耐压' order by id]]>
+									</value>
+									 <condition name="suoshuxinghao" hidden="true">
+										       <value>
+											<![CDATA[(suoshuxinghao =  #data# )]]>
+										</value>
+									      </condition>
+									</select>
+								  <insert pageurl="report{naiyachuanticailiao.naiyachuanticailiaodetail_report}" urlparams="suoshuxinghao=request{key}" popupparams="{title:'新增船体材料',width:980,height:400}"></insert>
+					              <update pageurl="report{naiyachuanticailiao.naiyachuanticailiaodetail_report}" urlparams="suoshuid=@{id}" popupparams="{title:'编辑船体材料',width:980,height:400}" ></update>
+								       <delete>
+								  	 delete from zbgl_zbjbxx_xinghao_ctcl where id=@{id__old};
+								  </delete>
+								    </sql>				    
+							   </report>  
+							  <report id="naiyaleiguxinghao_report" title="${leiguxinghao}"  align="center" type="editablelist" >
+							  <interceptor>
+								<imports>
+							  	 	<import>com.wabacus.util.*</import>
+							  	 	<import>com.wabacus.system.*</import>
+							  	</imports>
+							  	 	 <preaction>
+							  	 	     <![CDATA[
+									String xh = rrequest.getStringAttribute("suoshuxinghao");							
+									rrequest.getRequest().setAttribute("key" ,xh);									
+										  ]]>
+							  </preaction>
+	  	      				  </interceptor> 
+							  <display>
+							    <col column="{sequence:1}" label="序号"></col>
+							    <col column="id" label="id" displaytype="hidden"></col>
+							    <col column="suoshuxinghao" label="所属${xinghao}" displaytype="optional"/>
+								<col column="leixing" label="类型" displaytype="optional"/>
+							    <col column="leiguxinghao" label="${leiguxinghao}" ></col>
+							    <col column="leiguhao" label="${leigu}号" ></col>
+							    <col column="leigubuzhixingshi" label="${leigubuzhixingshi}" >
+								    <inputbox type="selectbox">						  
+										<option value="内肋骨" label="内肋骨"></option>
+										<option value="外肋骨" label="外肋骨"></option>
+										<option value="特大肋骨" label="特大肋骨"></option>
+									</inputbox>
+							    </col>
+							    <col column="beizhu" label="备注" ></col>
+							  </display>
+							  <sql>
+								       <select>
+									      <value>
+										<![CDATA[SELECT * FROM zbgl_zbjbxx_xinghao_lgxh where  {#condition#}  and leixing='耐压' order by id]]>
+									</value>
+									 <condition name="suoshuxinghao" hidden="true">
+										 <value>
+											<![CDATA[(suoshuxinghao =  #data# )]]>
+										</value>
+									 </condition>
+									</select>
+								  <insert pageurl="report{naiyaleiguxinghao.naiyaleiguxinghaodetail_report}" urlparams="suoshuxinghao=request{key}" popupparams="{title:'新增肋骨型号',width:980,height:400}"></insert>
+					              <update pageurl="report{naiyaleiguxinghao.naiyaleiguxinghaodetail_report}" urlparams="suoshuid=@{id}" popupparams="{title:'编辑肋骨型号',width:980,height:400}" ></update>
+								  <delete>
+								  	 delete from zbgl_zbjbxx_xinghao_lgxh where id=@{id__old};
+								  </delete>
+									</sql>						
+							  </report>
+							  <report id="naiyachuantiqiangdu_report" title="${naiyachuanti}的强度和稳定性"  align="center" type="editablelist" >
+							  <interceptor>
+								<imports>
+							  	 	<import>com.wabacus.util.*</import>
+							  	 	<import>com.wabacus.system.*</import>
+							  	</imports>
+							  	 	 <preaction>
+							  	 	     <![CDATA[
+									String xh = rrequest.getStringAttribute("suoshuxinghao");							
+									rrequest.getRequest().setAttribute("key" ,xh);									
+										  ]]>
+							  </preaction>
+	  	      				  </interceptor> 
+							  <display>
+							    <col column="{sequence:1}" label="序号"></col>
+							    <col column="id" label="id" displaytype="hidden"></col>
+							    <col column="suoshuxinghao" label="所属${xinghao}" displaytype="optional">
+									     
+							    </col>
+							        <col column="jiegouquyu" label="${jiegouquyu}" ></col>
+							        <col column="ZHONGMIANYINGLI" label="中面应力MPa" ></col>
+							        <col column="ZONGMIANYINGLI" label="纵向应力MPa" ></col>
+							        <col column="LINJIEYALI" label="失稳实际临界压力MPa" ></col>
+							        <col column="beizhu" label="备注" ></col>
+							  </display>
+							  <sql>
+								       <select>
+									      <value>
+										<![CDATA[SELECT * FROM zbgl_zbjbxx_xinghao_nyctqd where  {#condition#}]]>
+									</value>
+									 <condition name="suoshuxinghao" hidden="true">
+										       <value>
+											<![CDATA[(suoshuxinghao =  #data# )]]>
+										</value>
+									      </condition>
+									</select>
+								  <insert pageurl="report{naiyachuantiqiangdu.naiyachuantiqiangdudetail_report}" urlparams="suoshuxinghao=request{key}" popupparams="{title:'新增耐压船体强度和稳定性',width:980,height:400}"></insert>
+					              <update pageurl="report{naiyachuantiqiangdu.naiyachuantiqiangdudetail_report}" urlparams="suoshuid=@{id}" popupparams="{title:'编辑耐压船体强度和稳定性',width:980,height:400}" ></update>
+								  <delete>
+								  	 delete from zbgl_zbjbxx_xinghao_nyctqd where id=@{id__old};
+								  </delete>
+									</sql>
+							  </report>
+							  </vpanel>
+						  </framepanel>
+			<framepanel id="naiyachuanti_framepanel" parenttitle="非${naiyajiegou}"  title="url{suoshuxinghao}${naiyachuanti}" margin="10px">
+							   <vpanel id="naiyachuanti_vpanel">
+							   <hpanel id="fnaiyachuanti_hpanel">
+							   <report id="fnaiyachuanti_report" type="form"  width="600px"
+							   template="relative{htmltemplate/zhuangbeiguanli/zhuangbeijibenxinxi/xinghaofnaiyachuanti_template.html}">
+								    <display>
+									      <col column="id" label="id" displaytype="hidden"></col> 
+									      <col column="xinghao" label="${xinghao}" displaytype="hidden"/>
+									      <col column="fnaiyachuantizucheng" label="非${naiyachuanti}组成" />
+									      <col column="fnaiyachuantizongchang" label="非${naiyachuanti}总长"></col> 
+									       <col column="fchuantijiegoutedian" label="非${chuantijiegou}特点" datatype="clob" valuestyleproperty="colspan='2'" br="true">
+									         <inputbox type="textareabox" styleproperty="rows='5'" ></inputbox>
+								         </col>						     
+								    </display>
+								    <sql>
+								       <select>
+									      <value>
+										<![CDATA[SELECT * FROM zbgl_zbjbxx_xinghao where  {#condition#}]]>
+									</value>
+									 <condition name="suoshuxinghao" hidden="true">
+										       <value>
+											<![CDATA[(xinghao =  #data# )]]>
+										</value>
+									      </condition>
+									</select>
+								   <update>
+								     	update zbgl_zbjbxx_xinghao(@{fnaiyachuantizucheng},@{fnaiyachuantizongchang},@{fchuantijiegoutedian}) where id=@{id__old};
+						  	       </update>
+									
+								    </sql>				     
+							   </report> 
+							     <report id="fnaiyajiegoutupian_report"   left="30px" pagesize="2"  width="300px" type="editablelist2"  title="图片：" >
+									<display dataheader="" >
+				                    	<col column="id" label="id" displaytype="hidden"/>
+									  	<col column="photo" label="" >
+									    	<inputbox type="file"   displaytype="image" deletetype="2" savepath="${image.path}" rooturl="/uploadfile/"></inputbox> <!-- />-->
+								    	</col>  
+								    </display>
+								  	<sql>				     
+										<select>
+											<value>
+													<![CDATA[SELECT * FROM zbgl_zbwxjghz_pic  where tupianzhonglei='非耐压结构' and {#condition#} ]]>
+											</value>
+											<condition name="suoshuxinghao"  hidden="true">
+												<value>
+														<![CDATA[(tupiansuoshu = #data#)]]>
+												</value>
+											</condition>
+										</select>
+								      	<delete>
+								      		delete from zbgl_zbwxjghz_pic where id=@{id__old}; 			    
+								  		</delete>     
+								    </sql>
+				  					<format>
+							      		<imports>
+									    	<import>com.wabacus.util.*</import>
+							      		</imports>
+							      		<value>
+							  				<![CDATA[
+							  					if(photo!=null&&!photo.trim().equals(""))
+												{
+												  photo="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">"+"<a href=\"#\" onclick=\"wx_winpage('jsp/showPic.jsp?src="+photo+"',{initsize:'max'})\" >"+"<img src=\""+photo+"\"  width='100' height='100'>"+"</a></span>";
+												}else
+												{
+													photo="无照片";
+												}
+					  				
+							  				]]>
+							  			</value>
+							   		</format> 
+							   		<buttons buttonspacing="5" align="right">
+							  			<button name="upload" position="title" label="上传图片">
+										 <imports>
+								   			   <import>com.wabacus.system.*</import><!-- 用到了这个包下面的CacheDataBean类 -->
+							    		 </imports>
+											  <dynevent>
+												<![CDATA[
+													String str = rrequest.getStringAttribute("suoshuxinghao","");
+													System.out.println("***********************"+str);
+													StringBuffer sbuffer=new StringBuffer();
+													sbuffer.append("wx_winpage('upLoadImage.jsp?table=zbgl_zbwxjghz_pic&amp;tupianzhonglei=非耐压结构&amp;tupiansuoshu=");
+													sbuffer.append(str);
+													sbuffer.append("&amp;page=chuantijiegou&amp;report=fnaiyachuanti_report');");
+													return sbuffer.toString();//返回拼凑好的事件
+												]]>
+											</dynevent>
+										</button>
+					  				</buttons> 
+							  	</report> 
+							  	</hpanel>
+							  <report id="fnaiyakebanhoudu_report" title="${kebanhoudu}"  align="center" type="editablelist" >
+							   <interceptor>
+								<imports>
+							  	 	<import>com.wabacus.util.*</import>
+							  	 	<import>com.wabacus.system.*</import>
+							  	</imports>
+							  	 	 <preaction>
+							  	 	     <![CDATA[
+									String xh = rrequest.getStringAttribute("suoshuxinghao");							
+									rrequest.getRequest().setAttribute("key" ,xh);									
+										  ]]>
+							  </preaction>
+	  	      				  </interceptor> 
+							  <display>
+							    <col column="{sequence:1}" label="序号"></col>
+							    <col column="id" label="id" displaytype="hidden"></col>
+							    <col column="suoshuxinghao" label="所属${xinghao}" displaytype="optional"/>
+							    <col column="leixing" label="类型" displaytype="optional"/>
+							    <col column="kebanhoudu" label="${kebanhoudu}"/>
+							    <group label="${leigu}">
+							        <col column="syi" label="首" ></col>
+							        <col column="wyi" label="尾" ></col>
+							    </group>
+							        <col column="beizhu" label="备注" ></col>
+							  </display>
+							  <sql>
+								       <select>
+									      <value>
+										<![CDATA[SELECT * FROM zbgl_zbjbxx_xinghao_kbhd where  {#condition#}  and leixing='非耐压' order by id]]>
+									</value>
+									 <condition name="suoshuxinghao" hidden="true">
+										       <value>
+											<![CDATA[(suoshuxinghao =  #data# )]]>
+										</value>
+									      </condition>
+									</select>
+							<insert pageurl="report{fnaiyakebanhoudu.fnaiyakebanhoududetail_report}" urlparams="suoshuxinghao=request{key}" popupparams="{title:'新增壳板厚度',width:980,height:400}"></insert>
+					        <update pageurl="report{fnaiyakebanhoudu.fnaiyakebanhoududetail_report}" urlparams="suoshuid=@{id}" popupparams="{title:'编辑壳板厚度',width:980,height:400}" ></update>
+								  <delete>
+								  	 delete from zbgl_zbjbxx_xinghao_kbhd where id=@{id__old};
+								  </delete>
+									</sql>				
+							  </report>
+				<report id="fnaiyaleigubuzhi_report" title="${leigu}布置、间距"  align="center" type="editablelist" >
+							  <interceptor>
+								<imports>
+							  	 	<import>com.wabacus.util.*</import>
+							  	 	<import>com.wabacus.system.*</import>
+							  	</imports>
+							  	 	 <preaction>
+							  	 	     <![CDATA[
+									String xh = rrequest.getStringAttribute("suoshuxinghao");							
+									rrequest.getRequest().setAttribute("key" ,xh);									
+										  ]]>
+							  </preaction>
+	  	      				  </interceptor> 
+							  <display>
+							    <col column="{sequence:1}" label="序号"></col>
+							    <col column="id" label="id" displaytype="hidden"></col>
+							    <col column="suoshuxinghao" label="所属${xinghao}" displaytype="optional"/>
+							     <col column="leixing" label="类型" displaytype="optional"/>
+							    <group label="${leiguqujian}">
+							        <col column="syi" label="首" ></col>
+							        <col column="wyi" label="尾" ></col>
+							    </group>
+							        <col column="leigujianju" label="${leiguqujian}" ></col>
+							  </display>
+							  <sql>
+								       <select>
+									      <value>
+										<![CDATA[SELECT * FROM zbgl_zbjbxx_xinghao_lgjj where  {#condition#} and leixing='非耐压' order by id]]>
+									</value>
+									 <condition name="suoshuxinghao" hidden="true">
+										       <value>
+											<![CDATA[(suoshuxinghao =  #data# )]]>
+										</value>
+									      </condition>
+									</select>
+							<insert pageurl="report{fnaiyaleigubuzhi.fnaiyaleigubuzhidetail_report}" urlparams="suoshuxinghao=request{key}" popupparams="{title:'新增肋骨布置、间距',width:980,height:400}"></insert>
+					        <update pageurl="report{fnaiyaleigubuzhi.fnaiyaleigubuzhidetail_report}" urlparams="suoshuid=@{id}" popupparams="{title:'编辑肋骨布置、间距',width:980,height:400}" ></update>
+								  <delete>
+								  	 delete from zbgl_zbjbxx_xinghao_lgjj where id=@{id__old};
+								  </delete>
+									</sql>						
+							  </report> 
+							  <report id="fnaiyachuanticailiao_report" title="${chuanticailiao}" type="editablelist"  >
+							   <interceptor>
+								<imports>
+							  	 	<import>com.wabacus.util.*</import>
+							  	 	<import>com.wabacus.system.*</import>
+							  	</imports>
+							  	 	 <preaction>
+							  	 	     <![CDATA[
+									String xh = rrequest.getStringAttribute("suoshuxinghao");							
+									rrequest.getRequest().setAttribute("key" ,xh);									
+										  ]]>
+							  </preaction>
+	  	      				  </interceptor> 
+								    <display>							 
+									    <col column="{sequence:1}" label="序号"></col>
+									     <col column="id" label="id" displaytype="hidden"></col>
+									     <col column="suoshuxinghao" label="所属${xinghao}" displaytype="optional"/>
+									     <col column="leixing" label="类型" displaytype="optional"/>
+									      <col column="cailiaoleibie" label="材料类别">
+									       <inputbox type="selectbox">						  
+												<option value="金属材料" label="金属材料"></option>
+												<option value="非金属材料" label="非金属材料"></option>								
+											</inputbox>
+									      </col>
+									      <col column="cailiaoxinghao" label="材料${xinghao}"></col>
+									      <col column="yingyongfanwei" label="应用范围"></col>
+								    </display>
+								    <sql>
+								       <select>
+									      <value>
+										<![CDATA[SELECT * FROM zbgl_zbjbxx_xinghao_ctcl where  {#condition#} and leixing='非耐压' order by id]]>
+									</value>
+									 <condition name="suoshuxinghao" hidden="true">
+										       <value>
+											<![CDATA[(suoshuxinghao =  #data# )]]>
+										</value>
+									      </condition>
+									</select>
+							<insert pageurl="report{fnaiyachuanticailiao.fnaiyachuanticailiaodetail_report}" urlparams="suoshuxinghao=request{key}" popupparams="{title:'新增船体材料',width:980,height:400}"></insert>
+					        <update pageurl="report{fnaiyachuanticailiao.fnaiyachuanticailiaodetail_report}" urlparams="suoshuid=@{id}" popupparams="{title:'编辑船体材料',width:980,height:400}" ></update>
+								       <delete>
+								  	 delete from zbgl_zbjbxx_xinghao_ctcl where id=@{id__old};
+								  </delete>
+								    </sql>				    
+							   </report>  
+							  <report id="fnaiyaleiguxinghao_report" title="${leiguxinghao}"  align="center" type="editablelist">
+							  <interceptor>
+								<imports>
+							  	 	<import>com.wabacus.util.*</import>
+							  	 	<import>com.wabacus.system.*</import>
+							  	</imports>
+							  	 	 <preaction>
+							  	 	     <![CDATA[
+									String xh = rrequest.getStringAttribute("suoshuxinghao");							
+									rrequest.getRequest().setAttribute("key" ,xh);									
+										  ]]>
+							  </preaction>
+	  	      				  </interceptor> 
+							  <display>
+							    <col column="{sequence:1}" label="序号"></col>
+							    <col column="id" label="id" displaytype="hidden"></col>
+							    <col column="suoshuxinghao" label="所属${xinghao}" displaytype="optional"/>
+								<col column="leixing" label="类型" displaytype="optional"/>
+							    <col column="leiguxinghao" label="${leiguxinghao}" ></col>
+							    <col column="leiguhao" label="${leigu}号" ></col>
+							    <col column="leigubuzhixingshi" label="${leigubuzhixingshi}" >
+							   		<inputbox type="selectbox">						  
+										<option value="内肋骨" label="内肋骨"></option>
+										<option value="外肋骨" label="外肋骨"></option>
+										<option value="特大肋骨" label="特大肋骨"></option>
+									</inputbox>
+							    </col>
+							    <col column="beizhu" label="备注" ></col>
+							  </display>
+							  <sql>
+								       <select>
+									      <value>
+										<![CDATA[SELECT * FROM zbgl_zbjbxx_xinghao_lgxh where  {#condition#} and leixing='非耐压' order by id]]>
+									</value>
+									 <condition name="suoshuxinghao" hidden="true">
+										       <value>
+											<![CDATA[(suoshuxinghao =  #data# )]]>
+										</value>
+									      </condition>
+									</select>
+							<insert pageurl="report{fnaiyaleiguxinghao.fnaiyaleiguxinghaodetail_report}" urlparams="suoshuxinghao=request{key}" popupparams="{title:'新增肋骨型号',width:980,height:400}"></insert>
+					        <update pageurl="report{fnaiyaleiguxinghao.fnaiyaleiguxinghaodetail_report}" urlparams="suoshuid=@{id}" popupparams="{title:'编辑肋骨型号',width:980,height:400}" ></update>
+								  <delete>
+								  	 delete from zbgl_zbjbxx_xinghao_lgxh where id=@{id__old};
+								  </delete>
+									</sql>						
+							  </report>
+							  </vpanel>
+						  </framepanel>
+		 </tabpanel>
+	 </page>		   
+ </applications>

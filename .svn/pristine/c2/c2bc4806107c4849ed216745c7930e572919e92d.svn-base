@@ -1,0 +1,22 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>Web图片上传控件标准版演示</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<script type="text/javascript" src="ImageUploader/js/jquery-1.3.2.min.js"></script>
+	<script type="text/javascript" src="ImageUploader/js/ImageUploader.js" charset="utf-8"></script>
+</head>
+<body>
+	<div id="msg"></div>
+	<script language="javascript" type="text/javascript">
+		var imgUper = new ImageUploader();
+		imgUper.Config["PostUrl"] = "http://localhost:8080/MySystem/ImageUploader/jsp/upload.jsp";
+		imgUper.Fields["UserID"] = "dsh";
+
+		window.onload = function()
+		{
+			imgUper.Init();
+		}
+	</script>
+</body>
+</html>

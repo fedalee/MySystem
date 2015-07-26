@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<applications xmlns="http://www.wabacus.com"
+			   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			   xsi:schemaLocation="http://www.wabacus.com ../../xsd/wabacus.applications.xsd">
+ 
+ <page id="xinxijiansuo" js="/webresources/script/validate.js,/webresources/script/callback.js,/webresources/script/wabacus_api.js">
+ <vpanel id="vpl">
+ <report id="cedian"   onload="testonload1"    template="relative{htmltemplate/xinxijiansuo/shujufenxi/shujufenxitemplate.html}" interceptor="interceptor.SjfxTubiaoxianshi_Interceptor"> 	
+				 <display >
+                       <col column="{sequence:1}" label="序号"></col>
+                       <col column="id" label="id" displaytype="hidden" />
+                       <col column="cedianmingcheng" label="测点" />
+               		   <col column="gongkuang" label="工况" />
+               		   <col column="jieduan" label="所属实验" />
+               		   <col column="suoshuxianhao" label="所属舷号" />
+               		   <col column="xianhaozhuangtai" label="状态" />
+               		   <col column="zuheshebei" label="组合设备" />
+               		   <col column="danjishebei" label="单机设备" />  
+				  </display>
+				  <sql >
+					  <select>
+   						   <value><![CDATA[select a1.id,d1.suoshuxianhao,d1.jieduan,c1.NAME as zuheshebei,b1.NAME as danjishebei,b1.GONGKUANG,a1.CEDIANLEIBIE,a1.CEDIANMINGCHENG,xianhaozhuangtai from ZBGL_ZXSY_CEDIAN a1 join ZBGL_ZXSY_DJSB b1 on a1.SUOSHU=b1.ID LEFT join ZBGL_ZXSY_ZHSB  c1 on b1.SUOSHUZUHESHEBEI=c1.ID 
+											LEFT join ZBGL_ZXSY_SHEBEI d1 ON b1.SUOSHUSHEBEI=d1.ID where {#condition#}]]></value>
+			                   
+			                    <condition name="xianhao" label="舷号">
+								  <value>
+										  <![CDATA[(d1.suoshuxianhao like '%#data#%' )]]>
+								  </value>
+							     <inputbox type="selectbox">
+								      <option label="全部" value=""></option>
+								      <option dataset="@{select id,xianhao  from zbgl_zbjbxx_xianhao}" label="xianhao " value="xianhao"></option>
+							     </inputbox>				
+							   </condition>	
+			                   
+			                   <condition name="suoshugongkuang" label="工况">
+								  <value>
+										  <![CDATA[(b1.gongkuang like '%#data#%' )]]>
+								  </value>
+							     <inputbox type="selectbox">
+								      <option label="全部" value=""></option>
+								      <option dataset="@{select id,gongkuangmingcheng  from ZBGL_SYSH_MTSY_GONGKUANG}" label="gongkuangmingcheng" value="gongkuangmingcheng"></option>
+							     </inputbox>				
+							   </condition>
+							   <condition name="zuheshebei" label="组合设备">
+								  <value>
+										  <![CDATA[( c1.name like '%#data#%' )]]>
+								  </value>
+							     <inputbox type="selectbox">
+										 <option label="全部" value=""></option>
+								      <option dataset="@{SELECT DISTINCT  shebeiming FROM ZBGL_ZBJBXX_XIANHAO_STBZ}" label="shebeiming" value="shebeiming"></option>
+								</inputbox>			
+							   </condition>		
+							   <condition name="danjishebei" label="单机设备">
+								  <value>
+										  <![CDATA[( b1.name like '%#data#%' )]]>
+								  </value>
+							     <inputbox type="selectbox">
+										 <option label="全部" value=""></option>
+								      <option dataset="@{SELECT DISTINCT  shebeiming FROM ZBGL_ZBJBXX_XIANHAO_STBZ}" label="shebeiming" value="shebeiming"></option>
+								</inputbox>			
+							   </condition>		
+							   <condition name="cedianmingcheng" label="测点">
+								  <value>
+										  <![CDATA[(a1.cedianmingcheng like '%#data#%' )]]>
+								  </value>
+							     <inputbox type="selectbox">
+								      <option label="全部" value=""></option>
+								      <option dataset="@{select cedianmingcheng  from XTSZ_JBXXWH_CEDIANGUANLI}" label="cedianmingcheng" value="cedianmingcheng"></option>
+							     </inputbox>				
+							   </condition>
+							   	
+					  </select>
+			    </sql>
+		 </report>	 
+
+			 <report id="report1" title="员工年龄工资表" type="fusioncharts" width="1000px" chartheight="300" chartwidth="1000" chartype="MSColumn3D.swf " interceptor="interceptor.Tubiaoxianshi_Interceptor">
+				  <display>
+					   <col column="id" label="中文名"></col>
+					   <col column="jieduan" label="年龄"></col>
+				  </display>
+				  <sql>
+					   <value>
+						<![CDATA[select a1.id,d1.suoshuxianhao,d1.jieduan,c1.NAME as zuheshebei,b1.NAME as danjishebei,b1.GONGKUANG,a1.CEDIANLEIBIE,a1.CEDIANMINGCHENG,xianhaozhuangtai from ZBGL_ZXSY_CEDIAN a1 join ZBGL_ZXSY_DJSB b1 on a1.SUOSHU=b1.ID LEFT join ZBGL_ZXSY_ZHSB  c1 on b1.SUOSHUZUHESHEBEI=c1.ID 
+											LEFT join ZBGL_ZXSY_SHEBEI d1 ON b1.SUOSHUSHEBEI=d1.ID where {#condition#}]]>
+					</value>
+				  </sql>
+			 </report>
+	</vpanel>
+</page>
+</applications>
+

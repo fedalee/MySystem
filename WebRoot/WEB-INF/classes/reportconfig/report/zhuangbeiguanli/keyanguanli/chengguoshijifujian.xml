@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<applications xmlns="http://www.wabacus.com"
+			   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			   xsi:schemaLocation="http://www.wabacus.com ../xsd/wabacus.applications.xsd">
+	<page id="chengguoshijifujian" js="/webresources/script/validate.js,/wabacusdemo/js/testcallback.js">
+		 <report id="report3" title="成果实际附件" type="editablelist2" align="center"  template="${articlelist.report.template}">
+			  <display >
+			  <col column="{sequence:1}" label="序号"></col>
+			        <col column="id" label="id" displaytype="hidden" />
+					<col column="fujian" label="附件" >
+					<inputbox type="file" maxsize="10240" allowedtype="doc;txt" displaytype="textbox" deletetype="1" savepath="absolute{D:\}"  >
+					</inputbox><!-- /> -->
+				   </col>
+				   <col column="suoshujiedian" label="所属节点" >
+				  
+				   </col>
+				   <col column="fujianyuanshimingcheng" label="附件原始名称" >
+				  
+				   </col>
+			  </display>
+			  <sql>
+			  <value>
+					<![CDATA[SELECT * FROM zbgl_kygl_chengguoshijifujian ]]>
+					</value>
+					 <insert>
+		  		 insert into zbgl_kygl_chengguoshijifujian(id=uuid{},@{fujian},@{suoshujiedian},@{fujianyuanshimingcheng});
+			  </insert>
+			     <update>
+			     update zbgl_kygl_chengguoshijifujian(@{id},@{fujian},@{suoshujiedian},@{fujianyuanshimingcheng}) where id=@{id__old};
+			  </update>
+			     <delete>
+			  	 delete from zbgl_kygl_chengguoshijifujian where id=@{id__old};
+			  </delete>
+			  </sql>
+		 </report>
+	</page>
+	</applications>
+

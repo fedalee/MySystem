@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<applications xmlns="http://www.wabacus.com"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.wabacus.com ../xsd/wabacus.applications.xsd">
+	<page id="dsj_detail"
+		js="/webresources/script/validate.js,/webresources/script/wabacus_util.js">
+		<report id="dsj_report_detail" title="编辑" width="700px" align="center"
+			type="editabledetail">
+			<display>
+				
+
+				<col column="id" label="id" displaytype="hidden" />
+
+
+				<col column="xinghao" label="${xinghao}">
+					<inputbox type="selectbox" servervalidate="isNotEmpty(${invalid.isnotempty})">
+						<option dataset="@{select xinghao from zbgl_zbjbxx_xinghao}"
+							label="xinghao" value="xinghao"></option>
+					</inputbox>
+				</col>
+				<col column="xianhao" label="${xianhao}"  br="true">
+				   	<inputbox type="selectbox" servervalidate="isNotEmpty(${invalid.isnotempty})" depends="xinghao">
+				   		<option dataset="@{select xianhao from zbgl_zbjbxx_xianhao where suoshuxinghao='#xinghao#'}" label="xianhao" value="xianhao" />
+				   	</inputbox>
+				   </col>
+
+			</display>
+
+			<sql>
+
+				<value>
+						<![CDATA[SELECT * from ZBGL_ZBSY_DSJ where  {#condition#} ]]>
+				</value>
+				<condition name="id" hidden="true">
+
+					<value>
+							<![CDATA[id=#data#]]>
+					</value>
+				</condition>
+				<insert>
+					insert into
+					ZBGL_ZBSY_DSJ(id=uuid{},@{xianhao},@{xinghao});
+				</insert>
+				<update>
+					update ZBGL_ZBSY_DSJ(@{xianhao},@{xinghao}) where
+					id=@{id__old};
+			  </update>
+			</sql>
+		</report>
+	</page>
+</applications>
+

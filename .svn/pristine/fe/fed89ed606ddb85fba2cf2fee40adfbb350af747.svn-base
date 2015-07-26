@@ -1,0 +1,11 @@
+<table border="0">
+	<tr><td width="10%" align='left'><b><wx:data col="leidaboyinshen" showlabel="true" showdata="false"/></b></td><td><wx:data col="leidaboyinshen" showlabel="false" showdata="true"/></td></tr>
+	<tr><td width="10%">&nbsp;</td><td >&nbsp;</td></tr>
+	<tr><td width="10%" align='left'><b><wx:data col="hongwaiyinshen" showlabel="true" showdata="false"/></b></td><td><wx:data col="hongwaiyinshen" showlabel="false" showdata="true"/></td></tr>
+	<tr><td width="10%">&nbsp;</td><td >&nbsp;</td></tr>
+	<tr><td width="10%" align='left'><b><wx:data col="ciyinshen" showlabel="true" showdata="false"/></b></td><td><wx:data col="ciyinshen" showlabel="false" showdata="true"/></td></tr>
+	<tr><td width="10%">&nbsp;</td><td >&nbsp;</td></tr>
+	<tr><td width="10%" align='left'><b><wx:data col="dianchangyinshen" showlabel="true" showdata="false"/></b></td><td><wx:data col="dianchangyinshen" showlabel="false" showdata="true"/></td></tr>
+	<tr><td width="10%">&nbsp;</td><td >&nbsp;</td></tr>
+	<tr><td align='left'><wx:button type="save" /></td><td></td></tr>
+</table>

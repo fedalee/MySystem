@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<applications xmlns="http://www.wabacus.com"
+			   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			   xsi:schemaLocation="http://www.wabacus.com ../xsd/wabacus.applications.xsd">
+<page  id="feijinshu_poppage" js="/webresources/script/validate.js" >
+			  <report id="feijinshucailiao_pop" title="非${jinshucailiaoshuxing}"  type="editabledetail" >
+					    <display>
+					         <col column="id" label="id" displaytype="hidden" />
+						     <col column="name" label="名称"  valuestyleproperty="style='mso-number-format:\@'">
+							      <inputbox jsvalidate="isNotEmpty(#label#列不允许为空)"></inputbox>
+						     </col>
+						     <col column="xinghao" label="${xinghao}（牌号）" clickorderby="true" ></col>
+						     <col column="zucheng" label="组成" br="true"></col>
+						     <col column="midu" label="密度kg/m3"></col>
+						     <col column="tanxingmoliang" label="${tanxingmoliang}m/N" ></col>
+						     <col column="bosongbi" label="${bosongbi}" br="true"></col>
+						     <col column="zuniyinzi" label="${zunisunhaoyinzi}"></col>
+						     <col column="lashenqiangdu" label="${lashenqiangdu}MPa" ></col>
+						     <col column="cheduanshenchang" label="${cheduanshenchang}率%" br="true"></col>
+						     <col column="shaoyingdu" label="${shaoayingdu}"></col>
+						     <col column="silieqiangdu" label="${silieqiangdu}kN/m" ></col>
+						     <col column="lashenqiangdubianhua" label="${lashenqiangdu}变化率%" br="true"></col>
+						     <col column="cheduanshenchangbianhua" label="${cheduanshenchang}率变化率%"></col>
+						     <col column="shaoyingdubianhua" label="${shaoayingdu}变化" ></col>
+						     <col column="silieqiangdubianhua" label="${silieqiangdu}变化率%"></col>
+					    </display>
+					    <sql>
+					       <select>
+						      <value>
+							<![CDATA[SELECT * FROM sbgl_clgl_feijinshucailiao where  {#condition#} order by name]]>
+						</value>
+						      <condition name="name" label="名称" hidden="true">
+							       <value>
+								<![CDATA[(name =  #data# )]]>
+							</value>
+						      </condition>
+					       </select>
+					       <insert>
+				  		 insert into sbgl_clgl_feijinshucailiao(id=uuid{},@{name},@{xinghao},@{zucheng},@{midu},@{tanxingmoliang},@{bosongbi},@{zuniyinzi},@{lashenqiangdu},@{cheduanshenchang},@{shaoyingdu},@{silieqiangdu},@{lashenqiangdubianhua},@{cheduanshenchangbianhua},@{shaoyingdubianhua},@{silieqiangdubianhua});
+					  </insert>
+					       <update>
+					     update sbgl_clgl_feijinshucailiao(@{id},@{name},@{xinghao},@{zucheng},@{midu},@{tanxingmoliang},@{bosongbi},@{zuniyinzi},@{lashenqiangdu},@{cheduanshenchang},@{shaoyingdu},@{silieqiangdu},@{lashenqiangdubianhua},@{cheduanshenchangbianhua},@{shaoyingdubianhua},@{silieqiangdubianhua}) where id=@{id__old};
+					  </update>
+					       <delete>
+					  	 delete from sbgl_clgl_feijinshucailiao where id=@{id__old};
+					  </delete>
+					    </sql>
+				   </report>
+</page>			   
+<page  id="jinshu_poppage" js="/webresources/script/validate.js" >			  
+			  <report id="jinshucailiao_pop" title="${jinshucailiaoshuxing}"   type="editabledetail"  interceptor="com.wabacus.util.IdentifierGenerator_Interceptor" >
+					    <display>
+					         <col column="id" label="id" displaytype="hidden"/>
+						     <col column="name" label="名称" clickorderby="true" valuestyleproperty="style='mso-number-format:\@'">
+							      <inputbox jsvalidate="isNotEmpty(#label#列不允许为空)" ></inputbox>
+						     </col>
+						     <col column="xinghao" label="${xinghao}（牌号）" clickorderby="true" ></col>
+						     <col column="zucheng" label="组成" br="true"></col>
+						     <col column="midu" label="密度kg/m3"></col>
+						     <col column="tanxingmoliang" label="${tanxingmoliang}m/N"  ></col>
+						     <col column="bosongbi" label="${bosongbi}" br="true"></col>
+						     <col column="zuniyinzi" label="${zunisunhaoyinzi}" ></col>
+						     <col column="qufuqiangdu" label="${qufuqiangdu}MPa" ></col>
+						     <col column="yuliu1" label="预留1" br="true"></col>
+						     <col column="yuliu2" label="预留2" ></col>
+						     <col column="yuliu3" label="预留3" ></col>
+						     <col column="yuliu4" label="预留4"></col>
+					    </display>
+					    <sql>
+					       <select>
+						      <value>
+							<![CDATA[SELECT * FROM sbgl_clgl_jinshucailiao where  {#condition#} order by name]]>
+						</value>
+						      <condition name="name" label="名称" hidden="true">
+							       <value>
+								<![CDATA[(name =  #data# )]]>
+							</value>
+						      </condition>
+					       </select>
+					       <insert>
+				  		 insert into sbgl_clgl_jinshucailiao(id=uuid{},@{name},@{xinghao},@{zucheng},@{midu},@{tanxingmoliang},@{bosongbi},@{zuniyinzi},@{qufuqiangdu},@{yuliu1},@{yuliu2},@{yuliu3},@{yuliu4});
+					  </insert>
+					       <update>
+					     update sbgl_clgl_jinshucailiao(@{name},@{xinghao},@{zucheng},@{midu},@{tanxingmoliang},@{bosongbi},@{zuniyinzi},@{qufuqiangdu},@{yuliu1},@{yuliu2},@{yuliu3},@{yuliu4}) where id=@{id__old};
+					  </update>
+					       <delete>
+					  	 delete from sbgl_clgl_jinshucailiao where id=@{id__old};
+					  </delete>
+					    </sql>
+				   </report>
+
+	</page>
+
+	 </applications>
+
+

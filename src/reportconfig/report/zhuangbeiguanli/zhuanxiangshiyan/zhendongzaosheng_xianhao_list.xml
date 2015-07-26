@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<applications xmlns="http://www.wabacus.com"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.wabacus.com ../../../xsd/wabacus.applications.xsd">
+
+
+	<page id="zhendongzaosheng_list">
+
+		<report id="zhendongzaosheng_report" title="${zhendongzaosheng}实验"
+			type="editablelist2" rowselect="single">
+			<display>
+				<col column="{sequence}" label="序号"></col>
+				<col column="id" label="id" displaytype="hidden" />
+				<col column="xinghao" label="${xinghao}">
+					<inputbox type="selectbox" servervalidate="isNotEmpty(${invalid.isnotempty})">
+						<option dataset="@{select xinghao from zbgl_zbjbxx_xinghao}"
+							label="xinghao" value="xinghao"></option>
+					</inputbox>
+				</col>
+				<col column="xianhao" label="${xianhao}">
+					<inputbox type="selectbox" depends="xinghao">
+						<option
+							dataset="@{select xianhao from zbgl_zbjbxx_xianhao where suoshuxinghao like '%#[xinghao]#%'}"
+							label="xianhao" value="xianhao"></option>
+					</inputbox>
+				</col>
+				<col column="zhuangtai" label="QT状态">
+					<inputbox type="selectbox">
+							<option value="新船验收" label="新船验收"></option>
+							<option value="第一次小修前" label="第一次小修前"></option>
+							<option value="第一次小修后" label="第一次小修后"></option>
+							<option value="第二次小修前" label="第二次小修前"></option>
+							<option value="第二次小修后" label="第二次小修后"></option>
+							<option value="第三次小修前" label="第三次小修前"></option>
+							<option value="第三次小修后" label="第三次小修后"></option>
+							<option value="第一次中修前" label="第一次中修前"></option>
+							<option value="第一次中修后" label="第一次中修后"></option>
+							<option value="第二次中修前" label="第二次中修前"></option>
+							<option value="第二次中修后" label="第二次中修后"></option>
+							<option value="第三次中修前" label="第三次中修前"></option>
+							<option value="第三次中修后" label="第三次中修后"></option>
+							<option value="第一次大修前" label="第一次大修前"></option>
+							<option value="第一次大修后" label="第一次大修后"></option>
+							<option value="第二次大修前" label="第二次大修前"></option>
+							<option value="第二次大修后" label="第二次大修后"></option>
+					</inputbox>
+				</col>
+				<col column="beizhu" label="备注" >
+					<inputbox type="textareabox"></inputbox>
+				</col>
+			</display>
+
+			<sql>
+				<select>
+					<value>
+						<![CDATA[SELECT * FROM zbgl_zxsy_zdzs where {#condition#}]]>
+					</value>
+					<condition name="xinghao" label="${xinghao}">
+						<value>
+							<![CDATA[( xinghao = #data#)]]>
+						</value>
+					</condition>
+					<condition name="xianhao" label="${xianhao}">
+						<value>
+							<![CDATA[( xianhao = #data#)]]>
+						</value>
+					</condition>
+					<condition name="qiantingzhuangtai" label="QT状态">
+						<value>
+							<![CDATA[( qiantingzhuangtai = #data#)]]>
+						</value>
+						<inputbox type="selectbox">
+							<option value="" label="全部"></option>
+							<option value="新船验收" label="新船验收"></option>
+							<option value="第一次小修前" label="第一次小修前"></option>
+							<option value="第一次小修后" label="第一次小修后"></option>
+							<option value="第二次小修前" label="第二次小修前"></option>
+							<option value="第二次小修后" label="第二次小修后"></option>
+							<option value="第三次小修前" label="第三次小修前"></option>
+							<option value="第三次小修后" label="第三次小修后"></option>
+							<option value="第一次中修前" label="第一次中修前"></option>
+							<option value="第一次中修后" label="第一次中修后"></option>
+							<option value="第二次中修前" label="第二次中修前"></option>
+							<option value="第二次中修后" label="第二次中修后"></option>
+							<option value="第三次中修前" label="第三次中修前"></option>
+							<option value="第三次中修后" label="第三次中修后"></option>
+							<option value="第一次大修前" label="第一次大修前"></option>
+							<option value="第一次大修后" label="第一次大修后"></option>
+							<option value="第二次大修前" label="第二次大修前"></option>
+							<option value="第二次大修后" label="第二次大修后"></option>
+
+
+						</inputbox>
+					</condition>
+				</select>
+
+				<!-- 在这个insert标签中要对后面三个阶段进行初始化，即插入一些初始信息 -->
+				<insert>
+					<params>
+						<param name="null" value="-1" />
+						<param name="id1" value="uuid{}" />
+						<param name="id2" value="uuid{}" />
+						<param name="id3" value="uuid{}" />
+						<param name="id4" value="uuid{}" />
+						<param name="id5" value="uuid{}" />
+					</params>
+
+					<!-- 在zbgl_zxsy_zdzs表中添加记录 -->
+					insert into
+					zbgl_zxsy_zdzs(id=uuid{},@{xinghao},@{xianhao},@{zhuangtai},@{beizhu});
+					<!-- 以下三条插入语句分别对应三个阶段该舷号第设备的抽象表，zbgl_zxsy_shebei表 之后将会被继承 -->
+					insert into
+					zbgl_zxsy_shebei(id,suoshuxianhao,jieduan,hangsu,xianhaozhuangtai) values
+					(#{id1},@{xianhao},'taijia', #{null},@{zhuangtai});
+
+					insert into
+					zbgl_zxsy_shebei(id,suoshuxianhao,jieduan,hangsu,xianhaozhuangtai) values
+					(#{id2},@{xianhao},'matou', #{null},@{zhuangtai});
+
+					insert into
+					zbgl_zxsy_shebei(id,suoshuxianhao,jieduan,hangsu,xianhaozhuangtai) values
+					(#{id3},@{xianhao},'hangxing', #{null},@{zhuangtai});
+					<!-- 初始化码头实验的数据，该由于是表单无法插入，所以只能在这里初始化 -->
+					insert into
+					zbgl_zxsy_mtsy(id,suoshuxianhao,xianhaozhuangtai) values
+					(#{id4},@{xianhao},@{zhuangtai});
+					<!-- 类似地，初始化航行实验的数据 -->
+					insert into
+					zbgl_zxsy_hxsy(id,suoshuxianhao,xianhaozhuangtai) values
+					(#{id5},@{xianhao},@{zhuangtai});
+
+				</insert>
+
+<!-- 				<update>
+					update zbgl_zxsy_zdzs(@{zhuangtai}) where id =
+					@{id__old};
+				</update> -->
+				<delete>
+					delete from zbgl_zxsy_zdzs where id=@{id__old};
+				</delete>
+			</sql>
+			<format>
+				<value>
+				<![CDATA[
+				
+					xianhao="<span onmouseover=\"this.style.cursor='pointer'\">"
+						+"<a href=\"ShowReport.wx?PAGEID=zhendongzaosheng_tabs&suoshuxianhao="+xianhao+"&zhuangtai="+zhuangtai+"\" target=\"sampleframe\">"
+						+xianhao+"</a></span>";
+				
+					beizhu=beizhu==null?"":beizhu.trim();
+					if(!beizhu.equals(""))
+					{
+						String fulldesc=beizhu;
+						if(beizhu.length()>20) beizhu=beizhu.substring(0,20)+"...";
+						beizhu=beizhu.replaceAll("<p>","");
+						beizhu=beizhu.replaceAll("</p>","");
+						beizhu="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\"  onclick=\"wx_win('"+fulldesc+"',{width:400,height:200})\">"+beizhu+"</span>";
+						beizhu=beizhu+"&nbsp;&nbsp;<font color='#505050'></font>";
+					}
+				]]>
+				</value>
+			</format>
+		</report>
+
+
+	</page>
+
+</applications>

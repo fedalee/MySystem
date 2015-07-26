@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>导航栏</title>
+<link rel="stylesheet" type="text/css" href="css/nav/left-nav.css" />
+<script type="text/javascript" src="js/jquery-1.7.1.min.js"></script>
+</head>
+<body>
+	<div id="firstpane" class="menu_list">
+	    <p class="menu_head current">ZB管理</p>
+	    <div style="display:block" class=menu_body >
+			<a href="ShowReport.wx?PAGEID=xinghao" target="sampleframe">ZB基本信息</a>
+			<a href="ShowReport.wx?PAGEID=zhuanxiangshiyan_homePage" target="sampleframe">专项实验</a>
+	    </div>
+	    <p class="menu_head">设备管理</p>
+	    <div style="display:none" class=menu_body >
+			<a href="ShowReport.wx?PAGEID=shebei" target="sampleframe">设备</a>
+	    </div>
+	</div>
+	<script type=text/javascript>
+	$(document).ready(function(){
+		$("#firstpane .menu_body:eq(0)").show();
+		$("#firstpane p.menu_head").click(function(){
+			$(this).addClass("current").next("div.menu_body").slideToggle(300).siblings("div.menu_body").slideUp("slow");
+			$(this).siblings().removeClass("current");
+		});
+		$(".menu_body a").click(function(){
+			$(".menu_body a").removeClass("isClick");
+			$(this).addClass("isClick");
+		});
+		$(".menu_body a").mouseover(function(){
+			$(this).addClass("current");
+			$(this).siblings().removeClass("current");
+		});
+		$(".menu_body a").mouseout(function(){
+			$(this).removeClass("current");
+		});
+	});
+	</script>
+</body>
+</html>

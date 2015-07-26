@@ -1,0 +1,574 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns="http://www.wabacus.com"
+			  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			  xsi:schemaLocation="http://www.wabacus.com ../../../src/defaultconfig/xsd/wabacus.resources.xsd">
+			  
+			  
+	<!-- 定义上传文件的保存路径 -->
+	<resource key="file.path">
+		relative{/upload/files}
+	</resource>
+	
+	<!-- 定义上传图片的保存路径 -->
+	<resource key="image.path">
+		relative{/upload/images}
+	</resource>
+	  <!-- 项目自定义资源 -->
+	  <!-- 以A开头的变量名称 -->
+	  
+	  <!-- 以B开头的变量名称 -->
+	  <!-- 设备管理 -》课题名称 -->
+	  <resource key="bosongbi">泊松比</resource>
+	  <!-- 装备管理 -》课题名称 -->
+      <resource key="bianzhiwenjian">编制文件</resource>
+	  <!-- 科研管理 -->
+	  <resource key="beijingxinghao">背景型号</resource> 
+      <resource key="baozhangnengli">保障能力</resource>
+      <resource key="buchenxing">不沉性</resource>	
+	  <!-- 以C开头的变量名称 -->
+	  <resource key="changgui">常规</resource> 
+	  <resource key="chuantijiegou">船体结构</resource> 
+	  <resource key="caotingxitong">操艇系统</resource>
+	  <resource key="chulimubiaonengli">处理目标能力</resource> 
+	  <!-- 设备管理 -》课题名称 -->
+	  <resource key="cheduanshenchang">扯断伸长</resource>
+	  <!-- 以D开头的变量名称 -->
+	  <resource key="diancijianrong">电磁兼容</resource>
+	  <resource key="donglixitong">动力系统</resource>	  
+	  <resource key="dianxingzhanshuzhibiao">典型战术指标</resource>
+	  <!-- 以E开头的变量名称 -->
+	  
+	  <!-- 以F开头的变量名称 -->
+	  <resource key="fuyishuliang">服役数量</resource>
+	  <resource key="fuyinianxian">服役年限</resource>
+	  <resource key="fuxing">浮性</resource>
+	  <resource key="fangxiangduoduojiao">方向舵舵角</resource>
+	  <resource key="fashejizhuangzaipeizhi">发射及装载配置</resource>
+	  <resource key="fasheshendu">发射深度</resource>  
+	  <!-- 装备管理 -》课题名称 -->
+      <resource key="fangansheji">方案设计</resource>
+	  <resource key="fanganjihuashijian">方案计划时间</resource>
+	  <resource key="fanganshijishijian">方案实际时间</resource>
+	  <!-- 以G开头的变量名称 -->
+	  <resource key="guikoujiguan">归口机关</resource>
+	  <resource key="guakaodanwei">挂靠单位</resource>
+	  <resource key="gongfangnengli">攻防能力</resource>
+	  <resource key="guanjiangongyi">关键工艺</resource>
+	  <resource key="gongkuang">工况</resource>
+	  
+	  <!-- 设备管理 -》课题名称 -->
+	  <resource key="gongnengtexing">功能特性</resource>
+	  <resource key="gaizhuangfangan">改装方案</resource>
+	  <resource key="gaihuanzhuangxiangmu">改换装项目</resource>	
+	  <resource key="gaizhuangjieguo">改装结果</resource>
+	  <resource key="gaizhuangqianxingneng">改装前性能</resource>
+	  <resource key="gaizhuanghouxingneng">改装后前性能</resource>	  
+	  <resource key="gaihuanzhuanggaishu">改换装概述：</resource>
+	  <resource key="gaizhuangguocheng">改装过程</resource>
+	  <resource key="gaizhuangqian">改装前</resource>	
+	  <resource key="guochengjiancha">过程检查</resource>	
+	  <resource key="guochengyanshou">过过程验收</resource>	
+
+	  <!-- 以H开头的变量名称 -->
+	  <resource key="hangsu">航速</resource>
+	  <resource key="huizhuannisu">回转逆速</resource>	
+	  <resource key="hongwaijingjienengli">红外警戒探测能力</resource>	
+	  <resource key="hangsuyaoqiu">航速要求</resource>
+	  <resource key="haikuang">海况</resource>
+	  <resource key="hangyeguanli">行业管理</resource>
+	  <resource key="hangyejianshe">行业建设</resource>
+	  <resource key="hongguanlunzheng">宏观论证</resource>
+	  <!-- 以I开头的变量名称 -->
+
+	  <!-- 以J开头的变量名称 -->
+	  <resource key="jiaochuanshijian">交船时间</resource>
+	  <resource key="jiaochuanjihuashijian">交船计划时间</resource>
+	  <resource key="jiaochuanshijishijian">交船实际时间</resource>
+	  <resource key="jiaochuanfujian">交船附件</resource>
+	  <resource key="jiaochuanjieduan">交船阶段</resource>
+	  <resource key="jishushejijihuashijian">技术设计计划时间</resource>
+	  <resource key="jishushejishijishijian">技术设计实际时间</resource>
+	  <resource key="jishushejifujian">技术设计附件</resource>
+	  <resource key="jishushejijieduan">技术设计阶段</resource>
+	  <resource key="jianzaojihuashijian">建造计划时间</resource>
+	  <resource key="jianzaoshijishijian">建造实际时间</resource>
+	  <resource key="jianzaofangshi">建造方式</resource>
+	  <resource key="jianzaotedian">建造特点</resource>
+	  <resource key="jianzaoshuliang">建造数量</resource>
+	  <resource key="jianzaozhouqi">建造周期</resource>
+	  <resource key="jianzaojihua">建造计划</resource>
+	  <resource key="jianzaodanwei">建造单位</resource>
+	  <resource key="jianzaofujian">建造附件</resource>
+	  <resource key="jiangzhuansu">浆转速</resource>
+	  <resource key="jigoumingcheng">机构名称</resource>
+	  <resource key="jiaochuanzhuangtai">交船状态</resource>
+
+	  <resource key="jishuzhibiao">技术指标</resource>
+	  <resource key="jishuzerendanwei">技术责任单位</resource>
+	  <resource key="jishuxiezuodanwei">技术协作单位</resource>
+	  <resource key="jinshucailiaoshuxing">金属材料属性</resource>
+	  <resource key="jingfei">经费</resource>	
+	  <resource key="jinglixingneng">静力性能</resource>	
+	  <!-- 以K开头的变量名称 -->
+	  <resource key="keyanguanli">科研管理</resource>
+	  <resource key="keyanguanli_format" > 
+	  </resource>
+	  <resource key="kuaisuxinghexuhangxing">快速性和续航性</resource>
+	  <!-- 以L开头的变量名称 -->
+	  <resource key="lixianglunzheng">立项论证</resource>
+	  <resource key="lixianglunzhengfujian">立项论证附件</resource> 
+	  <resource key="lixiangjihuashijian">立项计划时间</resource>
+	  <resource key="lixiangshijishijian">立项实际时间</resource>
+	  <resource key="lixianglunzhengjihuahao">立项论证计划号</resource>
+	  <resource key="lunzhengdanwei">论证单位</resource>	
+	  <resource key="liebianzhidui">列编支队</resource>	  
+	  <!-- 设备管理 -》课题名称 -->
+	  <resource key="lashenqiangdu">拉伸强度</resource>
+	  <!-- 以M开头的变量名称 -->
+	  <resource key="mingminghao">命名号</resource>
+	  <resource key="mubiaotancenengli">目标探测能力</resource>
+	  <!-- 以N开头的变量名称 -->
+	  <resource key="naiyajiegou">耐压结构</resource> 
+	  <!-- 以O开头的变量名称 -->
+	  <!-- 以p开头的变量名称 -->
+	  <resource key="paishuiliang">排水量</resource>
+	  <resource key="paishuilianghechubeifuli">排水量和储备浮力</resource>	  
+	  <!-- 以Q开头的变量名称 -->
+	  <resource key="quanchuanxingjiancha">全船性检查</resource> 
+	  <resource key="quanchuanbaozhangxitong">全船保障系统</resource> 
+	  <!-- 设备管理 -》课题名称 -->
+	  <resource key="qufuqiangdu">屈服强度</resource> 	  
+	  <resource key="qianfujidongxing">潜伏机动性</resource> 	  
+	  <!-- 以R开头的变量名称 -->
+	  <resource key="renyuanbianzhi">人员编制</resource>
+	  <!-- 以S开头的变量名称 -->
+	  <resource key="shimingrenwu">使命任务</resource>
+	  <resource key="shengnaxitong">声呐系统</resource>
+	  <resource key="shibiemubiaonengli">识别目标能力</resource> 
+  <!-- 设备管理 -》课题名称 -->
+	  <resource key="shebeimingcheng">设备名称</resource> 
+	  <resource key="shebei">设备</resource> 
+	  <resource key="shebeileibie">设备类别</resource> 
+	  <resource key="shebeiguanli">设备管理</resource> 
+	  <resource key="shitingyingyongqingkuang">实艇应用情况</resource> 
+	  <resource key="shaoayingdu">邵A硬度</resource> 
+	  <resource key="silieqiangdu">撕裂强度</resource> 
+	   
+	  <!-- 装备管理 -》课题名称 -->
+      <resource key="suoshuxinghao">所属型号</resource>
+	  <resource key="shejidanwei">设计单位</resource>
+	  <resource key="shuimiancaozongxing">水面操纵性</resource>	 
+	  <resource key="shouxiangjiao">艏向角</resource>
+	  <resource key="shuimianshouxiangjiao">水面直航-艏向角</resource>
+	  <resource key="shuixiashouxiangjiao">水下直航-艏向角</resource>
+      <resource key="shuimianhuizhuanzhijing">水面回转直径</resource>	
+      <resource key="shuimianzxingcaoduo">水面Z形操舵</resource>
+      <resource key="shuimiandaoche">水面倒车</resource>	
+      <resource key="shuimianzhidong">水面制动</resource>	
+      <resource key="shuixiacaozongxing">水下操纵性</resource>	
+      <resource key="shuixiahuizhuanzhijing">水下回转直径</resource>
+      <resource key="shuidonglixishu">水动力系数</resource> 	
+      <resource key="shuiweishengjiangduonisu">水艉升降舵逆速</resource> 
+      <resource key="sushenglv">速升率</resource>	  
+	  <resource key="shuixiazxingcaoduo">水下Z形操舵</resource>
+	  <resource key="shuixiahuiduo">水下回舵</resource>
+	  <resource key="shuipingwendingyundong">水平稳定运动</resource>
+	  <resource key="shitingshiyongqingkuang">实艇使用情况</resource>
+	  <resource key="shuixiajiangzhuansu">水下直航-浆转速</resource>
+	  <resource key="shuimianjiangzhuansu">水面直航-浆转速</resource>
+	  <resource key="shuixiahangsu">水下直航-航速</resource>
+	  <resource key="shuixiazongqingjiao">水下直航-纵倾角</resource>
+	  <resource key="shuimianzongqingjiao">水面直航-纵倾角</resource>
+	  <resource key="shuixiafangxiangduoduojiao">水下直航-方向舵舵角</resource>
+	  <resource key="shuimianfangxiangduoduojiao">水面直航-方向舵舵角</resource>
+	  <resource key="shuixiatuijinzhuangtai">水下直航-推进状态</resource>
+	  <resource key="shuimiantuijinzhuangtai">水面直航-推进状态</resource>
+	  <!-- 科研管理 -》课题名称 -->
+	  <resource key="suoshuketi">所属课题</resource> 
+	  <resource key="suoshuzhuanti">所属专题</resource> 
+	  <!-- 以T开头的变量名称 -->
+	  <resource key="tanxingmoliang">弹性模量</resource>	  
+	  <resource key="tuijinzhuangtai">推进状态</resource>
+	  <resource key="tingxing">艇型:</resource>	  
+	  <!-- 以U开头的变量名称 -->
+	  
+	  <!-- 以V开头的变量名称 -->
+	  
+	  <!-- 以W开头的变量名称 -->
+	  <resource key="wenxing">稳性</resource>	  
+	  <resource key="weixiujieduan">维修阶段</resource>
+	  <resource key="wuqipeizhi">武器配置</resource>
+	  <resource key="wuqizhongleiheshuliang">武器种类和数量</resource>
+	  <resource key="wuqikongzhinengli">武器控制能力</resource>
+	  <resource key="wuqishiyongtiaojian">武器使用条件</resource>
+	  <resource key="wulitexing">物理特性</resource>
+	  <!-- 以X开头的变量名称 -->
+	  <resource key="xuhao">序号</resource>
+	  <resource key="xianhao">舷号</resource> 
+	  <resource key="xitongzucheng">系统组成</resource>
+	  <resource key="xinghaoguige">型号规格</resource>
+	  <resource key="xibofujian">系泊附件</resource>
+	  <resource key="xiugaiqiantingzhuangtaijibeizhu">修改潜艇状态及备注</resource>
+	  <resource key="xibo">系泊</resource>
+	  <resource key="xiboshiyan">系泊试验</resource>
+	  <resource key="xiboshijishijian">系泊实际时间</resource>
+	  <resource key="xibojihuashijian">系泊计划时间</resource>
+	  <resource key="xiaqianshendu">下潜深度</resource>
+	  <resource key="xiulishijian">修理时间</resource>
+	  <resource key="xiulifangan">修理方案</resource>
+	  <resource key="xiulijieguo">修理结果</resource>
+	  <resource key="xiulineirong">修理内容</resource>
+	  <resource key="xunliangongneng">训练功能</resource>
+	  <resource key="weixiuhouxingneng">维修后性能</resource>
+     
+      
+	  <!-- 科研管理 -->
+	  <resource key="xinghao">型号</resource>  
+ 	  <resource key="xiangmumingcheng">项目一级分类</resource> 
+	  <resource key="xiangmufenlei">项目二级分类</resource> 
+	  <!-- 以Y开头的变量名称 -->
+	  <resource key="yuxianyanjiu">预先研究</resource> 
+	  
+	  
+	  <!-- 以Z开头的变量名称 -->
+	  <resource key="zhuchijiguan">主持机关</resource>
+	  <!-- 设备管理 -》课题名称 -->
+	  <resource key="yanzhidanwei">研制单位</resource> 
+	  <!-- 科研管理 -->
+	  <resource key="zhuyaoshiyongbudui">主要使用部队</resource> 
+	  <resource key="zongtitexing">总体特性</resource>
+      <resource key="zongtibuzhi">总体布置</resource>
+	  <!-- 设备管理 -》课题名称 -->
+	  <resource key="zunisunhaoyinzi">阻尼损耗因子</resource>
+	  <!-- 装备管理 -》课题名称 -->
+      <resource key="zhuangbeiguanli">装备管理</resource>
+	  <resource key="zhuangbeiyanzhi">装备研制</resource>
+	  <resource key="zongzhuangchang">总装厂</resource>
+	  <resource key="zhuyaoxitong">主要系统</resource>
+	  <resource key="zuozhanxitong">作战系统</resource>
+	  <resource key="zongqingjiao">纵倾角</resource>      
+	  <resource key="zhuyaoneirong">主要内容</resource>
+	  <resource key="zhuguanjiguan">主管机关</resource>
+	  <resource key="zhuangbeiweixiu">装备维修</resource>
+	  <resource key="zhendongzaosheng">振动噪声</resource>
+	  <resource key="zhuangbeishiyong">装备使用</resource>
+	  <resource key="zhuangbeiwenti">装备问题</resource>
+	  <resource key="zhuangbeikeyan">装备科研</resource>
+	  <resource key="zhuchiduhezhuyaotingxingcanshu">主尺度和主要艇型参数</resource>
+	  <resource key="zhihuishiweikehefuti">指挥室围壳和附体</resource>
+	
+	  <resource key="biaotichuan">大事记</resource>
+
+
+
+
+<!-- $$$$$$$$$$$$$$$$$$$$$$ -->
+	<resource key="hongwai">红外</resource>
+	<resource key="hangxing">航行</resource>
+	<resource key="leidabo">雷达波</resource>
+	<resource key="matou">码头</resource>
+	<resource key="dianchang">电场</resource>
+	<resource key="ci">磁</resource>
+	<resource key="zongheyinshen">综合隐身</resource>
+	<resource key="feishengyinshenxingneng">非生性隐身</resource>
+	<resource key="shengmubiaoqiangdu">声目标强度</resource>
+	<resource key="leidaboyishen">雷达波隐身</resource>
+	<resource key="hongwaiyinshen">红外隐身</resource>
+	<resource key="ciyinshen">磁隐身</resource>
+	<resource key="dianchangyinshen">电场隐身</resource>
+	<resource key="weiji">尾迹</resource>
+	<resource key="jijiaozhendong">机脚振动</resource>
+	<resource key="zhendong">振动</resource>
+	<resource key="yinshen">隐身</resource>
+	<resource key="zhendongzaoshengshiyan"> 震动噪声实验（综合隐身）</resource>
+	<resource key="shenqian">深潜</resource>
+<!-- jibenxinxi -->
+    <resource key="anquanxing">安全性</resource>
+	<resource key="kekaoxing">可靠性</resource>
+	<resource key="weixiuxing">维修性</resource>
+	<resource key="diancijianrongxing">电磁兼容性</resource>
+	<resource key="xuhangli">续航力</resource>
+	<resource key="shihangxing">适航性</resource>
+	<resource key="caozuoxing">操作性</resource>
+	<resource key="juzhuxing">居住性</resource>
+	<resource key="shebeikekaoxing">设备可靠性</resource>
+	<resource key="baozhangxing">保障性</resource>
+	<resource key="ceshixing">测试性</resource>
+	<resource key="shiyingxing">适应性</resource>
+	<resource key="yinbixingzhibiao">隐蔽性指标</resource>
+	<resource key="kangchongji">抗冲击</resource>
+	<resource key="buzhiheanzhuang">布置和安装</resource>
+	<resource key="jiekouguanxi">接口关系</resource>
+	<resource key="naiyachuanti">耐压船体</resource>
+	<resource key="zhuyaozhanshujishuxingnenghexitongzucheng">主要战术技术性能和系统组成</resource>
+	<resource key="xitongkekaoxing">系统可靠性</resource>
+	<resource key="zongtikekaoxing">总体可靠性</resource>
+	<resource key="shebeiweixiuxing">设备维修性</resource>
+	<resource key="zongtiweixiuxing">总体维修性</resource>
+	<resource key="xitongweixiuxing">系统维修性</resource>
+	<resource key="shuixiahangxingzhuangtaizuidahangsu">水下航行状态最大航速</resource>
+	<resource key="shuixiazhuangtaiyingjituijinzhuangzhigongzuoshitingdehangsu">水下状态应急推进装置工作时艇的航速</resource>
+	<resource key="shitingxingneng">实艇性能</resource>
+	<resource key="he">核</resource>
+	<resource key="donglijidianli">动力及电力</resource>
+	<resource key="shuishengtongxinjuli">水声通信距离</resource>
+	<resource key="shuishengpengbinengli">水声碰壁能力</resource>	
+	<resource key="leidatancehezhencha">雷达探测和侦查</resource>
+	<resource key="guangdiantance">光电探测</resource>
+	<resource key="pingtaixitong">平台系统</resource>
+	<resource key="pingtaiguanlishebei">平台管设备</resource>
+	<resource key="shitingbuzhi">实艇布置</resource>
+	<resource key="shitingjiegou">实艇结构</resource>
+	<resource key="shitingxitong">实艇系统</resource>
+	<resource key="hangsuhexuhangli">航速和续航力</resource>
+	<resource key="jingjietancenengli">警戒探测能力</resource>
+	<resource key="zhihuikongzhinengli">指挥控制能力</resource>
+    <resource key="mubiaozhishinenglihemubiaoxinxinengli">目标指示能力和目标信息能力</resource>
+    <resource key="caozongkongzhixitong">操纵控制系统</resource>
+    <resource key="daqihuanjingzonghekongzhixitong">大气环境综合控制系统</resource>
+    <resource key="daohangnengli">导航能力</resource>
+    <resource key="jiegouzhuchidu">结构主尺度</resource>
+    <resource key="chuantizongchangdu">船体总长度（m）</resource>
+    <resource key="fasheshuicangchangdu">耐压船体含发射水舱长度</resource>
+    <resource key="chuantichangdu">水密度船体长度</resource>  
+    <resource key="zuidakuandu">稳定翼最大长度</resource>
+    <resource key="zuigaodiandegaodu">从基线到指挥室围壳最高点的高度</resource>
+    <resource key="chengyanengli">承压能力</resource>
+    <resource key="chuantizongzhendong">船体总振动</resource>
+    <resource key="leiguqujian">肋骨间距</resource>
+    <resource key="kebanhoudu">壳板厚度</resource>
+    <resource key="chuanticailiao">船体材料</resource>
+    <resource key="jinshucailiao">金属材料</resource>
+    <resource key="leiguxinghao">肋骨型号</resource>
+    <resource key="leigubuzhixingshi">肋骨布置形式</resource>
+    <resource key="xiezhuiduan">斜锥段</resource>
+    <resource key="zhukeduan">柱壳段</resource>   
+    <resource key="jiegouquyu">结构区域</resource> 
+    <resource key="jiegouxingshi">结构形式</resource> 
+    <resource key="leigu">肋骨</resource>
+    <resource key="zhuyaozhanshujishuxingneng">主要战术技术性能</resource>
+    <resource key="cangduan">舱段</resource>
+    <resource key="xitong">系统</resource>
+    <resource key="changyongzhibiao">常用指标</resource>
+    <resource key="leidaleixing">雷达类型</resource>  
+    <resource key="yulei">鱼雷</resource> 
+    <resource key="shuilei">水雷</resource>  
+    <resource key="daodan">导弹</resource> 
+    <resource key="tongxinnengli">通信能力</resource>  
+    <resource key="hangxingzhuangtai">航行状态</resource>  
+    <resource key="dingliangyaoqiu">定量要求：</resource>  
+    <resource key="dingliangzhibiao">定量指标</resource>    
+    <resource key="dingxingyaoqiu">定性要求：</resource>  
+    <resource key="duidianzishebei">对电子设备(MTTR)：</resource>  
+    <resource key="duijidianshebei">对机电设备(MTTR)：</resource>  
+    <resource key="guyoukeyongdu">固有可用度(AI)：</resource>  
+    <resource key="renwukeyongdu">任务可用度(RM)：</resource>
+    <resource key="shiyongshouming">使用寿命(Lse)：</resource> 
+    <resource key="jixianshendu">极限深度：</resource> 
+    <resource key="zuidagongzuoshendu">最大工作深度：</resource> 
+    <resource key="tingdehangsu">水下状态应急推进装置工作时艇的航速：</resource> 
+    <resource key="shuishangbuchenxing">正常装载状态的水上不沉性</resource> 
+    <resource key="zifutiaojian">自浮条件</resource> 
+    <resource key="xingnengcanshu">性能参数</resource>
+    <resource key="zerendanwei">责任单位</resource>
+    <resource key="guanchayemianfanwei">观察页面范围：</resource>
+    <resource key="mubiaoshuliang">同时跟踪噪声目标数量：</resource>
+    <resource key="xinhaoshuliang">同时跟踪主动声呐脉冲信号数量：</resource>
+    <resource key="zaoshengfaxianjuli">噪声发现距离：</resource>
+    <resource key="genzongjuli">噪声方位跟踪距离：</resource>
+    <resource key="zaoshengbeidongcejujuli">噪声被动测距距离：</resource>
+    <resource key="huishengcejujuli">回声测距距离：</resource>
+    <resource key="yuleimubiaotezheng">鱼雷目标特征：</resource>
+    <resource key="shengnaleixing">声呐类型</resource>
+    <resource key="mubiaotezheng">目标特征：</resource>
+    <resource key="fuyangfanwei">俯仰范围：</resource>
+    <resource key="tancehuanjing">探测环境：</resource>
+    <resource key="xunluojizuoyongjuli">对反潜巡逻机作用距离：</resource>
+    <resource key="qiantingzuoyongjuli">对3000t以上舰艇作用距离：</resource>
+    <resource key="chulimubiaopici">实时处理目标批次：</resource>
+    <resource key="zaoshengmubiaopici">同时分析噪声目标批次：</resource>
+    <resource key="gongjimubiaopici">同时解算攻击目标批次：</resource>
+    <resource key="zuidajiangeshijian">自动连续解算最大间隔时间：</resource>
+    <resource key="shuishengduikangqicai">水声对抗器材</resource>
+    <resource key="buleishi">布雷时：</resource>
+    <resource key="shiyongzaoshengganraoqishi">使用噪声干扰器、声诱饵时：</resource>
+    <resource key="shiyongganraoqishi">使用干扰器、声诱饵时：</resource>
+    <resource key="shiyongqimudanshi">使用气幕弹时：</resource>
+    <resource key="gongjishuimianmubiao">使用尾流自导鱼雷攻击水面目标时:</resource>
+    <resource key="fanghuhefangxianjiushengnengli">防护和防险救生能力</resource>
+    <resource key="zichili">自持力</resource>
+    <resource key="zhihuisuoshuliang">指挥所数量：</resource>
+    <resource key="zhanwei">战位：</resource>
+    <resource key="tingyuanshuliang">艇员数量：</resource>
+    <resource key="junguanshuliang">军官数量：</resource>
+    <resource key="shiguanshuliang">士官数量：</resource>
+    <resource key="shibingshuliang">士兵数量：</resource>
+    <resource key="tingchang">艇长：</resource>
+    <resource key="shangcengjianzhugaodu">上层建筑高度：</resource>
+    <resource key="caozongmian">操纵面：</resource>
+    <resource key="shuipingwendingyizuidakuandu">水平稳定翼最大宽度：</resource>
+    <resource key="congshangcengjianzhujiabansuanqidezuidagaodu">从上层建筑甲板算起的最大高度：</resource>
+    <resource key="hengqingjiao">横倾角</resource>
+    <resource key="tiaozhengshuicangrongji">调整水舱容积：</resource>
+    <resource key="zhengchangzhuangtaichuwenxingao">正常状态初稳心高：</resource>
+    <resource key="ranyouchaozaizhuangtaichuwenxingao">燃油超载状态初稳心高：</resource>
+    <resource key="zuidazifushendu">最大字符深度</resource>
+    <resource key="shuixiadonglikangchennengli">水下动力抗沉能力</resource>
+    <resource key="biandongzaihedaihuannengli">变动载荷代换能力</resource>
+    <resource key="zhenchajuli">侦查距离</resource>
+    <resource key="baojingzuixiaojuli">报警最小距离：</resource>
+    <resource key="zhengchangzhuangtaichubeifuli">正常状态储备浮力：</resource>
+    <resource key="chaozaizhuangtaichubeifuli">超载状态储备浮力：</resource>
+    <resource key="fenxitongzuidagongzuoshendu">SE/AIP分系统最大工作深度：</resource>
+    <resource key="cangshikongqizaosheng">舱室空气噪声</resource>
+    <resource key="hongwaifusheliangdu">红外辐射亮度w/m2.sr</resource>
+    <resource key="tonghaiguankoupaishuiliangdu">通海管口排水温度℃</resource>
+    <resource key="paiqiwendu">排气温度℃</resource>
+    <resource key="reweijiwencha">热尾迹温差℃</resource>
+    <resource key="leidasanshejiemian">雷达散射截面（RCS）m2</resource>
+    <resource key="pinlv">频率</resource>
+    <resource key="guaidianpinlvshengyajinji">拐点频率声压谱级</resource>
+    <resource key="shuixiafushezaosheng">水下辐射噪声</resource>
+    <resource key="leidaboyinshen">雷达波隐身</resource>
+    <resource key="shengnapingtaiquyu">声呐平台区域</resource>
+    <resource key="zaosheng">噪声</resource>
+    <resource key="tancemubiao">探测目标</resource>
+    <resource key="kaoheshuiwentiaojian">考核水文条件</resource>
+    <resource key="yuchuan">渔船</resource>
+    <resource key="congnaiyatishangyanqisuandezuidagaodu">从耐压体上沿起算的最大高度：</resource>
+    <resource key="zuidahangsu">最大航速</resource>
+    <resource key="hangxingzhuangtaizuidahangsu">航行状态最大航速</resource>
+    <resource key="xudianchijinghangxuhangli">蓄电池经航续航力</resource>
+    <resource key="daodanfashehangsu">导弹发射航速</resource>
+    <resource key="zuidahangsuxuhangli">最大航速续航力</resource>  
+    <resource key="shuixiadianlituijinhangsu">水下电力推进航速</resource>
+    <resource key="shuixiadianlituijinzuidahangsu">水下电力推进最大航速</resource>
+    <resource key="yingjidonglihangxingxuhangli">应急动力航行续航力</resource>
+    <resource key="shejishiyongshouming">设计使用寿命：</resource>
+    <resource key="shishijiankongshuju">实时监控数据：</resource>
+    <resource key="zhixingqidongzuo">执行器动作：</resource>
+    <resource key="xuantingshendu">悬停深度：</resource>
+    <resource key="dingshenxuantingshenduwendingjingdu">定深悬停深度稳定精度：</resource>
+    <resource key="hangxiangwendingjingdu">航向稳定精度：</resource>
+    <resource key="wendingjingdu">稳定精度：</resource>
+    <resource key="jinruwendingxuanhuihoudeshendupiancha">进入稳定旋回后的深度偏差：</resource>
+    <resource key="daohangleixing">导航类型</resource>
+    <resource key="dingweijingdu">定位精度/海里</resource>
+    <resource key="ceshenceqianjingdu">测深测潜精度/%H</resource>
+    <resource key="jueduisudujingdu">绝对速度精度/节</resource>
+    <resource key="shoushijingdu">授时精度/微秒</resource>
+    <resource key="ssjingdu">守时精度/（s/90天）</resource>
+    <resource key="tongxinleixing">通信类型</resource>
+    <resource key="tongxinjuli">通信距离/公里</resource>
+    <resource key="zhengchangshujujilunengli">正常数据记录能力/天</resource>
+    <resource key="wuqileixing">武器类型</resource>
+    <resource key="duikangqicaileixing">对抗器材类型</resource>
+    <resource key="xukongzhideqicaileixing">需控制的器材类型</resource>
+    <resource key="daodanxinghao">导弹型号</resource>
+    <resource key="yuleixinghao">鱼雷型号</resource>
+    <resource key="xitongshuchuedingdiangonglv">SE/AIP系统输出额定电功率</resource>
+    <resource key="fadianjishuchudianya">SE/AIP发电机输出电压</resource>
+    <resource key="chaidianxitongshuchuedingdiangonglv">柴电系统输出额定电功率</resource>
+    <resource key="chaiyoufadianjishuchudianya">柴油发电机输出电压</resource>
+    <resource key="xudianchizuxiaoshirongliang">蓄电池组小时容量</resource>
+    <resource key="xudianchizuchangshirongliang">蓄电池组长时容量</resource>
+    <resource key="tuijindianjiedinggonglv">推进电机额定功率</resource>
+    <resource key="tuijindianjishurudianya">推进电机输入电压</resource>
+    <resource key="nibiandianyuanzhuangzhiedinggonglv">逆变电源装置额定功率</resource>
+    <resource key="nibiandianyuanzhuangzhishuchudianya">逆变电源装置输出电压</resource>
+    <resource key="yingjituijinzhuangzhishuchugonglv">应急推进装置输出功率</resource>
+    <resource key="yingjituijinzhuangzhishurudianya">应急推进装置输入电压</resource>
+    <resource key="fanyingduiedingonglv">反应堆额定功率</resource>
+    <resource key="fanyingduixunhuannengli">反应堆循环能力</resource>
+    <resource key="duixinshouqi">堆芯寿期</resource>
+    <resource key="zhujizushuchuedingzhougonglv">主机组输出额定轴功率</resource>
+    <resource key="fadongjizuedinggonglv">高速异步整流汽轮发电机组额定功率</resource>
+    <resource key="zaoshengmubiaozuoyongjuli">噪声目标作用距离</resource>
+    <resource key="mubiaofaxianzuixiaojuli">目标发现最小距离/公里</resource>
+    <resource key="mubiaogenzongzuixiaojuli">目标跟踪最小距离/公里</resource>
+    <resource key="zaoshengcejuzuixiaojuli">噪声测距最小距离/公里</resource>
+    <resource key="huishengcejuzuixiaojuli">回声测距最小距离/公里</resource>
+    <resource key="zhenchazuixiaojuli">侦查最小距离/公里</resource>
+    <resource key="yuleifaxianhebaojingjuli">鱼雷发现和报警距离</resource>
+    <resource key="yuleifaxianhebaojingzuixiaojuli">鱼雷发现和报警最小距离/公里</resource>
+    <resource key="zaoshengcexiangguanchafanwei">噪声测向观察范围</resource>
+    <resource key="zhenchacepinfanwei">侦查测频范围</resource>
+    <resource key="baosu">报速：</resource>
+    <resource key="tongbaojuli">通报距离（≥）：</resource>
+    <resource key="tonghuajuli">通话距离（≥）：</resource>
+    <resource key="dianchuanbaojuli">电传报距离（≥）：</resource>
+    <resource key="jizaifanqiansousuoleida">机载反潜搜索雷达</resource>
+    <resource key="jizaiduogongnengleida">机载多功能雷达</resource>
+    <resource key="duogonglvjizaifanqiansousuoleida">多功率机载反潜搜索雷达</resource>
+    <resource key="jingjieleida">警戒雷达</resource>
+    <resource key="zhenchapinyu">侦查频域</resource>
+    <resource key="zhenchakongyufangwei">侦察空域方位</resource>
+    <resource key="zhenchakongyufuyang">侦察空域俯仰</resource>
+    <resource key="leidazuidacejujuli">雷达最大测距距离（＞）</resource>
+    <resource key="fanqianxunluoji">反潜巡逻机</resource>
+    <resource key="zhongxingjianting">中型舰艇</resource>
+    <resource key="tancefangwei">探测方位</resource>
+    <resource key="gongwaitongdao">探测俯仰角（红外通道）</resource>
+    <resource key="dianshitongdao">探测俯仰角（电视通道）</resource>
+    <resource key="kuaisuzhoushisudu">快速周视速度</resource>
+    <resource key="tianwendaohangjingdudingweiwucha">天文导航精度定位误差</resource>
+    <resource key="tianwendaohangjingduhangxiangwucha">天文导航精度航向误差</resource>
+    <resource key="duanbohongwaizidongcexingshijian">短波红外自动测星时间</resource>
+    <resource key="shishichulibentingtancemubiao">实时处理本艇探测目标：</resource>
+    <resource key="daodantaishumubiaozongpishu">导弹态势目标总批数（≤）：</resource>
+    <resource key="daodantaishiwaibumubiaoxinxipishu">导弹态势外部目标信息批数（≤）：</resource>
+    <resource key="daodantaishibentingtancemubiaoxinxipishu">导弹态势本艇探测目标信息批数（≤）：</resource>
+    <resource key="daodantaishimubiaozhishixinxipishu">导弹态势目标指示信息批数：</resource>
+    <resource key="yushuileigongji">鱼水雷攻击</resource>
+    <resource key="tongshigongjimubiao">可同时攻击目标/个</resource>
+    <resource key="yuleishuliang">可同时准备鱼雷（异舷）数量/枚</resource>
+    <resource key="ketongshidaoyinxiandaoyuleishuliang">可同时导引线导鱼雷数量/枚</resource>
+    <resource key="zhihangyuleishuliang">可同时控制自导/直航鱼雷数量/枚</resource>
+    <resource key="duihaiyouxiaoshecheng">对海最小有效射程/km</resource>
+    <resource key="duihaizuidayouxiaoshecheng">对海最大有效射程/km</resource>
+    <resource key="daodangongji">导弹攻击</resource>
+    <resource key="duihaigongjifanwei">对海攻击范围/度</resource>
+    <resource key="tongshikongzhidaodanshuliang">同时控制导弹数量/批</resource>
+    <resource key="tongshikongzhimubiaoshuliang">同时控制导弹数量/批</resource>
+    <resource key="duilugongjijuli">对陆攻击距离/km</resource>
+    <resource key="mingzhonggailv">命中概率：</resource>
+    <resource key="hangxiangjingdu">航向精度/</resource>
+    <resource key="shuipingjingdu">水平精度/</resource>
+    <resource key="cangshiwendu">工作和居住空调舱室温度：</resource>
+    <resource key="cangshixiangduishidu">工作和居住空调藏舱室相对湿度：</resource>
+    <resource key="jixieshebeicangshiwendu">机械设备舱室温度：</resource>
+    <resource key="jixieshebeicangshixiangduishidu">机械设备舱室相对湿度：</resource>
+    <resource key="shuimichuanti">水密船体</resource>
+    <resource key="cedian">测点</resource>
+ 
+    
+    
+      
+    
+      
+    
+    
+      
+ 
+    
+    
+    
+    
+       
+              
+              
+   
+    
+    
+    
+  
+    
+    
+    
+
+   
+    
+      
+    
+              
+</resources>

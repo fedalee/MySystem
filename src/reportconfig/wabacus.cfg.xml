@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<wabacus-config xmlns="http://www.wabacus.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.wabacus.com xsd/wabacus.cfg.xsd">
+	<system>
+		<item name="webroot" value="/MySystem"/><!-- 应用的根URL -->
+		<item name="webroot-abspath" value=""/><!-- 默认为context.getRealPath("/")获取的值，可以直接配置根路径 -->
+		<item name="showreport-url" value="/ShowReport.wx"/><!--显示报表数据的URL，就是在web.xml中配置的<url-pattern/>的值可以带参数-->
+		<item name="encode" value="UTF-8"/>
+		<item name="show-sql" value="true"/><!-- 是否显示执行的SQL语句或存储过程 -->
+		<item name="default-cellresize" value="2"/><!-- 指定整个项目中所有单行表头的数据自动列表报表的表格单元格默认可移动性 -->
+		<item name="default-labelstyle" value="1"/><!-- 查询条件提示标签的显示位置 -->
+		<item name="server-validate-class" value=""/><!-- 自己开发的服务器端校验类 -->
+		<item name="skin" value="vista"/><!-- 皮肤样式 -->
+		<item name="default-checkpermission" value="true"/><!-- 本应用是否要检查权限，如果在不需要检查权限的应用中关闭它，可以改善性能 -->
+		<item name="prompt-dialog-type" value="artdialog"/><!-- 提示组件类型 ymprompt;artdialog-->
+		<item name="default-condition-labelposition" value="left"/><!-- （自己添加的）condition配置的 label 的显示位置-->
+	</system>
+	
+	<datasources default="ds_oracle">
+		<datasource name="ds_sqlserver2k" type="com.wabacus.config.database.datasource.C3P0DataSource" dbtype="com.wabacus.config.database.type.SQLSERVER2K">
+			<property name="driver">net.sourceforge.jtds.jdbc.Driver</property>
+			<property name="url">jdbc:jtds:sqlserver://localhost:1433;DatabaseName=WabacusDemoDB</property>
+			<property name="user">sa</property>
+			<property name="password">{3DES}vwdDuiIwpZc=</property>
+			
+			<property name="max_size">20</property>   
+  			<property name="min_size">5</property>   
+  			<property name="timeout">100</property>   
+  			<property name="max_statements">100</property>   
+  			<property name="idle_test_period">50</property>   
+  			<property name="acquire_increment">2</property>  
+		</datasource>
+		<datasource name="ds_sqlserver2k5" type="com.wabacus.config.database.datasource.C3P0DataSource" dbtype="com.wabacus.config.database.type.SQLSERVER2K5">
+			<property name="driver">net.sourceforge.jtds.jdbc.Driver</property>
+			<property name="url">jdbc:jtds:sqlserver://localhost:1433;DatabaseName=WabacusDemoDB</property>
+			<property name="user">sa</property>
+			<property name="password">{3DES}vwdDuiIwpZc=</property>
+			
+			<property name="max_size">20</property>   
+  			<property name="min_size">5</property>   
+  			<property name="timeout">100</property>   
+  			<property name="max_statements">100</property>   
+  			<property name="idle_test_period">50</property>   
+  			<property name="acquire_increment">2</property>  
+		</datasource>
+		<datasource name="ds_oracle"
+			type="com.wabacus.config.database.datasource.C3P0DataSource" dbtype="com.wabacus.config.database.type.Oracle">
+			<property name="driver">oracle.jdbc.driver.OracleDriver</property>
+			<property name="url">jdbc:oracle:thin:@222.27.254.64:1521:MyOracle</property>
+			<property name="user">scott</property>
+			<property name="password">tiger</property>
+			<property name="max_size">20</property>
+			<property name="min_size">5</property>
+			<property name="timeout">100</property>
+			<property name="max_statements">100</property>
+			<property name="idle_test_period">50</property>
+			<property name="acquire_increment">2</property>
+		</datasource>
+		<datasource name="ds_mysql" type="com.wabacus.config.database.datasource.C3P0DataSource" dbtype="com.wabacus.config.database.type.MySql">
+			<property name="driver">com.mysql.jdbc.Driver</property>
+			<property name="url"><![CDATA[jdbc:mysql://localhost/wabacusdemodb?useUnicode=true&characterEncoding=GBK]]></property>
+			<property name="user">root</property>
+			<property name="password">{3DES}vwdDuiIwpZc=</property>
+			
+			<property name="max_size">20</property>   
+  			<property name="min_size">5</property>   
+  			<property name="timeout">100</property>   
+  			<property name="max_statements">100</property>   
+  			<property name="idle_test_period">50</property>   
+  			<property name="acquire_increment">2</property>  
+		</datasource>
+		<!-- 演示Proxool配置的数据源 -->
+		<!--datasource name="ds_mysql_proxool" type="com.wabacus.config.database.datasource.ProxoolDataSource"
+			dbtype="com.wabacus.config.database.type.MySql">
+			<property name="alias">proxool_pool</property>
+			<property name="configfile">proxool.xml</property>
+		</datasource-->
+		<!-- 演示JNDI方式配置的数据源 -->
+		<!--datasource name="ds_sqlserver2k5" type="com.wabacus.config.database.datasource.JNDIDataSource"
+			dbtype="com.wabacus.config.database.type.SQLSERVER2K5">
+			<property name="jndi">java:comp/env/demoSource</property>
+		</datasource-->
+		<!-- 演示直接用DriverManager配置的数据源 -->
+		<!--datasource name="ds_sqlserver2k5" type="com.wabacus.config.database.datasource.DriverManagerDataSource"
+			dbtype="com.wabacus.config.database.type.SQLSERVER2K5">
+			<property name="driver">net.sourceforge.jtds.jdbc.Driver</property>
+			<property name="url">jdbc:jtds:sqlserver://localhost:1433;DatabaseName=WabacusDemoDB</property>
+			<property name="user">sa</property>
+			<property name="password">111111</property>
+		</datasource-->
+	</datasources>
+
+	<inputbox-types/>
+	
+	<!-- 配置本项目中所有报表页面都必须包含的js文件 -->
+	<global-jsfiles>
+		<js-file>/webresources/script/validate.js</js-file>
+		<js-file>/webresources/script/callback.js</js-file>
+		
+	</global-jsfiles>
+	
+	<!-- 配置本项目中所有报表页面都必须包含的css文件 -->
+	<global-cssfiles/>
+		
+	<i18n-resources file="resources/i18n/ApplicationResources.xml"/>
+	
+	<!-- 注册所有全局资源文件 -->
+	<global-resources>
+		<resource-file>resources/resources_mysystem_zh.xml</resource-file>
+	</global-resources>
+	
+	<!-- 注册所有报表配置文件 -->
+	<report-files>
+  		<report-file pattern="true" recursive="true">report/(\S*?)(\.xml)</report-file>
+	</report-files>
+	
+	<global-interceptors>
+	<interceptor class="interceptor.SQLInteceptor" pageid="zhendongzaosheng"/>
+	</global-interceptors>
+</wabacus-config>

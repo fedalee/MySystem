@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<applications xmlns="http://www.wabacus.com"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.wabacus.com ../xsd/wabacus.applications.xsd">
+	<page id="zbwtwentiliebiao_detail"
+		js="/webresources/script/validate.js,/webresources/script/wabacus_util.js">
+		<report id="zbwtwentiliebiao_report_detail" title="编辑" width="700px"
+			align="center" type="editabledetail">
+			<display>
+
+				<col column="id" label="id" displaytype="hidden" />
+				<!-- 
+				<col column="type" displaytype="optional" />
+
+				<col column="xianhao" displaytype="optional" />
+				 -->
+				<col column="name" label="问题名" filter="true" filterwidth="120px" br="true"/>
+				<col column="chulifangshi" label="处理方式" />
+
+				<col column="wentileibie" label="问题类别" clickorderby="true" br="true">
+					<inputbox type="selectbox">
+						<option value="总体问题" label="总体问题"></option>
+						<option value="系统问题" label="系统问题"></option>
+						<option value="设备问题" label="设备问题"></option>
+						<option value="其他问题" label="其他问题"></option>
+					</inputbox>
+				</col>
+
+
+				<col column="createtime" label="问题产生时间" datatype="date{yyyy-MM-dd}"
+					clickorderby="true" >
+					<inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)"></inputbox>
+				</col>
+
+				<col column="handletime" label="问题处理时间" datatype="date{yyyy-MM-dd}" br="true">
+					<inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)"></inputbox>
+				</col>
+
+				<col column="origin" label="问题来源" datatype="clob"  valuestyleproperty="colspan='3'" br="true">  
+					<inputbox type="textareabox" styleproperty="rows='4'"></inputbox>
+				</col>
+				<col column="gaishu" label="问题概述" datatype="clob"  valuestyleproperty="colspan='3'">
+					<inputbox type="textareabox" styleproperty="rows='4'"></inputbox>
+				</col>
+				<!-- 
+				<col column="result" label="处理结果" dislaytype="hidden"/> 
+				 -->  <!-- 这货是附件 -->
+				 <!-- 
+				<col column="{non-fromdb}" property="ca" label="附件"></col>
+				 -->
+			</display>
+
+			<sql aftersave="RefreshLihuafeng">
+
+				<value>
+					<![CDATA[SELECT * from ZBGL_ZBSY_ZBWT_GEZHONGWENTI where  {#condition#} ]]>
+				</value>
+				<condition name="id" hidden="true">
+
+					<value>
+							<![CDATA[id=#data#]]>
+					</value>
+				</condition>
+				<insert>
+					<params>
+						<param name="param1" value="url{type}" />
+						<param name="param2" value="url{xianhao}"/>
+						<param name="param3" value="url{id}"/>
+					</params>
+		  				 insert into ZBGL_ZBSY_ZBWT_GEZHONGWENTI(id=uuid{},@{name},@{gaishu},xianhao=#{param2},@{createtime},@{origin},@{handletime},@{wentileibie},type=#{param1} ,@{chulifangshi} ,id_zbwt=#{param3});		 
+			 		</insert>
+			 	 		 	    
+			  	   <update>
+			    		 update ZBGL_ZBSY_ZBWT_GEZHONGWENTI(@{name},@{gaishu},@{createtime},@{origin},@{handletime},@{wentileibie},@{chulifangshi}) where id=@{id__old};
+			  	   </update>
+			</sql>
+		</report>
+	</page>
+</applications>
+

@@ -1,0 +1,3 @@
+将release包中的“依赖的第三方jar包”里面的所有jar文件拷入此目录中的WebRoot/WEB-INF/lib/目录下
+将release包中的“依赖的第三方客户端组件”的component/目录拷入/webresources/目录下面gh
+zczc

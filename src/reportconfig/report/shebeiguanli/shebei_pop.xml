@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<applications xmlns="http://www.wabacus.com"
+			   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			   xsi:schemaLocation="http://www.wabacus.com ../../xsd/wabacus.applications.xsd">
+
+	<page id="shebeixiangxiPopupPage" js="/webresources/script/validate.js,/webresources/script/callback.js">
+	
+	
+	
+			<report id="shebeixiangxiPopup"  title="url{shebeimingcheng}" 	type="editabledetail" servervalidateclass="com.ShujuJiaoyan">
+			<display>
+                <col column="id" label="id" displaytype="hidden" />
+               	<col column="shebeimingcheng" label="${shebeimingcheng}" />   
+				<col column="xinghaoguige" label="${xinghaoguige}" br="true">	 </col>
+				<col column="jishuzhibiao" label="${jishuzhibiao}" >	 </col> 
+				<col column="yanzhidanwei" label="${yanzhidanwei}" br="true">
+				<inputbox  servervalidate="isNotEmpty(#label#列须从查询结果中选取)" servervalidatetype="both">
+					<typeprompt count="15" timeout="0" selectbox="true">
+						<promptcol label="DANWEIMINGCHENG" title="研制单位" matchmode="anywhere"></promptcol>
+						<datasource>
+							<option dataset="@{select DANWEIMINGCHENG from XTSZ_JBXXWH_DANWEI where {#matchcondition#}}"></option> 
+						</datasource>
+					</typeprompt>
+				</inputbox>					
+				</col>	 
+				<col column="shengchandanwei" label="生产单位" >		
+				<inputbox  servervalidate="isNotEmpty(#label#列须从查询结果中选取)" servervalidatetype="both">
+					<typeprompt count="15" timeout="0" selectbox="true">
+						<promptcol label="DANWEIMINGCHENG" title="生产单位" matchmode="anywhere"></promptcol>
+						<datasource>
+							<option dataset="@{select DANWEIMINGCHENG from XTSZ_JBXXWH_DANWEI where {#matchcondition#}}"></option> 
+						</datasource>
+					</typeprompt>
+				</inputbox>	     
+				</col>
+				<col column="jishuzerendanwei" label="${jishuzerendanwei}"  clickorderby="true" br="true">
+				<inputbox  servervalidate="isNotEmpty(#label#列须从查询结果中选取)" servervalidatetype="both">
+					<typeprompt count="15" timeout="0" selectbox="true">
+						<promptcol label="DANWEIMINGCHENG" title="技术责任单位" matchmode="anywhere"></promptcol>
+						<datasource>
+							<option dataset="@{select DANWEIMINGCHENG from XTSZ_JBXXWH_DANWEI where {#matchcondition#}}"></option> 
+						</datasource>
+					</typeprompt>
+				</inputbox>
+				</col> 
+				<col column="jishuxiezuodanwei" label="${jishuxiezuodanwei}" clickorderby="true" br="true">
+				<inputbox  servervalidate="isNotEmpty(#label#列须从查询结果中选取)" servervalidatetype="both">
+					<typeprompt count="15" timeout="0" selectbox="true">
+						<promptcol label="DANWEIMINGCHENG" title="技术协作单位" matchmode="anywhere"></promptcol>
+						<datasource>
+							<option dataset="@{select DANWEIMINGCHENG from XTSZ_JBXXWH_DANWEI where {#matchcondition#}}"></option> 
+						</datasource>
+					</typeprompt>
+				</inputbox>
+				</col> 
+			    <col column="gongnengtexing" label="${gongnengtexing}" br="true" valuestyleproperty="colspan='3'">
+			       <inputbox type="textareabox" styleproperty="rows='5'"></inputbox>
+			    </col>					    
+				<col column="zhongdawenti" label="重大问题" br="true" valuestyleproperty="colspan='3'" >	
+				<inputbox type="textareabox" styleproperty="rows='5'"></inputbox> 
+				</col>
+	
+				<col column="shebeigaishu" label="${shebei}概述"   br="true" valuestyleproperty="colspan='3'">
+					  <inputbox type="textareabox" styleproperty="rows='5'"></inputbox>
+				</col>
+	
+			
+			</display>	
+			<sql aftersave="SheBeiRefresh">
+				<select>
+					<value><![CDATA[SELECT * FROM sbgl_shebei_xiangxixinxi where {#condition#} ]]></value>
+					<condition name="shebeimingcheng" hidden="true">
+						<value>
+								<![CDATA[(shebeimingcheng =  #data# )]]>
+						</value>
+
+					</condition>			
+					<condition name="suoshuleibie" hidden="true">
+						<value>
+								<![CDATA[(suoshuleibie =  #data# )]]>
+						</value>
+
+					</condition>
+				</select>
+				   
+				<insert >				
+			        	insert into sbgl_shebei_xiangxixinxi(id=uuid{},@{shebeimingcheng},
+			        	                                     @{shengchandanwei},@{gongnengtexing},@{xinghaoguige},
+			        	                                     @{jishuzerendanwei},@{jishuxiezuodanwei},suoshuleibie=url{suoshuleibie},
+			        	                                     @{shebeigaishu},@{jishuzhibiao},@{yanzhidanwei},
+			        	                                     @{zhongdawenti});			  				
+			    </insert>
+				<update>
+				     update sbgl_shebei_xiangxixinxi(@{shebeimingcheng},
+			        	                                     @{shengchandanwei},@{gongnengtexing},@{xinghaoguige},
+			        	                                     @{jishuzerendanwei},@{jishuxiezuodanwei},
+			        	                                     @{shebeigaishu},@{jishuzhibiao},@{yanzhidanwei},
+			        	                                     @{zhongdawenti}) where id=@{id};
+				    
+				</update>
+					
+							
+					
+			</sql>
+	
+			
+			
+			
+			
+			</report>
+	</page>
+	 </applications>
+

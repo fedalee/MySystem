@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<applications xmlns="http://www.wabacus.com"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.wabacus.com ../xsd/wabacus.applications.xsd">
+	<page id="ketimingcheng"
+		js="/webresources/script/validate.js,/WebRoot/js/testcallback.js">
+		<report id="report1" title="项目分类" type="editablelist2" 
+			align="center"  template="${articlelist.report.template}">
+			<display>
+				<col column="{sequence:1}" label="序号"></col>
+				<col column="id" label="id" displaytype="hidden" />
+				
+				
+				<col column="xiangmumingcheng" label="项目名称" clickorderby="true" />
+				
+				<col column="suoshuzhuanti" label="${suoshuzhuanti}"></col>
+				<col column="beijingxinghao" label="${beijingxinghao}" clickorderby="true">
+					<inputbox type="selectbox">
+						<option value="A型" label="A型"></option>
+						<option value="B型" label="B型"></option>
+						<option value="C型" label="C型"></option>
+					</inputbox>
+				</col>
+				<!-- 添加类别字段 -->
+				<col column="leibie" label="类别" clickorderby="true">
+					<inputbox type="selectbox">
+						<option value="常规" label="常规"></option>
+						<option value="Hqq" label="Hqq"></option>
+						<option value="UUV" label="UUV"></option>
+						<option value="小H" label="小H"></option>
+						<option value="其他" label="其他"></option>
+					</inputbox>
+				</col>
+
+	
+				<col column="xinghaoshuliang" label="${suoshuketi}" clickorderby="true" />
+				<col column="xiangmubianhao" label="项目编号" clickorderby="true" />
+				<col column="chengguoxingshi" label="成果形式" clickorderby="true">
+					<inputbox type="checkbox">
+						<option value="程序" label="程序"></option>
+						<option value="报告" label="报告"></option>
+						<option value="仿真模型" label="仿真模型"></option>
+						<option value="试验模型" label="试验模型"></option>
+						<option value="软件" label="软件"></option>
+					</inputbox>
+				</col>
+				<col column="zhuguandanwei" label="主管单位" clickorderby="true">
+					<inputbox type="selectbox">
+						<option value="工信部" label="工信部"></option>
+						<option value="教育部" label="教育部"></option>
+						<option value="科技部" label="科技部"></option>
+					</inputbox>
+				</col>
+				<col column="chengdandanwei" label="承担单位" clickorderby="true">
+					<inputbox type="selectbox">
+						<option value="哈尔滨工程大学" label="哈尔滨工程大学"></option>
+						<option value="哈尔滨工业大学" label="哈尔滨工业大学"></option>
+						<option value="山东大学" label="山东大学"></option>
+					</inputbox>
+				</col>
+				<!-- 把开始时间、验收时间改成项目技术时间 -->
+				<col column="kaishiriqi" label="项目技术时间" clickorderby="true"
+					datatype="date{yyyy-MM-dd}">
+					<inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)"></inputbox>
+				</col>
+
+				<col column="yanshouriqi" label="成果形式" clickorderby="true" />
+
+				<col column="wanchengdu" label="完成度" clickorderby="true">
+					<inputbox type="selectbox">
+						<option value="10%" label="10%"></option>
+						<option value="20%" label="20%"></option>
+						<option value="30%" label="30%"></option>
+						<option value="40%" label="40%"></option>
+						<option value="50%" label="50%"></option>
+						<option value="60%" label="60%"></option>
+						<option value="70%" label="70%"></option>
+						<option value="80%" label="80%"></option>
+						<option value="90%" label="90%"></option>
+						<option value="100%" label="100%"></option>
+					</inputbox>
+				</col>
+
+				<col column="yanjiumubiao" label="研究目标" clickorderby="true" />
+				<col column="jishumubiao" label="技术指标" clickorderby="true" />
+				<col column="jingfei" label="经费" clickorderby="true" />
+				<col column="yanjiuneirong" label="研究内容" clickorderby="true" />
+
+				<col column="zhuyaochengguo" label="主要成果" clickorderby="true" />
+				<col column="beizhu" label="备注" clickorderby="true" />
+				<col column="niandujihua" label="年度计划" clickorderby="true" />
+
+				<col column="{non-fromdb}" property="cz" label="操作"></col>
+			</display>
+			<sql>
+				<select>
+
+					<value>
+					<![CDATA[SELECT * FROM zbgl_kygl_keti where  {#condition#}]]>
+					</value>
+					
+					<condition name="xiangmumingcheng" label="xiangmumingcheng" hidden="true">
+						<value>
+					<![CDATA[(xiangmumingcheng = #data#)]]>
+						</value>
+					</condition>
+
+				</select>
+				<insert>
+					<params>
+						<param name="param1" value="url{xiangmumingcheng}" />
+					</params>
+					insert into
+					zbgl_kygl_keti(id=uuid{},@{suoshuzhuanti},@{leibie},@{xiangmumingcheng}=#{param1},@{beijingxinghao},@{xinghaoshuliang},@{xiangmubianhao},@{chengguoxingshi},@{zhuguandanwei},@{chengdandanwei},@{kaishiriqi},@{yanshouriqi},@{wanchengdu});
+				</insert>
+				<update>
+					update
+					zbgl_kygl_keti(@{id},@{suoshuzhuanti},@{leibie},@{xiangmumingcheng},@{beijingxinghao},@{xinghaoshuliang},@{xiangmubianhao},@{chengguoxingshi},@{zhuguandanwei},@{chengdandanwei},@{kaishiriqi},@{yanshouriqi},@{wanchengdu})
+					where id=@{id__old};
+			  </update>
+				<delete>
+					delete from zbgl_kygl_keti where id=@{id__old};
+			  </delete>
+			</sql>
+			<format>
+				<value>
+			  <![CDATA[
+			        cz="&nbsp;&nbsp;<span onmouseover=\"this.style.cursor='pointer'\">"
+			        +"<a href=\"ShowReport.wx?PAGEID=keti\" target=\"_blank\">"
+			        +"详细信息"+"</a></span>";
+			     ]]>
+				</value>
+			</format>
+
+		</report>
+	</page>
+</applications>

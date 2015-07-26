@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<applications xmlns="http://www.wabacus.com"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.wabacus.com ../../../xsd/wabacus.applications.xsd">
+	<page id="xiangmuliebiao_detail"
+		js="/webresources/script/validate.js,/webresources/script/wabacus_util.js">
+		<report id="xiangmuliebiao_report_detail" title="编辑" width="700px"
+			align="center" type="editabledetail" servervalidateclass="com.ShujuJiaoyan">
+					<display >
+					
+					<!-- 
+						<col column="{sequence:1}" label="序号"></col>
+					 --> 	
+						<col column="id" label="id" displaytype="hidden" />
+					 	
+						<col column="xiangmuerjifenlei" label="项目二级名称" clickorderby="true" displaytype="hidden"/>
+						
+						<col column="xiangmubianhao" label="项目编号" clickorderby="true" />
+						<col column="xiangmumingcheng" label="项目名称" clickorderby="true" br="true" />
+						
+						
+						<col column="suoshuzhuanti" label="${suoshuzhuanti}" ></col>
+						<col column="suoshuketi" label="所属课题" br="true"></col>
+						
+						<!-- 
+						<col column="beijingxinghao" label="${beijingxinghao}" clickorderby="true" br="true">
+							<inputbox type="selectbox">
+								<option value="A型" label="A型"></option>
+								<option value="B型" label="B型"></option>
+								<option value="C型" label="C型"></option>
+							</inputbox>
+						</col>
+						 -->
+						 <col column="beijingxinghao" label="${beijingxinghao}" br="true">
+							<inputbox type="selectbox" servervalidate="isNotEmpty(${invalid.isnotempty})">
+								<option dataset="@{select xinghao from zbgl_zbjbxx_xinghao}"
+									label="xinghao" value="xinghao"></option>
+							</inputbox>
+						</col>
+						
+						
+						<col column="zhuguandanwei" label="主管单位" clickorderby="true" br="true">
+							<inputbox servervalidate="isNotEmpty(#label#列须从查询结果中选取)" servervalidatetype="both">
+								<typeprompt count="15" timeout="0" selectbox="true">
+									<promptcol label="DANWEIMINGCHENG" title="挂靠单位" matchmode="anywhere"></promptcol>
+									<datasource>
+										<option dataset="@{select DANWEIMINGCHENG from XTSZ_JBXXWH_DANWEI where {#matchcondition#}}"></option> 
+									</datasource>
+								</typeprompt>
+							</inputbox>
+						</col>
+						<col column="chengdandanwei" label="承担单位" clickorderby="true">
+							<inputbox servervalidate="isNotEmpty(#label#列须从查询结果中选取)" servervalidatetype="both">
+								<typeprompt count="15" timeout="0" selectbox="true">
+									<promptcol label="DANWEIMINGCHENG" title="挂靠单位" matchmode="anywhere"></promptcol>
+									<datasource>
+										<option dataset="@{select DANWEIMINGCHENG from XTSZ_JBXXWH_DANWEI where {#matchcondition#}}"></option> 
+									</datasource>
+								</typeprompt>
+							</inputbox>
+						</col>
+						
+						<col column="xiangmujishushijian" label="项目技术时间" clickorderby="true" br="true"
+							datatype="date{yyyy-MM-dd}" >
+							<inputbox type="datepicker" jsvalidate="isDate(#data#格式不对，必须为yyyy-MM-dd格式)" br="true"></inputbox>
+						</col>
+
+						<col column="leibie" label="类别" clickorderby="true">
+							<inputbox type="selectbox">
+								<option value="常规" label="常规"></option>
+								<option value="Hqq" label="Hqq"></option>
+								<option value="UUV" label="UUV"></option>
+								<option value="小H" label="小H"></option>
+								<option value="其他" label="其他"></option>
+							</inputbox>
+						</col>
+
+						<col column="wanchengdu" label="完成度" clickorderby="true" br="true">
+							<inputbox type="selectbox">
+								<option value="10%" label="10%"></option>
+								<option value="20%" label="20%"></option>
+								<option value="30%" label="30%"></option>
+								<option value="40%" label="40%"></option>
+								<option value="50%" label="50%"></option>
+								<option value="60%" label="60%"></option>
+								<option value="70%" label="70%"></option>
+								<option value="80%" label="80%"></option>
+								<option value="90%" label="90%"></option>
+								<option value="100%" label="100%"></option>
+							</inputbox>
+						</col>
+
+
+						<col column="jishuzhibiao" label="技术指标" clickorderby="true" />
+						<col column="jingfei" label="经费" clickorderby="true" br="true"/>
+						
+
+						<col column="chengguoxingshi" label="成果形式" clickorderby="true" br="true">
+							<inputbox type="checkbox">
+								<option value="程序" label="程序"></option>
+								<option value="报告" label="报告"></option>
+								<option value="仿真模型" label="仿真模型"></option>
+								<option value="试验模型" label="试验模型"></option>
+								<option value="软件" label="软件"></option>
+							</inputbox>
+						</col>
+						
+						<col column="yanjiuneirong" label="研究内容" datatype="clob" valuestyleproperty="colspan='3'" br="true">
+							<inputbox type="textareabox" styleproperty="rows='4'"></inputbox>
+						</col>
+						<col column="yanjiumubiao" label="研究目标" datatype="clob" valuestyleproperty="colspan='3'" br="true">
+							<inputbox type="textareabox" styleproperty="rows='4'"></inputbox>
+						</col>	
+						
+						<col column="zhuyaochengguo" label="主要成果"  valuestyleproperty="colspan='3'" br="true">
+							<inputbox type="textareabox" styleproperty="rows='4'"></inputbox>
+						</col>
+						<!-- 
+						<col column="beizhu" label="备注" clickorderby="true" />
+						 -->
+						<col column="beizhu" label="备注" datatype="clob" clickorderby="true" valuestyleproperty="colspan='3'" br="true">
+							<inputbox type="textareabox" styleproperty="rows='4'"></inputbox>
+						</col>
+						
+						
+						
+						
+						
+						<col column="niandujihua" label="年度计划" clickorderby="true" displaytype="hidden"/>
+					</display>
+					
+					<sql>
+					
+							<value>
+									<![CDATA[SELECT * from zbgl_kygl_keti where  {#condition#} ]]>
+							</value>
+							<condition name="id"  hidden="true">
+								
+								<value>
+										<![CDATA[id=#data#]]>
+								</value>
+							</condition>
+							
+														
+				
+						<insert>
+							<params>
+								<param name="param1" value="url{xiangmuerjifenlei}" />
+							</params>
+							insert into
+							zbgl_kygl_keti(id=uuid{},@{xiangmumingcheng},xiangmuerjifenlei=#{param1},@{suoshuzhuanti},@{suoshuketi},@{xiangmubianhao},@{beijingxinghao},@{leibie},@{chengguoxingshi},@{zhuguandanwei},@{chengdandanwei},@{xiangmujishushijian},@{wanchengdu},@{yanjiumubiao},@{jishuzhibiao},@{jingfei},@{yanjiuneirong},@{zhuyaochengguo},@{beizhu},@{niandujihua});
+						</insert>
+						 
+						<update>
+							update
+							zbgl_kygl_keti(@{xiangmumingcheng},@{xiangmuerjifenlei},@{suoshuzhuanti},@{suoshuketi},@{xiangmubianhao},@{beijingxinghao},@{leibie},@{chengguoxingshi},@{zhuguandanwei},@{chengdandanwei},@{xiangmujishushijian},@{wanchengdu},@{yanjiumubiao},@{jishuzhibiao},@{jingfei},@{yanjiuneirong},@{zhuyaochengguo},@{beizhu},@{niandujihua})
+							where id=@{id__old};
+			 			</update>
+			 			 
+					</sql>
+		</report>
+	</page>
+</applications>

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<applications xmlns="http://www.wabacus.com"
+			   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			   xsi:schemaLocation="http://www.wabacus.com ../xsd/wabacus.applications.xsd">
+<page  id="cailiaoguanli" js="/webresources/script/validate.js" >
+		  <tabpanel id="tp1"   titlestyle="2" align="left" titleposition="top" titlealign="left"  margin="10px"  >
+ 
+
+			  <report id="report1" title="非${jinshucailiaoshuxing}"  type="editablelist" rowselect="single" celldrag="0">
+					    <display>
+					         <col column="{sequence:1}" label="序号"></col>
+					         <col column="id" label="id" displaytype="hidden" />
+						     <col column="name" label="名称"  valuestyleproperty="style='mso-number-format:\@'">
+							      <inputbox jsvalidate="isNotEmpty(#label#列不允许为空)"></inputbox>
+						     </col>
+						     <col column="xinghao" label="${xinghao}（牌号）" clickorderby="true"></col>
+						     <col column="zucheng" label="组成"></col>
+						     <col column="midu" label="密度kg/m3"></col>
+						     <col column="tanxingmoliang" label="${tanxingmoliang}m/N"></col>
+						     <col column="bosongbi" label="${bosongbi}"></col>
+						     <col column="zuniyinzi" label="${zunisunhaoyinzi}"></col>
+						     <col column="lashenqiangdu" label="${lashenqiangdu}MPa"></col>
+						     <col column="cheduanshenchang" label="${cheduanshenchang}率%"></col>
+						     <col column="shaoyingdu" label="${shaoayingdu}"></col>
+						     <col column="silieqiangdu" label="${silieqiangdu}kN/m"></col>
+						     <col column="lashenqiangdubianhua" label="${lashenqiangdu}变化率%"></col>
+						     <col column="cheduanshenchangbianhua" label="${cheduanshenchang}率变化率%"></col>
+						     <col column="shaoyingdubianhua" label="${shaoayingdu}变化"></col>
+						     <col column="silieqiangdubianhua" label="${silieqiangdu}变化率%"></col>
+					    </display>
+					    <sql>
+					       <select>
+						      <value>
+							<![CDATA[SELECT * FROM sbgl_clgl_feijinshucailiao where  {#condition#} order by name]]>
+						</value>
+						      <condition name="name" label="名称">
+							       <value>
+								<![CDATA[(name like  '%#data#%' )]]>
+							</value>
+						      </condition>
+					       </select>
+                   <insert pageurl="report{feijinshu_poppage.feijinshucailiao_pop}"
+					  urlparams="name=request{name}" popupparams="{title:'新增非${jinshucailiaoshuxing}',width:980,height:450}">
+				   </insert>
+				   <update pageurl="report{feijinshu_poppage.feijinshucailiao_pop}"
+					   urlparams="name=@{name}" popupparams="{title:'修改非${jinshucailiaoshuxing}信息',width:980,height:450}">
+				   </update>
+					       <delete>
+					  	 delete from sbgl_clgl_feijinshucailiao where id=@{id__old};
+					  </delete>
+					    </sql>
+				   </report>
+			  
+			  <report id="report2" title="${jinshucailiaoshuxing}"   type="editablelist"  interceptor="com.wabacus.util.IdentifierGenerator_Interceptor" rowselect="single" celldrag="0">
+					    <display>
+					         <col column="{sequence:1}" label="序号"></col>
+					         <col column="id" label="id" displaytype="optional" />
+						     <col column="name" label="名称" clickorderby="true" valuestyleproperty="style='mso-number-format:\@'">
+							      <inputbox jsvalidate="isNotEmpty(#label#列不允许为空)"></inputbox>
+						     </col>
+						     <col column="xinghao" label="${xinghao}（牌号）" clickorderby="true"></col>
+						     <col column="zucheng" label="组成"></col>
+						     <col column="midu" label="密度kg/m3"></col>
+						     <col column="tanxingmoliang" label="${tanxingmoliang}m/N"></col>
+						     <col column="bosongbi" label="${bosongbi}"></col>
+						     <col column="zuniyinzi" label="${zunisunhaoyinzi}"></col>
+						     <col column="qufuqiangdu" label="${qufuqiangdu}MPa"></col>
+						     <col column="yuliu1" label="预留1"></col>
+						     <col column="yuliu2" label="预留2"></col>
+						     <col column="yuliu3" label="预留3"></col>
+						     <col column="yuliu4" label="预留4"></col>
+					    </display>
+					    <sql>
+					       <select>
+						      <value>
+							<![CDATA[SELECT * FROM sbgl_clgl_jinshucailiao where  {#condition#} order by name]]>
+						</value>
+						      <condition name="name" label="名称">
+							       <value>
+								<![CDATA[(name like  '%#data#%' )]]>
+							</value>
+						      </condition>
+					       </select>
+	                   <insert pageurl="report{jinshu_poppage.jinshucailiao_pop}"
+					        urlparams="name=request{name}" popupparams="{title:'新增${jinshucailiaoshuxing}',width:980,height:450}">
+				       </insert>
+				       <update pageurl="report{jinshu_poppage.jinshucailiao_pop}"
+					        urlparams="name=@{name}" popupparams="{title:'修改${jinshucailiaoshuxing}信息',width:980,height:450}">
+				       </update>
+					       <delete>
+					  	 delete from sbgl_clgl_jinshucailiao where id=@{id__old};
+					  </delete>
+					    </sql>
+				   </report>
+		
+			  
+		 </tabpanel>
+
+	</page>
+
+	 </applications>
+
+

@@ -1,0 +1,156 @@
+package interceptor;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import com.DataCopy;
+import com.DataUpdate;
+import com.JiaoChuanDataUpdate;
+import com.wabacus.config.component.application.report.ReportBean;
+import com.wabacus.system.ReportRequest;
+import com.wabacus.system.component.application.report.configbean.editablereport.AbsEditableReportEditDataBean;
+import com.wabacus.system.component.application.report.configbean.editablereport.EditableReportInsertDataBean;
+import com.wabacus.system.component.application.report.configbean.editablereport.EditableReportUpdateDataBean;
+import com.wabacus.system.dataset.update.action.AbsUpdateAction;
+import com.wabacus.system.datatype.CDateType;
+import com.wabacus.system.intercept.AbsInterceptorDefaultAdapter;
+import com.wabacus.system.intercept.AbsPageInterceptor;
+import com.wabacus.util.Dao;
+import com.wabacus.util.IdentifierGenerator;
+
+public class ZhuangbeiyanzhiDataCopyInterceptor extends AbsInterceptorDefaultAdapter {
+
+	@Override
+	public int doSave(ReportRequest rrequest, ReportBean rbean,
+			AbsEditableReportEditDataBean editbean) {
+		
+		if(editbean instanceof EditableReportInsertDataBean)
+		{
+			List<Map<String,String>> data = rrequest.getLstInsertedData("jiaochuanPopup");
+			List<Map<String, String>> pdata=rrequest.getLstInsertedParamValues(rbean);
+			Map<String,Object> gdata=new HashMap<String,Object>();
+			
+			
+			List<String> cols=new ArrayList<String>();
+			cols.add("id");
+			cols.add("xianhao");
+			cols.add("xinghao");
+			cols.add("jiaochuanzhuangtai");
+			cols.add("jiaochuanjihuashijian");
+			cols.add("jiaochuanshijishijian");
+	
+	
+			List<String> values=new ArrayList<String>();
+			values.add(IdentifierGenerator.getStringId());
+			values.add(data.get(0).get("xianhao"));
+			values.add(pdata.get(0).get("xinghao"));
+			values.add(data.get(0).get("jiaochuanzhuangtai"));
+			values.add(data.get(0).get("jiaochuanjihuashijian"));
+			values.add(data.get(0).get("jiaochuanshijishijian"));
+		    		
+			Dao.getInstance().insert("zbgl_zbyz_jiaochuan", cols, values);
+			
+			String value=pdata.get(0).get("xinghao");
+			gdata =Dao.getInstance().getRecord("ZBGL_ZBYZ_JIAOCHUAN",value); 
+			String suoshu=(String)gdata.get("ID");
+			String xinghao=(String)gdata.get("XINGHAO");
+			List<String> stxncols=new ArrayList<String>();
+			
+			stxncols.add("id");
+			stxncols.add("suoshu");
+			//stxncols.add("xianhao");
+			stxncols.add("xinghao");
+			stxncols.add("suoshujieduan");
+			
+	
+			List<String> stxnvalues=new ArrayList<String>();
+			String id=IdentifierGenerator.getStringId();
+			stxnvalues.add(id);
+			stxnvalues.add(suoshu);
+			//stxnvalues.add(data.get(0).get("xianhao"));
+			stxnvalues.add(pdata.get(0).get("xinghao"));
+			stxnvalues.add("交船阶段");
+			
+			Dao.getInstance().insert("zbgl_zbyz_shitingxingneng", stxncols, stxnvalues);
+			
+			String xianjieduan="交船阶段";
+			String yuanjieduan="技术设计阶段";
+			
+			String onevalue=pdata.get(0).get("xinghao");
+			gdata =Dao.getInstance().getRecord("ZBGL_ZBYZ_XINGHAOXINXI",onevalue); 
+			String xinghaoID=(String)gdata.get("ID");
+
+			
+			JiaoChuanDataUpdate.CopyXinghao(xinghao,xinghaoID,suoshu,"ZBGL_ZBYZ_SHITINGXINGNENG",yuanjieduan,xianjieduan);
+		
+			String xianhao=data.get(0).get("xianhao");
+			List<String> queryCol=new ArrayList<String>();
+			queryCol.add("ID");
+			List<String> queryValue=new ArrayList<String>();
+			queryValue.add(id);
+			List<String> newCol=new ArrayList<String>();
+			newCol.add("XIANHAO");
+			List<String> newValue=new ArrayList<String>();
+			newValue.add(xianhao);
+		    Dao.getInstance().update("ZBGL_ZBYZ_SHITINGXINGNENG", queryCol, queryValue, newCol, newValue);
+		    
+		    List<String> queryCols=new ArrayList<String>();
+			queryCols.add("SUOSHU");
+			queryCols.add("SUOSHUJIEDUAN");
+			List<String> queryValues=new ArrayList<String>();
+			queryValues.add(suoshu);
+			queryValues.add("交船阶段");
+			List<String> newCols=new ArrayList<String>();
+			newCols.add("SUOSHUXIANHAO");
+			List<String> newValues=new ArrayList<String>();
+			newValues.add(xianhao);
+		    //Dao.getInstance().update("ZBGL_ZBJBXX_STXN_ZSMBZYJL", queryCols, queryValues, newCols, newValues);
+			return WX_RETURNVAL_SUCCESS;
+		}
+		else if(editbean instanceof EditableReportUpdateDataBean){
+			List<Map<String,String>> input=rrequest.getLstUpdatedData("jiaochuanPopup");
+			System.out.println(input);
+			String jiaochuanzhuangtai=(String)input.get(0).get("jiaochuanzhuangtai");
+			String jiaochuanzhuangtai_old=(String)input.get(0).get("jiaochuanzhuangtai__old");
+			System.out.println("1111111111"+jiaochuanzhuangtai+jiaochuanzhuangtai_old);
+			if(jiaochuanzhuangtai.equals("已完成")&&jiaochuanzhuangtai_old.equals("进行中")){
+				
+			/*	List<Map<String, String>> pdata=rrequest.getLstUpdatedParamValues(rbean);	
+				System.out.println("000000000"+pdata);
+				List<String> cols=new ArrayList<String>();
+				cols.add("id");
+				cols.add("xianhao");
+				cols.add("suoshuxinghao");
+				cols.add("jieduan");						
+				List<String> values=new ArrayList<String>();
+				values.add(IdentifierGenerator.getStringId());
+				values.add(input.get(0).get("xianhao"));
+				values.add(pdata.get(0).get("xinghao"));
+				values.add(jiaochuanzhuangtai);
+				
+				
+				
+				Dao.getInstance().insert("zbgl_zbjbxx_xianhao", cols, values); */  
+				 List<String> queryCol=new ArrayList<String>();
+					queryCol.add("XIANHAO");
+					List<String> queryValue=new ArrayList<String>();
+					queryValue.add(input.get(0).get("xianhao"));
+					List<String> newCol=new ArrayList<String>();
+					newCol.add("JIEDUAN");
+					List<String> newValue=new ArrayList<String>();
+					newValue.add("已完成");
+				    Dao.getInstance().update("zbgl_zbjbxx_xianhao", queryCol, queryValue, newCol, newValue);
+			
+			
+			
+			} 
+				//return WX_RETURNVAL_SUCCESS;
+			}	
+		return super.doSave(rrequest, rbean, editbean);
+		}
+}

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<applications xmlns="http://www.wabacus.com"
+			   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			   xsi:schemaLocation="http://www.wabacus.com ../xsd/wabacus.applications.xsd">
+	<page id="ciyinshen">
+		<report id="ciyinshen_report" title="${ciyinshen}" type="editablelist2">
+			<display >
+			 <col column="{sequence}" label="序号"></col>		
+			 <col column="id" label="id" displaytype="hidden"/>
+			  <col column="suoshu" label="suoshu" displaytype="hidden"/>
+			  <col column="suoshujieduan" label="suoshujieduan" displaytype="hidden"/>
+			   <col column="gongkuang" label="工况" />
+				<col column="cichangqiangdu" label="磁场强度nT（double）" />
+				<col column="beizhu" label="备注" datatype="clob" valuestyleproperty="colspan='1'">
+				       <inputbox type="textareabox"  ></inputbox>
+				   </col>
+		
+			</display>
+			<sql>
+				<value>
+					<![CDATA[SELECT * FROM zbgl_zbjbxx_zttx_cys where  {#condition#} order by id]]>
+				</value>
+				 <condition name="suoshu" label="${xinghao}" hidden="true">
+										<value>
+											<![CDATA[(suoshu = #data#)]]>
+										</value>
+				</condition>
+				 <condition name="suoshujieduan" label="${xinghao}" hidden="true">
+										<value>
+											<![CDATA[(suoshujieduan = #data#)]]>
+										</value>
+				</condition>
+			<insert>
+			 <params> 
+					<param name="suoshu" value="url{suoshu}"/><param name="suoshujieduan" value="url{suoshujieduan}"/>
+				 </params>
+		  		 insert into zbgl_zbjbxx_zttx_cys(id=uuid{},suoshu=#{suoshu},suoshujieduan=#{suoshujieduan},@{gongkuang},@{cichangqiangdu},@{beizhu});
+		  		
+			  </insert>
+			   <update>
+			     update zbgl_zbjbxx_zttx_cys(@{gongkuang},@{cichangqiangdu},@{beizhu}) where id=@{id__old};
+			    
+			  </update>
+			     <delete>
+			  	 delete from zbgl_zbjbxx_zttx_cys where id=@{id__old};		  	
+			  </delete>
+			</sql>
+		</report>			
+	</page>
+</applications>            
+
